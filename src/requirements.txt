@@ -1,0 +1,8 @@
+PyOpenGL
+PyOpenGL_accelerate
+"PyVRML97==2.3.0a4"
+simpleparse
+numpy
+"OpenGLContext==2.2.0a3"
+pydispatcher
+pillow
