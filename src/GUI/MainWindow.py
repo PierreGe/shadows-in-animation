@@ -27,13 +27,13 @@ class MainWindow(QtGui.QMainWindow):
         ex = SplitPane.SplitPane()
         self.setCentralWidget(ex)
 
-        self.statusBar()
+        # si on veut mettre une bar en bas qui dit par exemple "Computing ..."
+        statusBar = self.statusBar()
 
         self.initToolsBar()
         self.initMenu()
-        
-        self.setGeometry(300, 300, 350, 250)    
-        self.show()
+   
+        self.showMaximized()
 
     def initToolsBar(self):
         """ """
@@ -45,7 +45,7 @@ class MainWindow(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(exitAction)
 
-        
+
         fileMenu = menubar.addMenu('&Help')
         fileMenu.addAction(exitAction)
 

@@ -4,6 +4,9 @@
 from PyQt4 import QtGui, QtCore
 
 
+import TreeWidget,OpenGLWidget
+
+
 class SplitPane(QtGui.QWidget):
     
     def __init__(self):
@@ -15,13 +18,13 @@ class SplitPane(QtGui.QWidget):
 
         hbox = QtGui.QHBoxLayout(self)
 
-        left = QtGui.QTextEdit()
-        left.setFrameShape(QtGui.QFrame.StyledPanel)
- 
-        right = QtGui.QTextEdit()
-        right.setFrameShape(QtGui.QFrame.StyledPanel)
+        left = TreeWidget.TreeWidget()
+
+        right = OpenGLWidget.OpenGLWidget()
 
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(1, 0)
         splitter.addWidget(left)
         splitter.addWidget(right)
 
@@ -31,6 +34,6 @@ class SplitPane(QtGui.QWidget):
 
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
         
-        self.setGeometry(300, 300, 300, 200)
-        self.setWindowTitle('QtGui.QSplitter')
+        #self.setGeometry(300, 300, 300, 200)
+        #self.setWindowTitle('QtGui.QSplitter')
         self.show()
