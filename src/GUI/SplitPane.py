@@ -1,11 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # -*- coding: utf8 -*-
 
 from PyQt4 import QtGui, QtCore
 
-
-import TreeWidget,OpenGLWidget
-
+import TreeWidget
+import OpenGLWidget
 
 class SplitPane(QtGui.QWidget):
     
