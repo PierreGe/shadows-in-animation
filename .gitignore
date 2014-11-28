@@ -27,6 +27,11 @@
 *.out
 *.app
 
+# Latex
+*.aux
+*.log
+*.toc
+
 bin/
 lib/
 include/
