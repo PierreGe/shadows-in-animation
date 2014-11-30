@@ -5,34 +5,48 @@ from PyQt4 import QtGui, QtCore
 
 import TreeWidget
 import OpenGLWidget
+import OpenGLWidgetv2
 
 class SplitPane(QtGui.QWidget):
     
     def __init__(self):
         super(SplitPane, self).__init__()
         
+        self.splitter = None
+        self.right = None
+        self.left = None
+
         self.initUI()
         
     def initUI(self):      
 
         hbox = QtGui.QHBoxLayout(self)
 
-        left = TreeWidget.TreeWidget()
+        self.left = TreeWidget.TreeWidget()
 
-        right = OpenGLWidget.OpenGLWidget()
+        self.right = OpenGLWidget.OpenGLWidget()
 
-        splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        splitter.setStretchFactor(0, 3)
-        splitter.setStretchFactor(1, 0)
-        splitter.addWidget(left)
-        splitter.addWidget(right)
+        self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+
+        self.splitter.addWidget(self.left)
+        self.splitter.addWidget(self.right)
+
+        #set a proportion between the tree and the openGL example
+        self.splitter.setSizes([50,600])
 
 
-        hbox.addWidget(splitter)
+        hbox.addWidget(self.splitter)
         self.setLayout(hbox)
 
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
         
-        #self.setGeometry(300, 300, 300, 200)
-        #self.setWindowTitle('QtGui.QSplitter')
         self.show()
+
+        #self.replaceRightChild(OpenGLWidgetv2.OpenGLWidget())
+
+    def replaceRightChild(self,openglWidget):
+
+        self.right.hide()
+        self.right.setParent(None)
+        del(self.right)
+        self.splitter.addWidget(openglWidget)
