@@ -4,13 +4,18 @@
 from PyQt4 import QtGui, QtCore
 
 import TreeWidget
-import OpenGLWidget
-import OpenGLWidgetv2
+import SelectionController
+import HelpWidget
+
 
 class SplitPane(QtGui.QWidget):
+    """ """
     
     def __init__(self):
+        """ """
         super(SplitPane, self).__init__()
+
+        self._selectController = SelectionController.SelectionController(self)
         
         self.splitter = None
         self.right = None
@@ -18,21 +23,20 @@ class SplitPane(QtGui.QWidget):
 
         self.initUI()
         
-    def initUI(self):      
-
+    def initUI(self):
+        """ """
         hbox = QtGui.QHBoxLayout(self)
 
-        self.left = TreeWidget.TreeWidget()
+        self.left = TreeWidget.TreeWidget(self._selectController)
 
-        self.right = OpenGLWidget.OpenGLWidget()
+        self.right = HelpWidget.HelpWidget()
 
         self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
 
         self.splitter.addWidget(self.left)
         self.splitter.addWidget(self.right)
 
-        #set a proportion between the tree and the openGL example
-        self.splitter.setSizes([50,600])
+        self._resize()
 
 
         hbox.addWidget(self.splitter)
@@ -44,9 +48,20 @@ class SplitPane(QtGui.QWidget):
 
         #self.replaceRightChild(OpenGLWidgetv2.OpenGLWidget())
 
-    def replaceRightChild(self,openglWidget):
+    def _resize(self):
+        """ set a proportion """
+        self.splitter.setSizes([50,600])
+
+    def replaceRightWidget(self,newWidget):
+        """ """
 
         self.right.hide()
         self.right.setParent(None)
         del(self.right)
-        self.splitter.addWidget(openglWidget)
+        self.right = newWidget
+        self.splitter.addWidget(newWidget)
+        self._resize()
+
+
+
+

@@ -8,47 +8,52 @@ from PyQt4 import QtCore, QtGui
 
 
 class TreeWidget(QtGui.QWidget):
+    """ """
+    def __init__(self,selectController):
+        """ """
+        self._selectController = selectController
 
-    def __init__(self):
         QtGui.QWidget.__init__(self)
-        self.treeWidget = QtGui.QTreeWidget()
-        self.treeWidget.setHeaderHidden(True)
-        self.treeWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-        self.addItems(self.treeWidget.invisibleRootItem())
-        self.treeWidget.itemChanged.connect (self.handleChanged)
+        self._treeWidget = QtGui.QTreeWidget()
+        self._treeWidget.setHeaderHidden(True)
+        self._treeWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+        self._addItems(self._treeWidget.invisibleRootItem())
+        self._treeWidget.itemChanged.connect (self.handleChanged)
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.treeWidget)
+        layout.addWidget(self._treeWidget)
         self.setLayout(layout)
 
-    def addItems(self, parent):
+    def _addItems(self, parent):
+        """ """
         column = 0
-        scene1 = self.addParent(parent, column, "Scene numero un", "description")
-        scene2 = self.addParent(parent, column, "Scene numero deux", "description")
+        scene1 = self._addParent(parent, column, "Scene numero un", "description")
+        scene2 = self._addParent(parent, column, "Scene numero deux", "description")
 
-        item1 = self.addChild(scene1, column, "Algo A", "description Algo A")
-        item1.setCheckState(column, QtCore.Qt.Checked)
-        self.addChild(scene1, column, "Algo B", "description Algo B")
+        self._addChild(scene1, column, "Algo A", "description Algo A")
+        self._addChild(scene1, column, "Algo B", "description Algo B")
 
-        self.addChild(scene2, column, "Algo A", "description Algo A")
-        self.addChild(scene2, column, "Algo B", "description Algo B")
+        self._addChild(scene2, column, "Algo A", "description Algo A")
+        self._addChild(scene2, column, "Algo B", "description Algo B")
 
 
-    def addParent(self, parent, column, title, data):
+    def _addParent(self, parent, column, title, data):
+        """ """
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
         item.setChildIndicatorPolicy(QtGui.QTreeWidgetItem.ShowIndicator)
         item.setExpanded (True)
         return item
 
-    def addChild(self, parent, column, title, data):
+    def _addChild(self, parent, column, title, data):
+        """ """
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
         item.setCheckState(column, QtCore.Qt.Unchecked)
         return item
 
-    def unckeckEverythingExceptItem(self,itemExcluded):
+    def _unckeckEverythingExceptItem(self,itemExcluded):
         """ """
-        root = self.treeWidget.invisibleRootItem()
+        root = self._treeWidget.invisibleRootItem()
         childCountRoot = root.childCount()
         for firstLevelchild in range(childCountRoot):
             firstChild = root.child(firstLevelchild)
@@ -61,8 +66,8 @@ class TreeWidget(QtGui.QWidget):
 
     def handleChanged(self, item, column):
         if item.checkState(column) == QtCore.Qt.Checked:
-            self.unckeckEverythingExceptItem(item)
-            #print "checked", item, item.text(column)
-        #if item.checkState(column) == QtCore.Qt.Unchecked:
-            #item.setCheckState(0, QtCore.Qt.Checked)
+            self._unckeckEverythingExceptItem(item)
+            self._selectController.swichTo(item)
+        if item.checkState(column) == QtCore.Qt.Unchecked:
+            self._selectController.showHelp()
             #print "unchecked", item, item.text(column)

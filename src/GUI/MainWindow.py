@@ -7,28 +7,26 @@ from PyQt4 import QtGui, QtCore
 import SplitPane
 
 class MainWindow(QtGui.QMainWindow):
-    
+    """ This class is the GUI's main class """
     def __init__(self):
+        """Constructor of the class MainWindow"""
         super(MainWindow, self).__init__()
         self.initUI()
         
     def initUI(self): 
-        """ This methode will  """             
+        """ This methode will initiate the GUI :
+        The Menu bar
+        The toorls bar
+        The main SplitPane
+        The statusBar  """             
         # Windows title
         self.setWindowTitle("Les ombres au sein des jeux et des animations")
 
-
-
-        textEdit1 = QtGui.QTextEdit()
-        textEdit2 = QtGui.QTextEdit()
-        splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        splitter.addWidget(textEdit1)
-        splitter.addWidget(textEdit1)
         ex = SplitPane.SplitPane()
         self.setCentralWidget(ex)
 
         # si on veut mettre une bar en bas qui dit par exemple "Computing ..."
-        statusBar = self.statusBar()
+        #statusBar = self.statusBar()
 
         self.initToolsBar()
         self.initMenu()
@@ -59,7 +57,8 @@ class MainWindow(QtGui.QMainWindow):
         toolbar.addAction(exitAction)
         
         
-def main():  
+def main():
+    """ """  
     app = QtGui.QApplication(sys.argv)
     ex = MainWindow()
     sys.exit(app.exec_())
