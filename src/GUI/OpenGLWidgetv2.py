@@ -142,7 +142,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def degrade(self, zMin, zMax ,zActuel):
 # Cas d'un degrade un peu chauvin avec trois couleurs
-        Couleur1 = [0, 0, 255]
+        Couleur1 = [255, 0, 255]
         Couleur2 = [255, 255, 255]
         Couleur3 = [255, 0, 0]
  
