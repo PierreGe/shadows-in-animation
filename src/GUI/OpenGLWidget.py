@@ -9,6 +9,7 @@ import ObjParser
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
+    # Public interface
     def __init__(self, object_names = [], parent=None):
         QtOpenGL.QGLWidget.__init__(self, parent)
         self.object_names = object_names
@@ -59,9 +60,10 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called at startup
     def initializeGL(self):
         # initial rotation
-        self.xRot = 240
-        self.yRot = -480
+        self.xRot = 15
+        self.yRot = -30
         self.zRot = 0
+        self.zoom = -30
 
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
@@ -98,11 +100,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # reload new matrix
         GL.glLoadIdentity()
         # zoom out camera
-        GL.glTranslated(0.0, 0.0, -19.0)
+        GL.glTranslated(0, 0, self.zoom)
         # apply rotation
-        GL.glRotated(self.xRot / 16.0, 1.0, 0.0, 0.0)
-        GL.glRotated(self.yRot / 16.0, 0.0, 1.0, 0.0)
-        GL.glRotated(self.zRot / 16.0, 0.0, 0.0, 1.0)
+        GL.glRotated(self.xRot, 1, 0, 0)
+        GL.glRotated(self.yRot, 0, 1, 0)
+        GL.glRotated(self.zRot, 0, 0, 1)
         # paint objects
         self.paintFloor()
         self.paintObjects()
@@ -148,7 +150,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.lastPos = QtCore.QPoint(event.pos())
  
     def wheelEvent(self, event):
-        print 'La routourne va tourner...'
+        self.zoom += event.delta()/100.0
+        self.updateGL()
  
     # Work methods
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
@@ -161,7 +164,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def normalizeAngle(self, angle):
         while angle < 0:
-            angle += 360 * 16
-        while angle > 360 * 16:
-            angle -= 360 * 16
+            angle += 360
+        while angle > 360:
+            angle -= 360
         return angle
