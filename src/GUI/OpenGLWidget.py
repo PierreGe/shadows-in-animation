@@ -92,6 +92,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for obj in self.object_names:
             dirpath = "/".join(obj[0].split("/")[:-1])
             filepath = obj[0].split("/")[-1]
+            print dirpath
             self.objects.append(OBJ(dirpath, filepath))
  
     # Called on each update/frame

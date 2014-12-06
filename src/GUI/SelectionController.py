@@ -6,12 +6,17 @@ import HelpWidget
 
 import OpenGLWidget
 
+import json
+
 
 class SelectionController(object):
     """docstring for SelectionController"""
     def __init__(self, splitPane):
         self._splitPane = splitPane
-        self.glWidget = OpenGLWidget.OpenGLWidget([("Stick_Figure_by_Swp.OBJ", (0,0,0))])
+        with open("assets/scene/basic.json", "r") as f:
+            j = json.loads(f.read())
+            print j
+        self.glWidget = OpenGLWidget.OpenGLWidget(j)
         self.helpWidget = HelpWidget.HelpWidget()
 
     def showGL(self, item):
