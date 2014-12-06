@@ -43,8 +43,8 @@ class MainWindow(QtGui.QMainWindow):
    
         self.showMaximized()
 
-    def initToolsBar(self):
-        """ This method will initate the toolsbar """
+    def initMenu(self):
+        """ This method will initate the menu """
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), 'Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
@@ -57,8 +57,8 @@ class MainWindow(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('&Help')
         fileMenu.addAction(exitAction)
 
-    def initMenu(self):
-        """ """
+    def initToolsBar(self):
+        """ This method will initate the toolsBar"""
         exitAction = QtGui.QAction(QtGui.QIcon('images/application-exit.png'), 'Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')

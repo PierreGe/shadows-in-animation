@@ -17,14 +17,14 @@ class Controller(object):
     def __init__(self,statusBar):
         self._statusBar = statusBar
         self._splitPane = None
-        self._scene = {} # nom : obj-liste
-        self._parseAllScene()
+        self._scene = {} # nom : obj-liste  (from assets/scene/)
+        self._parseAllScene() #
 
     def initSplitPane(self,splitPane):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
-        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"])
+        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]) # name from json file
         self.helpWidget = HelpWidget.HelpWidget()
         self._setStatusReady()
 
@@ -44,10 +44,10 @@ class Controller(object):
 
     def getAllScene(self):
         """ """
-        pass
+        return self._scene
 
     def _parseAllScene(self):
-        """ """
+        """ This method will assets/scene/ and add all the scene to a dictionnary"""
         mypath = "assets/scene/"
         scenesFiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
         for singleFile in scenesFiles:
