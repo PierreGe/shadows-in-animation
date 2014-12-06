@@ -14,9 +14,8 @@ class SelectionController(object):
     def __init__(self, splitPane):
         self._splitPane = splitPane
         with open("assets/scene/basic.json", "r") as f:
-            j = json.loads(f.read())
-            print j
-        self.glWidget = OpenGLWidget.OpenGLWidget(j)
+            objects = json.loads(f.read())
+        self.glWidget = OpenGLWidget.OpenGLWidget(objects)
         self.helpWidget = HelpWidget.HelpWidget()
 
     def showGL(self, item):
