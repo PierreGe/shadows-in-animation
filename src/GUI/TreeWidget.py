@@ -11,7 +11,7 @@ class TreeWidget(QtGui.QWidget):
     """ """
     def __init__(self,selectController):
         """ """
-        self._selectController = selectController
+        self._controller = selectController
 
         QtGui.QWidget.__init__(self)
         self._treeWidget = QtGui.QTreeWidget()
@@ -26,15 +26,14 @@ class TreeWidget(QtGui.QWidget):
     def _addItems(self, parent):
         """ """
         column = 0
-        scene1 = self._addParent(parent, column, "Scene numero un", "description")
-        scene2 = self._addParent(parent, column, "Scene numero deux", "description")
-
-        self._addChild(scene1, column, "Algo A", "description Algo A")
-        self._addChild(scene1, column, "Algo B", "description Algo B")
-
-        self._addChild(scene2, column, "Algo A", "description Algo A")
-        self._addChild(scene2, column, "Algo B", "description Algo B")
-
+        sceneDictionnary = self._controller.getAllScene()
+        for scene in sceneDictionnary:
+            name = sceneDictionnary[scene]["name"]
+            description = sceneDictionnary[scene]["description"]
+            scene1 = self._addParent(parent, column, name, description)
+            self._addChild(scene1, column, "Algo A", "description Algo A")
+        
+        # TODO : associer les algo
 
     def _addParent(self, parent, column, title, data):
         """ """
@@ -67,7 +66,7 @@ class TreeWidget(QtGui.QWidget):
     def handleChanged(self, item, column):
         if item.checkState(column) == QtCore.Qt.Checked:
             self._unckeckEverythingExceptItem(item)
-            self._selectController.showGL(item)
+            self._controller.showGL(item)
         if item.checkState(column) == QtCore.Qt.Unchecked:
-            self._selectController.showHelp()
+            self._controller.showHelp()
             #print "unchecked", item, item.text(column)

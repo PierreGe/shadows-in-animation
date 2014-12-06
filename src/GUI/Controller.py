@@ -24,13 +24,14 @@ class Controller(object):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
-        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]) # name from json file
+        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]["obj-liste"]) # name from json file
         self.helpWidget = HelpWidget.HelpWidget()
         self._setStatusReady()
 
     def showGL(self, item):
         """ """
         self._setStatusComputing()
+        print(item)
         pass
         # TODO use item
         self._replaceRightWidget(self.glWidget)
@@ -51,11 +52,11 @@ class Controller(object):
         mypath = "assets/scene/"
         scenesFiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
         for singleFile in scenesFiles:
-            with open("assets/scene/basic.json", "r") as f:
+            with open(mypath + singleFile, "r") as f:
                 jasonDict = json.loads(f.read())
                 name = jasonDict["name"]
-                objects = jasonDict["obj-liste"]
-                self._scene[name] = objects
+                dicti = jasonDict
+                self._scene[name] = dicti
 
     def _replaceRightWidget(self,newWidget):
         """ """
