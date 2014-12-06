@@ -1,10 +1,10 @@
 import pygame
 from OpenGL.GL import *
  
-def MTL(filename):
+def MTL(path, filename):
     contents = {}
     mtl = None
-    for line in open(filename, "r"):
+    for line in open(path + filename, "r"):
         if line.startswith('#'): continue
         values = line.split()
         if not values: continue
@@ -31,15 +31,17 @@ def MTL(filename):
     return contents
  
 class OBJ:
-    def __init__(self, filename, swapyz=False):
+    def __init__(self, path, filename, swapyz=False):
         """Loads a Wavefront OBJ file. """
+        if len(path) >0 and path[-1] != "/":
+            path += "/"
         self.vertices = []
         self.normals = []
         self.texcoords = []
         self.faces = []
  
         material = None
-        for line in open(filename, "r"):
+        for line in open(path + filename, "r"):
             if line.startswith('#'): continue
             values = line.split()
             if not values: continue
@@ -58,7 +60,7 @@ class OBJ:
             elif values[0] in ('usemtl', 'usemat'):
                 material = values[1]
             elif values[0] == 'mtllib':
-                self.mtl = MTL(values[1])
+                self.mtl = MTL(path, values[1])
             elif values[0] == 'f':
                 face = []
                 texcoords = []

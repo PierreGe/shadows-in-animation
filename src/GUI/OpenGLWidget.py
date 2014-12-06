@@ -124,7 +124,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def loadObjects(self):
         self.objects = []
-        self.objects.append(OBJ("Stick_Figure_by_Swp.OBJ"))
+        self.objects.append(OBJ("","Stick_Figure_by_Swp.OBJ"))
  
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, r, g, b): 
         GL.glBegin(GL.GL_QUADS)
