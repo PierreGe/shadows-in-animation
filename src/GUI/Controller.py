@@ -3,27 +3,27 @@
 
 
 import HelpWidget
-
 import OpenGLWidget
-
 import json
 
 
 class Controller(object):
     """Controller will controll :
             - what widget is diplayed on the left part of the splitPane
-            - what the statusBar show"""
+            - what the statusBar show
+        The controller also know all the scene"""
     def __init__(self,statusBar):
         self._statusBar = statusBar
         self._splitPane = None
+        self._scene = {} # nom : fichier
 
     def initSplitPane(self,splitPane):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
         with open("assets/scene/basic.json", "r") as f:
-            jDict = json.loads(f.read())
-            objects = jDict["obj-liste"]
+            jasonDict = json.loads(f.read())
+            objects = jasonDict["obj-liste"]
         self.glWidget = OpenGLWidget.OpenGLWidget(objects)
         self.helpWidget = HelpWidget.HelpWidget()
         self._setStatusReady()
@@ -41,6 +41,11 @@ class Controller(object):
         self._setStatusComputing()
         self._replaceRightWidget(self.helpWidget)
         self._setStatusReady()
+
+    def getAllScene(self):
+        """ """
+        path = "assets/scene/"
+        pass
 
     def _replaceRightWidget(self,newWidget):
         """ """
