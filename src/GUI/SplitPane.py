@@ -29,12 +29,10 @@ class SplitPane(QtGui.QWidget):
 
         self.left = TreeWidget.TreeWidget(self._selectController)
 
-        self.right = HelpWidget.HelpWidget()
-
         self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
 
         self.splitter.addWidget(self.left)
-        self.splitter.addWidget(self.right)
+        self._selectController.showHelp()
 
         self._resize()
 
@@ -43,7 +41,7 @@ class SplitPane(QtGui.QWidget):
         self.setLayout(hbox)
 
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
-        
+
         self.show()
 
         #self.replaceRightChild(OpenGLWidgetv2.OpenGLWidget())
@@ -54,8 +52,9 @@ class SplitPane(QtGui.QWidget):
 
     def replaceRightWidget(self,newWidget):
         """ """
-        self.right.hide()
-        self.right.setParent(None)
+        if (self.right):
+            self.right.hide()
+            self.right.setParent(None)
         newWidget.show()
         self.right = newWidget
         self.splitter.addWidget(newWidget)

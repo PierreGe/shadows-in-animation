@@ -9,7 +9,7 @@ import OpenGLWidget
 
 class SelectionController(object):
     """docstring for SelectionController"""
-    def __init__(self,splitPane):
+    def __init__(self, splitPane):
         self._splitPane = splitPane
         self.glWidget = OpenGLWidget.OpenGLWidget([("Stick_Figure_by_Swp.OBJ", (0,0,0))])
         self.helpWidget = HelpWidget.HelpWidget()
