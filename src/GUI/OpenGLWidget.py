@@ -14,9 +14,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.object_names = object_names
 
     def setObjects(self, object_names):
-        self.object_names = object_names
         for obj in self.objects:
             GL.glDeleteLists(1, GL.GL_COMPILE)
+        self.object_names = object_names
         self.loadObjects()
 
     # Rotation
@@ -84,14 +84,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.groundPoints = [-1,0,-1,-1,0,1,1,0,1,1,0,-1]
         self.groundList = GL.glGenLists(1)
         GL.glNewList(self.groundList, GL.GL_COMPILE)
-        self.quadrilatere(*[x*10 for x in self.groundPoints])
+        self.quadrilatere(*(([x*10 for x in self.groundPoints])))
         GL.glEndList()
 
     def loadObjects(self):
         self.objects = []
         for obj in self.object_names:
-            self.objects.append(OBJ(obj[0]))
-            # FIX THAT SHIT : translated
+            dirpath = "/".join(obj[0].split("/")[:-1])
+            filepath = obj[0].split("/")[-1]
+            self.objects.append(OBJ(dirpath, filepath))
  
     # Called on each update/frame
     def paintGL(self):

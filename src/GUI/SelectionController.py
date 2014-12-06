@@ -22,8 +22,7 @@ class SelectionController(object):
 
     def showHelp(self):
         """ """
-        self.glWidget.setObjects([("../assets/obj/satellite/Satellite.obj",(0,0,0))])
-        self._replaceRightWidget(self.glWidget)
+        self._replaceRightWidget(self.helpWidget)
 
     def _replaceRightWidget(self,newWidget):
         """ """
