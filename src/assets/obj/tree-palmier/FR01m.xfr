@@ -1,0 +1,5704 @@
+Version 0.93
+
+Background 128, 128, 128
+
+Queue  "Sequence_List" {
+
+Frames 100
+
+Unit  "RootSequence" {
+
+Frames 100
+Time   0, 1
+Animate_Camera TRUE
+Active TRUE
+
+Entity "RootSequence" {
+KeySequence  "Sequence" {
+
+Frames 100
+KeyFrame {
+Name  "Key"
+Time  0
+
+Model {
+
+Struct {
+Name "Root"
+Export_GroupName "Root"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "RealRuler100m"
+  "size"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Camera {
+Translation 0.116963, 4.79463, -2.76004
+View_Vector 0, 0, 1
+Foot_Vector 0, 1, 0
+View_Point  0, 0, 0
+Zoom  30
+Near -1
+Far  5
+OccularDistance 0.81
+EyePlane        0
+PlaneOrigin     50
+BrushConstant FALSE
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stem1"
+Export_GroupName "Stem1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Stem2"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0.2, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     24
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0.1, 0.1,"rnd", -0.5, 0.5
+Texture_File "FR01brk1.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 0.5, 0.01, 10 }
+Texture_ScaleT  { 3, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 4, -1, 20 },  { 4, -1, 20 },  { 4, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+ApplyProfil3D
+Profil {
+Size  24
+-0.105, 0.41, 0
+-0.00749139, 0.429228, 0
+0.102518, 0.425625, 0
+0.230633, 0.378994, 0
+0.383572, 0.263978, 0
+0.477488, 0.128563, 0
+0.501306, 0.000859816, 0
+0.484856, -0.124694, 0
+0.43113, -0.24667, 0
+0.346387, -0.355145, 0
+0.24361, -0.431123, 0
+0.12605, -0.477317, 0
+-4.09782e-008, -0.492887, 0
+-0.12605, -0.477317, 0
+-0.24361, -0.431123, 0
+-0.346387, -0.355145, 0
+-0.431582, -0.246921, 0
+-0.482185, -0.12317, 0
+-0.494874, 0.00444102, 0
+-0.475952, 0.129493, 0
+-0.423439, 0.248706, 0
+-0.344831, 0.346408, 0
+-0.264132, 0.39513, 0
+-0.184008, 0.411625, 0
+}
+}
+Tree {
+Segments { 19, 1, 500 }
+Branch_Num { 10, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 50, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.4725, 0
+0.516801, 0.510599, 0
+1, 0.4925, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  6
+0, 0.7, 0
+0.083271, 0.611673, 0
+0.248249, 0.565072, 0
+0.552082, 0.520841, 0
+0.768215, 0.482227, 0
+1, 0.4575, 0
+}
+Scale {
+Size  3
+0, 0.52, 0
+0.48303, 0.6325, 0
+1, 0.995, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.5, 1, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0.06, 0
+0.486465, 0.0650001, 0
+1, 0.06, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  5
+0, 0.2025, 0
+0.261217, 0.168734, 0
+0.556692, 0.326093, 0
+0.823753, 0.335305, 0
+1, 0.19, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0.16, 0
+0.490909, 0.2, 0
+1, 0.44, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.490909, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.46707, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+-0.877748, -0.0211919, 9.90781
+-0.895587, -0.141443, 19.9715
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stem2"
+Export_GroupName "Stem2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Stem3"
+  "inv1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { -3, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     7
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk2.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 0.5, 0.01, 10 }
+Texture_ScaleT  { 14, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  7
+0, 0.5, 0
+0.389654, 0.306931, 0
+0.486203, -0.108759, 0
+0.214765, -0.449551, 0
+-0.214765, -0.449551, 0
+-0.486203, -0.108759, 0
+-0.389654, 0.306931, 0
+}
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 12, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 6, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.36, 0
+0.518182, 0.42, 0
+1, 0.32, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 0.545, 0
+0.176969, 0.61, 0
+0.657778, 0.5525, 0
+1, 0.51, 0
+}
+Scale {
+Size  4
+0, 1, 0
+0.540808, 0.965, 0
+0.884444, 0.8225, 0
+1, 1, 0
+}
+GeomScale {
+Size  4
+0, 1, 0
+0.5, 1, 0
+0.835556, 0.7925, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  8
+0, 0.7, 0
+0.151746, 0.635, 0
+0.285714, 0.7, 0
+0.433016, 0.76, 0
+0.571429, 0.7, 0
+0.723175, 0.635, 0
+0.857143, 0.7, 0
+1, 0.76, 0
+}
+Angle {
+Size  3
+0, 0.155, 0
+0.46359, 0.14623, 0
+1, 0.1175, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.463636, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Stalk"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "rnd1"
+Export_GroupName "rnd1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Branch"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Horn {
+Segments { 5, 1, 500 }
+Top       TRUE
+Scale     1, 1,"id", 0, 5
+Shape     0, 1.57,"cos", -3.14159, 3.14159
+Dense     0, 0,"cos", -3.14159, 3.14159
+Steps     1, 1,"id", 1, 200
+Flap      0, 0,"id", -7, 7
+Screw     0, 0,"id", -50, 50
+RotX      0, 0.06,"rnd", -1, 1
+RotY      0, 0.06,"rnd", -1, 1
+RotZ      0, 0.1,"rnd", -1, 1
+TrX       0, 0,"id", -20, 20
+TrY       0, 0,"id", -20, 20
+TrZ       0, 0,"id", -20, 20
+Smooth
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+ShapeKnots {
+Size  5
+1, -1, 0
+0.92388, -0.5, 0
+0.707107, 0, 0
+0.382683, 0.5, 0
+-4.09782e-008, 1, 0
+}
+MoveScale 20
+Length { 0.001, 0.001, 20 }
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Papaya"
+Export_GroupName "Papaya"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 3, -1, 20 },  { 3, -1, 20 },  { 3, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1.8, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     9
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0.05, 0.05,"rnd", -0.5, 0.5
+Texture_File "FR01frt.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 0.5, 0.01, 10 }
+Texture_ScaleT  { 15, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 0.6, -1, 20 },  { 0.6, -1, 20 },  { 0.6, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  9
+0, 0.5, 0
+0.320575, 0.375175, 0
+0.490786, 0.0864444, 0
+0.429859, -0.248394, 0
+0.170225, -0.46621, 0
+-0.170225, -0.46621, 0
+-0.429859, -0.248394, 0
+-0.490786, 0.0864444, 0
+-0.320575, 0.375175, 0
+}
+}
+Revo {
+ShapeKnots {
+Size  15
+0.115, 0, -0.5025
+0.237932, 0, -0.494452
+0.393216, 0, -0.439164
+0.528112, 0, -0.340444
+0.671701, 0, -0.227806
+0.851455, 0, -0.153455
+0.954562, 0, -0.0849719
+0.994221, 0, -0.00129193
+0.989585, 0, 0.0730831
+0.959695, 0, 0.173234
+0.818465, 0, 0.306837
+0.505464, 0, 0.431299
+0.249429, 0, 0.457526
+0.11085, 0, 0.435277
+0.00999996, 0, 0.4275
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "RealRuler1m"
+Export_GroupName "RealRuler1m"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { -0.5, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "1MRuler.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { -1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 3, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Use_GFXColor
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  1, 1, 1
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Leaf {
+Segments  5
+Top TRUE
+Shape   -1.57, 1.57,"cos", -3.14159, 3.14159
+Dense   1, 0,"cos", -3.14159, 3.14159
+RotX    0, 0,"id", -20, 20
+RotY    0, 0,"id", -20, 20
+RotZ    0, 0,"id", -20, 20
+Scale     { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 1, 0.001, 10 }
+ShapeKnots {
+Size  6
+-4.37114e-008, -1, 0
+0.587785, -0.6, 0
+0.951057, -0.2, 0
+0.951057, 0.2, 0
+0.587785, 0.6, 0
+-4.47035e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "size"
+Export_GroupName "size"
+Group
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Stem1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.075, -1, 20 },  { 0.075, -1, 20 },  { 0.075, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stalk"
+Export_GroupName "Stalk"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Z
+Photo_Mode Vector
+Photo  { -0.290909, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Papaya"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     3
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 5, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  3
+0, 0.5, 0
+0.433013, -0.25, 0
+-0.433013, -0.25, 0
+}
+}
+Tree {
+Segments { 10, 1, 500 }
+Branch_Num { 7, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 3, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.52, 0
+0.5, 0.5, 0
+1, 0.48, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  3
+0, 0.9, 0
+0.5, 0.6, 0
+1, 0.6, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.5, 1, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 1, 0
+0.420405, 1, 0
+1, 1, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.5, 0.8, 0
+1, 0.2, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "RealRuler100m"
+Export_GroupName "RealRuler100m"
+Group
+Hide
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "RealRuler1m"
+  "RealRuler1mflat"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 1, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "OMruler.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { -1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 10, -1, 20 },  { 1, -1, 20 },  { 100, -1, 100 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Use_GFXColor
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  1, 1, 1
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Leaf {
+Segments  5
+Top TRUE
+Shape   -1.57, 1.57,"cos", -3.14159, 3.14159
+Dense   1, 0,"cos", -3.14159, 3.14159
+RotX    0, 0,"id", -20, 20
+RotY    0, 0,"id", -20, 20
+RotZ    0, 0,"id", -20, 20
+Scale     { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 1, 0.001, 10 }
+ShapeKnots {
+Size  6
+-4.37114e-008, -1, 0
+0.587785, -0.6, 0
+0.951057, -0.2, 0
+0.951057, 0.2, 0
+0.587785, 0.6, 0
+-4.47035e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "RealRuler1mflat"
+Export_GroupName "RealRuler1mflat"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 1.57, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { -6, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "circle.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { -1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 10, -1, 20 },  { 10, -1, 20 },  { 10, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Use_GFXColor
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  1, 1, 1
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Leaf {
+Segments  5
+Top TRUE
+Shape   -1.57, 1.57,"cos", -3.14159, 3.14159
+Dense   1, 0,"cos", -3.14159, 3.14159
+RotX    0, 0,"id", -20, 20
+RotY    0, 0,"id", -20, 20
+RotZ    0, 0,"id", -20, 20
+Scale     { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 1, 0.001, 10 }
+ShapeKnots {
+Size  6
+-4.37114e-008, -1, 0
+0.587785, -0.6, 0
+0.951057, -0.2, 0
+0.951057, 0.2, 0
+0.587785, 0.6, 0
+-4.47035e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stem3"
+Export_GroupName "Stem3"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Simple3"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     7
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  7
+0, 0.5, 0
+0.389654, 0.306931, 0
+0.486203, -0.108759, 0
+0.214765, -0.449551, 0
+-0.214765, -0.449551, 0
+-0.486203, -0.108759, 0
+-0.389654, 0.306931, 0
+}
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 38, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 10, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       TRUE
+Version 6
+Branchiness {
+Size  3
+0, 0.495, 0
+0.5, 0.5, 0
+1, 0.5, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 1, 0
+0.394747, 0.9675, 0
+0.715556, 0.7275, 0
+1, 0.415, 0
+}
+Scale {
+Size  3
+0, 1, 0
+0.536364, 1, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.663636, 1, 0
+1, 0.84, 0
+}
+Deviate {
+Size  3
+0, 0.085, 0
+0.491111, 0.075, 0
+1, 0.08, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.6, 0
+0.605812, 0.47123, 0
+1, 0.3775, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.463636, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "rnd1"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Branch"
+Export_GroupName "Branch"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Leaf1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1.3, -1, 20 },  { 1.3, -1, 20 },  { 1.3, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     5
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 7, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2.5, -1, 20 },  { 2.5, -1, 20 },  { 2.5, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  5
+0, 0.5, 0
+0.466532, 0.152071, 0
+0.289386, -0.391692, 0
+-0.289386, -0.391691, 0
+-0.466532, 0.152072, 0
+}
+}
+Tree {
+Segments { 15, 1, 500 }
+Branch_Num { 15, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 8, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.5, 0
+0.600404, 0.45, 0
+1, 0.3325, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  8
+0, 0.995, 0
+0.0412774, 0.944596, 0
+0.101965, 0.824688, 0
+0.174598, 0.609189, 0
+0.239092, 0.547547, 0
+0.430554, 0.432192, 0
+0.80256, 0.275796, 0
+1, 0.2, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.52, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.5, 1, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0.00999999, 0
+0.491111, 0.0550001, 0
+1, 0.1, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.490909, 0.16, 0
+1, 0.28, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.550101, 0.145, 0
+1, 0.16, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 0.04, 0
+0.545455, 0.12, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Leaf1"
+Export_GroupName "Leaf1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 10, -1, 20 },  { 10, -1, 20 },  { 10, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { -0.05, -50, 50 },  { -0.05, -50, 50 },  { -0.4, -50, 50 }
+}
+Primitive {
+Type "Area"
+Points     9
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0.005, 0.005,"rnd", -0.5, 0.5
+Texture_File "FR01lef.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 15, 0.01, 20 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+ApplyProfil3D
+Profil {
+Size  9
+-0.435, -0.0949999, 0
+-0.338359, -0.0313993, 0
+-0.22837, -0.0161289, 0
+-0.113494, -0.00711183, 0
+0.00452515, -0.00188898, 0
+0.11481, -0.00761472, 0
+0.22789, -0.0220061, 0
+0.346413, -0.0472087, 0
+0.46, -0.105, 0
+}
+}
+Leaf {
+Segments  15
+Top TRUE
+Shape   -1.57, 1.57,"floor", -3.14159, 3.14159
+Dense   0.04, 0.04, "1+rnd(x)", 0, 0.2
+RotX    0, 1,"rnd", -20, 20
+RotY    0, 2,"rnd", -20, 20
+RotZ    2, 2,"rnd", -20, 20
+Scale     { 1.4, -1, 20 },  { -0.5, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 0.7, 0.001, 10 }
+ApplyShape
+ShapeKnots {
+Size  15
+1, -1, 0
+1.07141, -0.874752, 0
+1.07199, -0.702557, 0
+1.05152, -0.554792, 0
+1.03078, -0.420267, 0
+1.00819, -0.287173, 0
+0.997167, -0.14348, 0
+0.994939, 1.30944e-006, 0
+1.00042, 0.143469, 0
+1.01351, 0.28714, 0
+1.02981, 0.420639, 0
+1.04376, 0.555386, 0
+1.0739, 0.701174, 0
+1.11984, 0.844162, 0
+-1.49012e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0.08, 0
+}
+Gravitropism {
+Size  3
+0, 0.12, 0
+0.522626, 0.3675, 0
+1, 0.735, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "inv1"
+Export_GroupName "inv1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "inv2"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 10, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 5, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       TRUE
+Version 6
+Branchiness {
+Size  3
+0, 0.495, 0
+0.5, 0.5, 0
+1, 0.5, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 1, 0
+0.394747, 0.9675, 0
+0.715556, 0.7275, 0
+1, 0.415, 0
+}
+Scale {
+Size  3
+0, 1, 0
+0.536364, 1, 0
+1, 1, 0
+}
+GeomScale {
+Size  3
+0, 0.6, 0
+0.627272, 0.68, 0
+1, 0.52, 0
+}
+Deviate {
+Size  3
+0, 0.085, 0
+0.491111, 0.075, 0
+1, 0.08, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.43, 0
+0.50359, 0.34623, 0
+1, 0.2525, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.463636, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Stalk2"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "inv2"
+Export_GroupName "inv2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 7, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 4, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       TRUE
+Version 6
+Branchiness {
+Size  3
+0, 0.575, 0
+0.5, 0.5, 0
+1, 0.18, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 1, 0
+0.394747, 0.9675, 0
+0.715556, 0.7275, 0
+1, 0.415, 0
+}
+Scale {
+Size  3
+0, 1, 0
+0.572728, 1, 0
+1, 1, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.663636, 1, 0
+1, 0.84, 0
+}
+Deviate {
+Size  3
+0, 0.085, 0
+0.491111, 0.075, 0
+1, 0.08, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.225, 0
+0.521368, 0.20623, 0
+1, 0.1375, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 0.76, 0
+0.481818, 0.76, 0
+1, 0.76, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Stalk3"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stalk2"
+Export_GroupName "Stalk2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "flowerclosed1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     3
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  3
+0, 0.5, 0
+0.433013, -0.25, 0
+-0.433013, -0.25, 0
+}
+}
+Tree {
+Segments { 5, 1, 500 }
+Branch_Num { 3, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 3, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  4
+0, 0, 0
+0.431111, 0.0275, 0
+0.695556, 0.54, 0
+1, 0.48, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  3
+0, 0.9, 0
+0.5, 0.6, 0
+1, 0.6, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 0.52, 0
+0.5, 0.6, 0
+1, 0.44, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.5, 0
+0.500404, 0.345, 0
+1, 0.00500003, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0.455, 0
+0.398183, 0.485, 0
+1, 0.37, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.5, 0.8, 0
+1, 0.2, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Simple2"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "flowerclosed"
+Export_GroupName "flowerclosed"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Simple1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.6, -1, 20 },  { 0.6, -1, 20 },  { 0.6, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     5
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01flo2.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 2, -1, 20 },  { 2, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  5
+0, 0.5, 0
+0.475528, 0.154508, 0
+0.293893, -0.404509, 0
+-0.293893, -0.404508, 0
+-0.475528, 0.154509, 0
+}
+}
+Horn {
+Segments { 6, 1, 500 }
+Top       FALSE
+Scale     1, 1,"id", 0, 5
+Shape     0, 1.57,"cos", -3.14159, 3.14159
+Dense     0, 0,"cos", -3.14159, 3.14159
+Steps     1, 1,"id", 1, 200
+Flap      0, 0,"id", -7, 7
+Screw     0, 0,"id", -50, 50
+RotX      0, 0.1,"rnd", -1, 1
+RotY      0, 0.1,"rnd", -1, 1
+RotZ      0, 0,"id", -1, 1
+TrX       0, 0,"id", -20, 20
+TrY       0, 0,"id", -20, 20
+TrZ       0, 0,"id", -20, 20
+Smooth
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+ShapeKnots {
+Size  6
+0.12, -1, 0
+0.118998, -0.599644, 0
+0.139641, -0.199946, 0
+0.230972, 0.199874, 0
+0.273021, 0.600022, 0
+0.34, 1, 0
+}
+ApplyShape
+MoveScale 20
+Length { 0.05, 0.001, 20 }
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple"
+Export_GroupName "Simple"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "flowerclosed"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stalk3"
+Export_GroupName "Stalk3"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     3
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  3
+0, 0.5, 0
+0.433013, -0.25, 0
+-0.433013, -0.25, 0
+}
+}
+Tree {
+Segments { 5, 1, 500 }
+Branch_Num { 3, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 2, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  4
+0, 0, 0
+0.376566, 0.3475, 0
+0.695556, 0.54, 0
+1, 0.48, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  3
+0, 0.9, 0
+0.5, 0.6, 0
+1, 0.6, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 0.52, 0
+0.5, 0.6, 0
+1, 0.44, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.5, 0
+0.500404, 0.345, 0
+1, 0.00500003, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0.455, 0
+0.398183, 0.485, 0
+1, 0.37, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.5, 0.8, 0
+1, 0.2, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Simple"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple1"
+Export_GroupName "Simple1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01flo.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1.5, -1, 20 },  { 1.5, -1, 20 },  { 1.5, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "flowerclosed1"
+Export_GroupName "flowerclosed1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.6, -1, 20 },  { 0.6, -1, 20 },  { 0.6, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     5
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01flo2.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 6, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 2, -1, 20 },  { 2, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  5
+0, 0.5, 0
+0.475528, 0.154508, 0
+0.293893, -0.404509, 0
+-0.293893, -0.404508, 0
+-0.475528, 0.154509, 0
+}
+}
+Horn {
+Segments { 6, 1, 500 }
+Top       FALSE
+Scale     1, 1,"id", 0, 5
+Shape     0, 1.57,"cos", -3.14159, 3.14159
+Dense     1.4, 0,"cos", -3.14159, 3.14159
+Steps     1, 1,"id", 1, 200
+Flap      0, 0,"id", -7, 7
+Screw     0, 0,"id", -50, 50
+RotX      0, 0.1,"rnd", -1, 1
+RotY      0, 0.1,"rnd", -1, 1
+RotZ      0, 0,"id", -1, 1
+TrX       0, 0,"id", -20, 20
+TrY       0, 0,"id", -20, 20
+TrZ       0, 0,"id", -20, 20
+Smooth
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+ShapeKnots {
+Size  6
+0.12, -1, 0
+0.388998, -0.599644, 0
+0.469641, -0.199946, 0
+0.370972, 0.199874, 0
+0.233021, 0.600022, 0
+0.1, 1, 0
+}
+ApplyShape
+MoveScale 20
+Length { 0.16, 0.001, 20 }
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple2"
+Export_GroupName "Simple2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "flowerclosed1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple3"
+Export_GroupName "Simple3"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Branch"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.5, -1, 20 },  { 0.5, -1, 20 },  { 0.5, -1, 20 }
+Rotation    { 0.228479, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+}
+
+
+}
+
+KeyFrame {
+Name  "Key"
+Time  1
+
+Model {
+
+Struct {
+Name "Root"
+Export_GroupName "Root"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "RealRuler100m"
+  "size"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Camera {
+Translation 0.116963, 4.79463, -2.76004
+View_Vector 0, 0, 1
+Foot_Vector 0, 1, 0
+View_Point  0, 0, 0
+Zoom  30
+Near -1
+Far  5
+OccularDistance 0.81
+EyePlane        0
+PlaneOrigin     50
+BrushConstant FALSE
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stem1"
+Export_GroupName "Stem1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Stem2"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0.2, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     24
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0.1, 0.1,"rnd", -0.5, 0.5
+Texture_File "FR01brk1.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 0.5, 0.01, 10 }
+Texture_ScaleT  { 3, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 4, -1, 20 },  { 4, -1, 20 },  { 4, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+ApplyProfil3D
+Profil {
+Size  24
+-0.105, 0.41, 0
+-0.00749139, 0.429228, 0
+0.102518, 0.425625, 0
+0.230633, 0.378994, 0
+0.383572, 0.263978, 0
+0.477488, 0.128563, 0
+0.501306, 0.000859816, 0
+0.484856, -0.124694, 0
+0.43113, -0.24667, 0
+0.346387, -0.355145, 0
+0.24361, -0.431123, 0
+0.12605, -0.477317, 0
+-4.09782e-008, -0.492887, 0
+-0.12605, -0.477317, 0
+-0.24361, -0.431123, 0
+-0.346387, -0.355145, 0
+-0.431582, -0.246921, 0
+-0.482185, -0.12317, 0
+-0.494874, 0.00444102, 0
+-0.475952, 0.129493, 0
+-0.423439, 0.248706, 0
+-0.344831, 0.346408, 0
+-0.264132, 0.39513, 0
+-0.184008, 0.411625, 0
+}
+}
+Tree {
+Segments { 19, 1, 500 }
+Branch_Num { 10, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 50, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.4725, 0
+0.516801, 0.510599, 0
+1, 0.4925, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  6
+0, 0.7, 0
+0.083271, 0.611673, 0
+0.248249, 0.565072, 0
+0.552082, 0.520841, 0
+0.768215, 0.482227, 0
+1, 0.4575, 0
+}
+Scale {
+Size  3
+0, 0.52, 0
+0.48303, 0.6325, 0
+1, 0.995, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.5, 1, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0.06, 0
+0.486465, 0.0650001, 0
+1, 0.06, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  5
+0, 0.2025, 0
+0.261217, 0.168734, 0
+0.556692, 0.326093, 0
+0.823753, 0.335305, 0
+1, 0.19, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0.16, 0
+0.490909, 0.2, 0
+1, 0.44, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.490909, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.46707, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+-0.877748, -0.0211919, 9.90781
+-0.895587, -0.141443, 19.9715
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stem2"
+Export_GroupName "Stem2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Stem3"
+  "inv1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { -3, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     7
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk2.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 0.5, 0.01, 10 }
+Texture_ScaleT  { 14, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  7
+0, 0.5, 0
+0.389654, 0.306931, 0
+0.486203, -0.108759, 0
+0.214765, -0.449551, 0
+-0.214765, -0.449551, 0
+-0.486203, -0.108759, 0
+-0.389654, 0.306931, 0
+}
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 12, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 6, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.36, 0
+0.518182, 0.42, 0
+1, 0.32, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 0.545, 0
+0.176969, 0.61, 0
+0.657778, 0.5525, 0
+1, 0.51, 0
+}
+Scale {
+Size  4
+0, 1, 0
+0.540808, 0.965, 0
+0.884444, 0.8225, 0
+1, 1, 0
+}
+GeomScale {
+Size  4
+0, 1, 0
+0.5, 1, 0
+0.835556, 0.7925, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  8
+0, 0.7, 0
+0.151746, 0.635, 0
+0.285714, 0.7, 0
+0.433016, 0.76, 0
+0.571429, 0.7, 0
+0.723175, 0.635, 0
+0.857143, 0.7, 0
+1, 0.76, 0
+}
+Angle {
+Size  3
+0, 0.155, 0
+0.46359, 0.14623, 0
+1, 0.1175, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.463636, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Stalk"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "rnd1"
+Export_GroupName "rnd1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Branch"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Horn {
+Segments { 5, 1, 500 }
+Top       TRUE
+Scale     1, 1,"id", 0, 5
+Shape     0, 1.57,"cos", -3.14159, 3.14159
+Dense     0, 0,"cos", -3.14159, 3.14159
+Steps     1, 1,"id", 1, 200
+Flap      0, 0,"id", -7, 7
+Screw     0, 0,"id", -50, 50
+RotX      0, 0.06,"rnd", -1, 1
+RotY      0, 0.06,"rnd", -1, 1
+RotZ      0, 0.1,"rnd", -1, 1
+TrX       0, 0,"id", -20, 20
+TrY       0, 0,"id", -20, 20
+TrZ       0, 0,"id", -20, 20
+Smooth
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+ShapeKnots {
+Size  5
+1, -1, 0
+0.92388, -0.5, 0
+0.707107, 0, 0
+0.382683, 0.5, 0
+-4.09782e-008, 1, 0
+}
+MoveScale 20
+Length { 0.001, 0.001, 20 }
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Papaya"
+Export_GroupName "Papaya"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 3, -1, 20 },  { 3, -1, 20 },  { 3, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1.8, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     9
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0.05, 0.05,"rnd", -0.5, 0.5
+Texture_File "FR01frt.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 0.5, 0.01, 10 }
+Texture_ScaleT  { 15, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 0.6, -1, 20 },  { 0.6, -1, 20 },  { 0.6, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  9
+0, 0.5, 0
+0.320575, 0.375175, 0
+0.490786, 0.0864444, 0
+0.429859, -0.248394, 0
+0.170225, -0.46621, 0
+-0.170225, -0.46621, 0
+-0.429859, -0.248394, 0
+-0.490786, 0.0864444, 0
+-0.320575, 0.375175, 0
+}
+}
+Revo {
+ShapeKnots {
+Size  15
+0.115, 0, -0.5025
+0.237932, 0, -0.494452
+0.393216, 0, -0.439164
+0.528112, 0, -0.340444
+0.671701, 0, -0.227806
+0.851455, 0, -0.153455
+0.954562, 0, -0.0849719
+0.994221, 0, -0.00129193
+0.989585, 0, 0.0730831
+0.959695, 0, 0.173234
+0.818465, 0, 0.306837
+0.505464, 0, 0.431299
+0.249429, 0, 0.457526
+0.11085, 0, 0.435277
+0.00999996, 0, 0.4275
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "RealRuler1m"
+Export_GroupName "RealRuler1m"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { -0.5, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "1MRuler.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { -1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 3, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Use_GFXColor
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  1, 1, 1
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Leaf {
+Segments  5
+Top TRUE
+Shape   -1.57, 1.57,"cos", -3.14159, 3.14159
+Dense   1, 0,"cos", -3.14159, 3.14159
+RotX    0, 0,"id", -20, 20
+RotY    0, 0,"id", -20, 20
+RotZ    0, 0,"id", -20, 20
+Scale     { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 1, 0.001, 10 }
+ShapeKnots {
+Size  6
+-4.37114e-008, -1, 0
+0.587785, -0.6, 0
+0.951057, -0.2, 0
+0.951057, 0.2, 0
+0.587785, 0.6, 0
+-4.47035e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "size"
+Export_GroupName "size"
+Group
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Stem1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.075, -1, 20 },  { 0.075, -1, 20 },  { 0.075, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stalk"
+Export_GroupName "Stalk"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Z
+Photo_Mode Vector
+Photo  { -0.290909, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Papaya"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     3
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 5, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  3
+0, 0.5, 0
+0.433013, -0.25, 0
+-0.433013, -0.25, 0
+}
+}
+Tree {
+Segments { 10, 1, 500 }
+Branch_Num { 7, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 3, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.52, 0
+0.5, 0.5, 0
+1, 0.48, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  3
+0, 0.9, 0
+0.5, 0.6, 0
+1, 0.6, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.5, 1, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 1, 0
+0.420405, 1, 0
+1, 1, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.5, 0.8, 0
+1, 0.2, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "RealRuler100m"
+Export_GroupName "RealRuler100m"
+Group
+Hide
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "RealRuler1m"
+  "RealRuler1mflat"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 1, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "OMruler.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { -1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 10, -1, 20 },  { 1, -1, 20 },  { 100, -1, 100 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Use_GFXColor
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  1, 1, 1
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Leaf {
+Segments  5
+Top TRUE
+Shape   -1.57, 1.57,"cos", -3.14159, 3.14159
+Dense   1, 0,"cos", -3.14159, 3.14159
+RotX    0, 0,"id", -20, 20
+RotY    0, 0,"id", -20, 20
+RotZ    0, 0,"id", -20, 20
+Scale     { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 1, 0.001, 10 }
+ShapeKnots {
+Size  6
+-4.37114e-008, -1, 0
+0.587785, -0.6, 0
+0.951057, -0.2, 0
+0.951057, 0.2, 0
+0.587785, 0.6, 0
+-4.47035e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "RealRuler1mflat"
+Export_GroupName "RealRuler1mflat"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 1.57, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { -6, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "circle.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { -1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 10, -1, 20 },  { 10, -1, 20 },  { 10, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Use_GFXColor
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  1, 1, 1
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Leaf {
+Segments  5
+Top TRUE
+Shape   -1.57, 1.57,"cos", -3.14159, 3.14159
+Dense   1, 0,"cos", -3.14159, 3.14159
+RotX    0, 0,"id", -20, 20
+RotY    0, 0,"id", -20, 20
+RotZ    0, 0,"id", -20, 20
+Scale     { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 1, 0.001, 10 }
+ShapeKnots {
+Size  6
+-4.37114e-008, -1, 0
+0.587785, -0.6, 0
+0.951057, -0.2, 0
+0.951057, 0.2, 0
+0.587785, 0.6, 0
+-4.47035e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stem3"
+Export_GroupName "Stem3"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Simple3"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     7
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  7
+0, 0.5, 0
+0.389654, 0.306931, 0
+0.486203, -0.108759, 0
+0.214765, -0.449551, 0
+-0.214765, -0.449551, 0
+-0.486203, -0.108759, 0
+-0.389654, 0.306931, 0
+}
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 38, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 10, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       TRUE
+Version 6
+Branchiness {
+Size  3
+0, 0.495, 0
+0.5, 0.5, 0
+1, 0.5, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 1, 0
+0.394747, 0.9675, 0
+0.715556, 0.7275, 0
+1, 0.415, 0
+}
+Scale {
+Size  3
+0, 1, 0
+0.536364, 1, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.663636, 1, 0
+1, 0.84, 0
+}
+Deviate {
+Size  3
+0, 0.085, 0
+0.491111, 0.075, 0
+1, 0.08, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.6, 0
+0.605812, 0.47123, 0
+1, 0.3775, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.463636, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "rnd1"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Branch"
+Export_GroupName "Branch"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Leaf1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1.3, -1, 20 },  { 1.3, -1, 20 },  { 1.3, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     5
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 7, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2.5, -1, 20 },  { 2.5, -1, 20 },  { 2.5, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  5
+0, 0.5, 0
+0.466532, 0.152071, 0
+0.289386, -0.391692, 0
+-0.289386, -0.391691, 0
+-0.466532, 0.152072, 0
+}
+}
+Tree {
+Segments { 15, 1, 500 }
+Branch_Num { 15, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 8, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  3
+0, 0.5, 0
+0.600404, 0.45, 0
+1, 0.3325, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  8
+0, 0.995, 0
+0.0412774, 0.944596, 0
+0.101965, 0.824688, 0
+0.174598, 0.609189, 0
+0.239092, 0.547547, 0
+0.430554, 0.432192, 0
+0.80256, 0.275796, 0
+1, 0.2, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.52, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.5, 1, 0
+1, 1, 0
+}
+Deviate {
+Size  3
+0, 0.00999999, 0
+0.491111, 0.0550001, 0
+1, 0.1, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.490909, 0.16, 0
+1, 0.28, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.550101, 0.145, 0
+1, 0.16, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 0.04, 0
+0.545455, 0.12, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Leaf1"
+Export_GroupName "Leaf1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 10, -1, 20 },  { 10, -1, 20 },  { 10, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { -0.05, -50, 50 },  { -0.05, -50, 50 },  { -0.4, -50, 50 }
+}
+Primitive {
+Type "Area"
+Points     9
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0.005, 0.005,"rnd", -0.5, 0.5
+Texture_File "FR01lef.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 15, 0.01, 20 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+ApplyProfil3D
+Profil {
+Size  9
+-0.435, -0.0949999, 0
+-0.338359, -0.0313993, 0
+-0.22837, -0.0161289, 0
+-0.113494, -0.00711183, 0
+0.00452515, -0.00188898, 0
+0.11481, -0.00761472, 0
+0.22789, -0.0220061, 0
+0.346413, -0.0472087, 0
+0.46, -0.105, 0
+}
+}
+Leaf {
+Segments  15
+Top TRUE
+Shape   -1.57, 1.57,"floor", -3.14159, 3.14159
+Dense   0.04, 0.04, "1+rnd(x)", 0, 0.2
+RotX    0, 1,"rnd", -20, 20
+RotY    0, 2,"rnd", -20, 20
+RotZ    2, 2,"rnd", -20, 20
+Scale     { 1.4, -1, 20 },  { -0.5, -1, 20 },  { 1, -1, 20 }
+RadDeform  { 0, -1, 1 }
+MoveScale 1
+Length { 0.7, 0.001, 10 }
+ApplyShape
+ShapeKnots {
+Size  15
+1, -1, 0
+1.07141, -0.874752, 0
+1.07199, -0.702557, 0
+1.05152, -0.554792, 0
+1.03078, -0.420267, 0
+1.00819, -0.287173, 0
+0.997167, -0.14348, 0
+0.994939, 1.30944e-006, 0
+1.00042, 0.143469, 0
+1.01351, 0.28714, 0
+1.02981, 0.420639, 0
+1.04376, 0.555386, 0
+1.0739, 0.701174, 0
+1.11984, 0.844162, 0
+-1.49012e-008, 1, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0.08, 0
+}
+Gravitropism {
+Size  3
+0, 0.12, 0
+0.522626, 0.3675, 0
+1, 0.735, 0
+}
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "inv1"
+Export_GroupName "inv1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "inv2"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 10, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 5, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       TRUE
+Version 6
+Branchiness {
+Size  3
+0, 0.495, 0
+0.5, 0.5, 0
+1, 0.5, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 1, 0
+0.394747, 0.9675, 0
+0.715556, 0.7275, 0
+1, 0.415, 0
+}
+Scale {
+Size  3
+0, 1, 0
+0.536364, 1, 0
+1, 1, 0
+}
+GeomScale {
+Size  3
+0, 0.6, 0
+0.627272, 0.68, 0
+1, 0.52, 0
+}
+Deviate {
+Size  3
+0, 0.085, 0
+0.491111, 0.075, 0
+1, 0.08, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.43, 0
+0.50359, 0.34623, 0
+1, 0.2525, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.463636, 1, 0
+1, 1, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Stalk2"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "inv2"
+Export_GroupName "inv2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 1, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 7, -1, 20 },  { 7, -1, 20 },  { 7, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { -1.57, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+Tree {
+Segments { 3, 1, 500 }
+Branch_Num { 7, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 4, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       TRUE
+Version 6
+Branchiness {
+Size  3
+0, 0.575, 0
+0.5, 0.5, 0
+1, 0.18, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  4
+0, 1, 0
+0.394747, 0.9675, 0
+0.715556, 0.7275, 0
+1, 0.415, 0
+}
+Scale {
+Size  3
+0, 1, 0
+0.572728, 1, 0
+1, 1, 0
+}
+GeomScale {
+Size  3
+0, 1, 0
+0.663636, 1, 0
+1, 0.84, 0
+}
+Deviate {
+Size  3
+0, 0.085, 0
+0.491111, 0.075, 0
+1, 0.08, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.225, 0
+0.521368, 0.20623, 0
+1, 0.1375, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 0.76, 0
+0.481818, 0.76, 0
+1, 0.76, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Stalk3"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stalk2"
+Export_GroupName "Stalk2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "flowerclosed1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     3
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  3
+0, 0.5, 0
+0.433013, -0.25, 0
+-0.433013, -0.25, 0
+}
+}
+Tree {
+Segments { 5, 1, 500 }
+Branch_Num { 3, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 3, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  4
+0, 0, 0
+0.431111, 0.0275, 0
+0.695556, 0.54, 0
+1, 0.48, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  3
+0, 0.9, 0
+0.5, 0.6, 0
+1, 0.6, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 0.52, 0
+0.5, 0.6, 0
+1, 0.44, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.5, 0
+0.500404, 0.345, 0
+1, 0.00500003, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0.455, 0
+0.398183, 0.485, 0
+1, 0.37, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.5, 0.8, 0
+1, 0.2, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Simple2"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "flowerclosed"
+Export_GroupName "flowerclosed"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Simple1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.6, -1, 20 },  { 0.6, -1, 20 },  { 0.6, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     5
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01flo2.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 10, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 2, -1, 20 },  { 2, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  5
+0, 0.5, 0
+0.475528, 0.154508, 0
+0.293893, -0.404509, 0
+-0.293893, -0.404508, 0
+-0.475528, 0.154509, 0
+}
+}
+Horn {
+Segments { 6, 1, 500 }
+Top       FALSE
+Scale     1, 1,"id", 0, 5
+Shape     0, 1.57,"cos", -3.14159, 3.14159
+Dense     0, 0,"cos", -3.14159, 3.14159
+Steps     1, 1,"id", 1, 200
+Flap      0, 0,"id", -7, 7
+Screw     0, 0,"id", -50, 50
+RotX      0, 0.1,"rnd", -1, 1
+RotY      0, 0.1,"rnd", -1, 1
+RotZ      0, 0,"id", -1, 1
+TrX       0, 0,"id", -20, 20
+TrY       0, 0,"id", -20, 20
+TrZ       0, 0,"id", -20, 20
+Smooth
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+ShapeKnots {
+Size  6
+0.12, -1, 0
+0.118998, -0.599644, 0
+0.139641, -0.199946, 0
+0.230972, 0.199874, 0
+0.273021, 0.600022, 0
+0.34, 1, 0
+}
+ApplyShape
+MoveScale 20
+Length { 0.05, 0.001, 20 }
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple"
+Export_GroupName "Simple"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "flowerclosed"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Stalk3"
+Export_GroupName "Stalk3"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     3
+Separator  TRUE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01brk3.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  3
+0, 0.5, 0
+0.433013, -0.25, 0
+-0.433013, -0.25, 0
+}
+}
+Tree {
+Segments { 5, 1, 500 }
+Branch_Num { 3, 1, 100 }
+Fork_Num { 0, 0, 50 }
+Len { 2, 0, 200 }
+TransZ { 0, -10, 10 }
+KruschtlKnots { 2, 0, 10 }
+IniScale { 1, 0, 1 }
+Top       FALSE
+Version 6
+Branchiness {
+Size  4
+0, 0, 0
+0.376566, 0.3475, 0
+0.695556, 0.54, 0
+1, 0.48, 0
+}
+Forkiness {
+Size  3
+0, 0, 0
+0.5, 0.5, 0
+1, 0.2, 0
+}
+Shape {
+Size  3
+0, 0.9, 0
+0.5, 0.6, 0
+1, 0.6, 0
+}
+Scale {
+Size  3
+0, 0.5, 0
+0.5, 0.5, 0
+1, 0.44, 0
+}
+GeomScale {
+Size  3
+0, 0.52, 0
+0.5, 0.6, 0
+1, 0.44, 0
+}
+Deviate {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Screw {
+Size  3
+0, 0.7, 0
+0.5, 0.7, 0
+1, 0.7, 0
+}
+Angle {
+Size  3
+0, 0.5, 0
+0.500404, 0.345, 0
+1, 0.00500003, 0
+}
+ForkAngle {
+Size  3
+0, 0.4, 0
+0.5, 0.4, 0
+1, 0.4, 0
+}
+Phototropism {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Gravitropism {
+Size  3
+0, 0.455, 0
+0.398183, 0.485, 0
+1, 0.37, 0
+}
+Kruschtl {
+Size  3
+0, 0, 0
+0.5, 0, 0
+1, 0, 0
+}
+Dense {
+Size  3
+0, 1, 0
+0.5, 0.8, 0
+1, 0.2, 0
+}
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+Branches {
+  "Simple"
+}
+
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple1"
+Export_GroupName "Simple1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Square"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01flo.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1.5, -1, 20 },  { 1.5, -1, 20 },  { 1.5, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "flowerclosed1"
+Export_GroupName "flowerclosed1"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.6, -1, 20 },  { 0.6, -1, 20 },  { 0.6, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Tube"
+Points     5
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "FR01flo2.tif"
+Texture_Mode TG_NONE
+Texture_Handler 1
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 6, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 2, -1, 20 },  { 2, -1, 20 },  { 2, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+Profil {
+Size  5
+0, 0.5, 0
+0.475528, 0.154508, 0
+0.293893, -0.404509, 0
+-0.293893, -0.404508, 0
+-0.475528, 0.154509, 0
+}
+}
+Horn {
+Segments { 6, 1, 500 }
+Top       FALSE
+Scale     1, 1,"id", 0, 5
+Shape     0, 1.57,"cos", -3.14159, 3.14159
+Dense     1.4, 0,"cos", -3.14159, 3.14159
+Steps     1, 1,"id", 1, 200
+Flap      0, 0,"id", -7, 7
+Screw     0, 0,"id", -50, 50
+RotX      0, 0.1,"rnd", -1, 1
+RotY      0, 0.1,"rnd", -1, 1
+RotZ      0, 0,"id", -1, 1
+TrX       0, 0,"id", -20, 20
+TrY       0, 0,"id", -20, 20
+TrZ       0, 0,"id", -20, 20
+Smooth
+Characteristic 5
+Knots {
+Size  3
+0, 0, 0
+0, 0, 10
+0, 0, 20
+}
+ShapeKnots {
+Size  6
+0.12, -1, 0
+0.388998, -0.599644, 0
+0.469641, -0.199946, 0
+0.370972, 0.199874, 0
+0.233021, 0.600022, 0
+0.1, 1, 0
+}
+ApplyShape
+MoveScale 20
+Length { 0.16, 0.001, 20 }
+}
+
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple2"
+Export_GroupName "Simple2"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "flowerclosed1"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+Struct {
+Name "Simple3"
+Export_GroupName "Simple3"
+CullRadius { 0, 0, 20 }
+CullPos    { 0, -100, 100 },  { 0, -100, 100 },  { 0, -100, 100 }
+Photo_Dir Y
+Photo_Mode Vector
+Photo  { 0, -1, 1 }
+Existence    0, 1,"id", 0, 1
+Children {
+  "Branch"
+}
+
+Struct_Mut_Info {
+Trigger 0xffffffff
+Trigger_Method 0x2
+Acceleration 1
+}
+Transform {
+Scale    { 0.5, -1, 20 },  { 0.5, -1, 20 },  { 0.5, -1, 20 }
+Rotation    { 0.228479, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+Primitive {
+Type "Undefined"
+Points     3
+Separator  FALSE
+Deformable TRUE
+TorusMinor  { 0.2, 0, 1 }
+Resolution 1
+Displace   0, 0,"rnd", -0.5, 0.5
+Texture_File "Default"
+Texture_Mode TG_NONE
+Texture_Handler 2
+Texture_ScaleS  { 1, 0.01, 10 }
+Texture_ScaleT  { 1, 0.01, 10 }
+Texture_ShiftS  { 0, -10, 10 }
+Texture_ShiftT  { 0, -10, 10 }
+Texture_Speed   { 1, 0, 1 }
+Alpha         { 1, 0, 1 }
+Color_Select  { 0.5, 0, 1 }
+Attractor_Center   0.1
+Attractor_Strength { 1, -5, 5 }
+Attractor_Mode     -1
+Transform {
+Scale    { 1, -1, 20 },  { 1, -1, 20 },  { 1, -1, 20 }
+Rotation    { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 },  { 0, -3.14159, 3.14159 }
+Translation    { 0, -50, 50 },  { 0, -50, 50 },  { 0, -50, 50 }
+}
+NewAlphaDef
+Use_Color_Spline FALSE
+GFXColor {
+AMBIENT  0.1, 0.1, 0.1
+DIFFUSE  0.5, 0.5, 0.5
+SPECULAR 0, 0, 0
+EMISSION 0, 0, 0
+ALPHA 1
+}
+
+Simple_Triangulation
+}
+AccessInfo {
+}
+
+}
+
+}
+
+
+}
+
+
+}
+
+
+
+}
+
+
+}
+
+
+
+
+}
+
+
+
