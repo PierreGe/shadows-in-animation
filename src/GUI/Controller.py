@@ -22,7 +22,8 @@ class Controller(object):
         self._setStatusComputing()
         self._splitPane = splitPane
         with open("assets/scene/basic.json", "r") as f:
-            objects = json.loads(f.read())
+            jDict = json.loads(f.read())
+            objects = jDict["obj-liste"]
         self.glWidget = OpenGLWidget.OpenGLWidget(objects)
         self.helpWidget = HelpWidget.HelpWidget()
         self._setStatusReady()

@@ -1,10 +1,13 @@
-[
-  [
-    "assets/obj/bonhomme/Stick_Figure_by_Swp.OBJ",
+{
+  "name": "Basic Scene",
+  "obj-liste": [
     [
-      0,
-      0,
-      0
+      "assets/obj/bonhomme/Stick_Figure_by_Swp.OBJ",
+      [
+        0,
+        0,
+        0
+      ]
     ]
   ]
-]
+}
