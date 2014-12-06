@@ -25,7 +25,7 @@ class SplitPane(QtGui.QWidget):
         self.initUI()
         
     def initUI(self):
-        """ """
+        """ this method will intiate the splitpane"""
         hbox = QtGui.QHBoxLayout(self)
 
         self.left = TreeWidget.TreeWidget(self._controller)

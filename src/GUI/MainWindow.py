@@ -31,6 +31,7 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle("Les ombres au sein des jeux et des animations")
 
         self._statusBar = self.statusBar()
+        self._statusBar.showMessage('Welcome!')
         self._controller = Controller.Controller(self._statusBar)
 
         ex = SplitPane.SplitPane(self._controller)
@@ -54,8 +55,12 @@ class MainWindow(QtGui.QMainWindow):
         fileMenu.addAction(exitAction)
 
 
-        fileMenu = menubar.addMenu('&Help')
-        fileMenu.addAction(exitAction)
+        helpMenu = menubar.addMenu('&Help')
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), 'Exit', self)
+        #aboutAction.setShortcut('Ctrl+Q')
+        aboutAction.setStatusTip('Exit application')
+        aboutAction.triggered.connect(self.close)
+        helpMenu.addAction(aboutAction)
 
     def initToolsBar(self):
         """ This method will initate the toolsBar"""

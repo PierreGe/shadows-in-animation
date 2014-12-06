@@ -64,6 +64,7 @@ class TreeWidget(QtGui.QWidget):
 
 
     def handleChanged(self, item, column):
+        """ This method is trigered when something is selectionned in the treeview """
         if item.checkState(column) == QtCore.Qt.Checked:
             self._unckeckEverythingExceptItem(item)
             self._controller.showGL(item)

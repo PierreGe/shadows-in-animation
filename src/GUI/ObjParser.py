@@ -1,6 +1,7 @@
 import pygame
 from OpenGL.GL import *
- 
+
+# this code come partially from the opensource pygame doc 
  
 class ObjParser:
     def __init__(self, filename, swapyz=False):
@@ -80,10 +81,10 @@ class ObjParser:
         glDisable(GL_TEXTURE_2D)
         glEndList()
 
-    def MTL(self, filename):
+    def MTL(self, mtlFilename):
         contents = {}
         mtl = None
-        for line in open(self.path + filename, "r"):
+        for line in open(self.path + mtlFilename, "r"):
             if line.startswith('#'): continue
             values = line.split()
             if not values: continue
