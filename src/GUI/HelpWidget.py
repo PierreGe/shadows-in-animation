@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf8 -*-
 
+import os
 
 from PyQt4 import QtGui, QtCore
 
@@ -20,6 +21,7 @@ class HelpWidget(QtGui.QWidget):
 
         self.textWidget = QtGui.QLabel(self)
         self.textWidget.setText(self._getStringHelp())
+        self.textWidget.setStyleSheet(self._getStyleSheet());
 
         hbox.addWidget(self.textWidget)
         self.setLayout(hbox)
@@ -28,12 +30,10 @@ class HelpWidget(QtGui.QWidget):
         
         self.show()
 
+    def _getStyleSheet(self):
+        """ """
+        return open(os.getcwd() + "/GUI/text-help/text-help.css").read()
+
     def _getStringHelp(self):
         """ """
-        s= ""
-        s += "Bonjour!\n\n"
-        s += "Ceci est l'aide \n\n\n" 
-        s += "Sur votre gauche vous trouverez ... \n\n\n "
-        s += "Mais oui c'est clair ! \n\n\n\n\n "
-        s += "Selectionne quelque chose dans la tree view a gauche"
-        return s
+        return open(os.getcwd() +"/GUI/text-help/text-help.html").read()

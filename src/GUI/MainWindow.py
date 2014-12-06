@@ -37,29 +37,30 @@ class MainWindow(QtGui.QMainWindow):
         ex = SplitPane.SplitPane(self._controller)
         self.setCentralWidget(ex)
 
-        # si on veut mettre une bar en bas qui dit par exemple "Computing ..."
-
         self.initToolsBar()
         self.initMenu()
    
         self.showMaximized()
 
+    def displayAbout(self):
+        """ Display some info"""
+        QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015")
+
     def initMenu(self):
         """ This method will initate the menu """
-        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), 'Exit', self)
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&File')
+        fileMenu = menubar.addMenu('&Fichier')
         fileMenu.addAction(exitAction)
 
 
-        helpMenu = menubar.addMenu('&Help')
-        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), 'Exit', self)
-        #aboutAction.setShortcut('Ctrl+Q')
-        aboutAction.setStatusTip('Exit application')
-        aboutAction.triggered.connect(self.close)
+        helpMenu = menubar.addMenu("&Aide")
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), "A propos", self)
+        aboutAction.setStatusTip("A propos de cette application")
+        aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)
 
     def initToolsBar(self):

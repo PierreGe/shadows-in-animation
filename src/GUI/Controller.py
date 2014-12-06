@@ -56,7 +56,7 @@ class Controller(object):
         scenesFiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
         # remove auto-generated file : thanks macos!!!
         for singleFile in scenesFiles:
-            if "json" in singleFile:
+            if "json" in singleFile.lower():
                 jasonDict = json.loads(open(mypath + singleFile).read())
                 name = jasonDict["name"]
                 dicti = jasonDict
