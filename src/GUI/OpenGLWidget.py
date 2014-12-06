@@ -9,21 +9,17 @@ from objloader import OBJ
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
-    def __init__(self, parent=None):
-        QtOpenGL.QGLWidget.__init__(self, parent) 
-        self.init()
+    def __init__(self, object_names = [], parent=None):
+        QtOpenGL.QGLWidget.__init__(self, parent)
+        self.object_names = object_names
 
-    def init(self):
-        # initial rotation
-        self.xRot = 240
-        self.yRot = -480
-        self.zRot = 0
+    def setObjects(self, object_names):
+        self.object_names = object_names
+        for obj in self.objects:
+            GL.glDeleteLists(1, GL.GL_COMPILE)
+        self.loadObjects()
 
-        self.lastPos = QtCore.QPoint()
- 
-        self.trolltechGreen = QtGui.QColor.fromCmykF(0.40, 0.0, 1.0, 0.0)
-        self.trolltechPurple = QtGui.QColor.fromCmykF(0.39, 0.39, 0.0, 0.0)
-
+    # Rotation
     def xRotation(self):
         return self.xRot
  
@@ -60,33 +56,73 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.emit(QtCore.SIGNAL("zRotationChanged(int)"), angle)
             self.updateGL()
  
+    # Called at startup
     def initializeGL(self):
-        self.qglClearColor(self.trolltechPurple.dark())
+        # initial rotation
+        self.xRot = 240
+        self.yRot = -480
+        self.zRot = 0
+
+        # save mouse cursor position for smooth rotation
+        self.lastPos = QtCore.QPoint()
+
+        # create some light sources FIX THAT SHIT
         GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION,  (-40, 200, 100, 0.0))
         GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, (0.2, 0.2, 0.2, 1.0))
         GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, (0.5, 0.5, 0.5, 1.0))
         GL.glEnable(GL.GL_COLOR_MATERIAL)
         GL.glEnable(GL.GL_LIGHT0)
         GL.glEnable(GL.GL_LIGHTING)
+        # save mouse cursor position for smooth rotation
+        self.lastPos = QtCore.QPoint()
+        # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
+
+    # Objects construction methods
+    def makeFloor(self):
+        self.groundPoints = [-1,0,-1,-1,0,1,1,0,1,1,0,-1]
+        self.groundList = GL.glGenLists(1)
+        GL.glNewList(self.groundList, GL.GL_COMPILE)
+        self.quadrilatere(*[x*10 for x in self.groundPoints])
+        GL.glEndList()
+
+    def loadObjects(self):
+        self.objects = []
+        for obj in self.object_names:
+            self.objects.append(OBJ(obj[0]))
+            # FIX THAT SHIT : translated
  
+    # Called on each update/frame
     def paintGL(self):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+        # reload new matrix
         GL.glLoadIdentity()
+        # zoom out camera
         GL.glTranslated(0.0, 0.0, -19.0)
+        # apply rotation
         GL.glRotated(self.xRot / 16.0, 1.0, 0.0, 0.0)
         GL.glRotated(self.yRot / 16.0, 0.0, 1.0, 0.0)
         GL.glRotated(self.zRot / 16.0, 0.0, 0.0, 1.0)
-        GL.glColor3f(1,1,1)
+        # paint objects
+        self.paintFloor()
+        self.paintObjects()
+
+    def paintFloor(self):
+        GL.glColor3f(1,1,1) # WHITE
         GL.glCallList(self.groundList)
+
+    def paintObjects(self):
+        GL.glColor3f(1,0,0) # RED
         GL.glPushMatrix()
+        # translate objects because grid is too high
         GL.glTranslated(0,2,0)
-        GL.glColor3f(1,0,0)
         for obj in self.objects:
             GL.glCallList(obj.gl_list)
         GL.glPopMatrix()
+
  
+    # Called when window is resized
     def resizeGL(self, width, height):
         GL.glViewport(0, 0, width, height)
  
@@ -96,6 +132,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
         GL.glMatrixMode(GL.GL_MODELVIEW)
  
+    # Events
     def mousePressEvent(self, event):
         self.lastPos = QtCore.QPoint(event.pos())
  
@@ -114,25 +151,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def wheelEvent(self, event):
         print 'La routourne va tourner...'
-
-    def makeFloor(self):
-        self.groundPoints = [-1,0,-1,-1,0,1,1,0,1,1,0,-1]
-        self.groundList = GL.glGenLists(1)
-        GL.glNewList(self.groundList, GL.GL_COMPILE)
-        self.quadrilatere(*(([x*10 for x in self.groundPoints]) + [0,1,0]))
-        GL.glEndList()
-
-    def loadObjects(self):
-        self.objects = []
-        self.objects.append(OBJ("Stick_Figure_by_Swp.OBJ"))
  
-    def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, r, g, b): 
+    # Work methods
+    def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
         GL.glBegin(GL.GL_QUADS)
         GL.glVertex3d(x1, y1, z1)
         GL.glVertex3d(x2, y2, z2)
         GL.glVertex3d(x3, y3, z3)
         GL.glVertex3d(x4, y4, z4)
-        GL.glEnd() 
+        GL.glEnd()
  
     def normalizeAngle(self, angle):
         while angle < 0:

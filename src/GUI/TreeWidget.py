@@ -67,7 +67,7 @@ class TreeWidget(QtGui.QWidget):
     def handleChanged(self, item, column):
         if item.checkState(column) == QtCore.Qt.Checked:
             self._unckeckEverythingExceptItem(item)
-            self._selectController.swichTo(item)
+            self._selectController.showGL(item)
         if item.checkState(column) == QtCore.Qt.Unchecked:
             self._selectController.showHelp()
             #print "unchecked", item, item.text(column)

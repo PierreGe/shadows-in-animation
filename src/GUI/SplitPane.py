@@ -54,10 +54,9 @@ class SplitPane(QtGui.QWidget):
 
     def replaceRightWidget(self,newWidget):
         """ """
-
         self.right.hide()
         self.right.setParent(None)
-        del(self.right)
+        newWidget.show()
         self.right = newWidget
         self.splitter.addWidget(newWidget)
         self._resize()
