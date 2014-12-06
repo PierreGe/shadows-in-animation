@@ -90,9 +90,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         self.objects = []
         for obj in self.object_names:
-            dirpath = "/".join(obj[0].split("/")[:-1])
-            filepath = obj[0].split("/")[-1]
-            self.objects.append(OBJ(dirpath, filepath))
+            self.objects.append(OBJ(obj[0]))
  
     # Called on each update/frame
     def paintGL(self):

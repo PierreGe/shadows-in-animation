@@ -31,7 +31,9 @@ def MTL(path, filename):
     return contents
  
 class OBJ:
-    def __init__(self, path, filename, swapyz=False):
+    def __init__(self, filename, swapyz=False):
+        path = "/".join(filename.split("/")[:-1])
+        filename = filename.split("/")[-1]
         """Loads a Wavefront OBJ file. """
         if len(path) >0 and path[-1] != "/":
             path += "/"
