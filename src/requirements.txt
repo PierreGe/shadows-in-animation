@@ -6,3 +6,6 @@ numpy
 "OpenGLContext==2.2.0a3"
 pydispatcher
 pillow
+python-pygame
+PyQt4
+glut
