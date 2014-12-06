@@ -1,11 +1,13 @@
 #!/usr/bin/python2
 # -*- coding: utf8 -*-
 
+import json
+from os import listdir
+from os.path import isfile, join
+
 
 import HelpWidget
 import OpenGLWidget
-import json
-
 
 class Controller(object):
     """Controller will controll :
@@ -15,16 +17,14 @@ class Controller(object):
     def __init__(self,statusBar):
         self._statusBar = statusBar
         self._splitPane = None
-        self._scene = {} # nom : fichier
+        self._scene = {} # nom : obj-liste
+        self._parseAllScene()
 
     def initSplitPane(self,splitPane):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
-        with open("assets/scene/basic.json", "r") as f:
-            jasonDict = json.loads(f.read())
-            objects = jasonDict["obj-liste"]
-        self.glWidget = OpenGLWidget.OpenGLWidget(objects)
+        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"])
         self.helpWidget = HelpWidget.HelpWidget()
         self._setStatusReady()
 
@@ -44,8 +44,18 @@ class Controller(object):
 
     def getAllScene(self):
         """ """
-        path = "assets/scene/"
         pass
+
+    def _parseAllScene(self):
+        """ """
+        mypath = "assets/scene/"
+        scenesFiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
+        for singleFile in scenesFiles:
+            with open("assets/scene/basic.json", "r") as f:
+                jasonDict = json.loads(f.read())
+                name = jasonDict["name"]
+                objects = jasonDict["obj-liste"]
+                self._scene[name] = objects
 
     def _replaceRightWidget(self,newWidget):
         """ """
