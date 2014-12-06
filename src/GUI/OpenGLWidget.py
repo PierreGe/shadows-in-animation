@@ -90,7 +90,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         self.objects = []
         for obj in self.object_names:
-            self.objects.append(ObjParser.ObjParser(obj[0]))
+            self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
@@ -113,12 +113,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintObjects(self):
         GL.glColor3f(1,0,0) # RED
-        GL.glPushMatrix()
-        # translate objects because grid is too high
-        GL.glTranslated(0,2,0)
         for obj in self.objects:
-            GL.glCallList(obj.gl_list)
-        GL.glPopMatrix()
+            GL.glPushMatrix()
+            GL.glTranslated(*obj[1])
+            GL.glCallList(obj[0].gl_list)
+            GL.glPopMatrix()
 
  
     # Called when window is resized
