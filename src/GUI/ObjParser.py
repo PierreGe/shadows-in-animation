@@ -1,49 +1,23 @@
 import pygame
 from OpenGL.GL import *
  
-def MTL(path, filename):
-    contents = {}
-    mtl = None
-    for line in open(path + filename, "r"):
-        if line.startswith('#'): continue
-        values = line.split()
-        if not values: continue
-        if values[0] == 'newmtl':
-            mtl = contents[values[1]] = {}
-        elif mtl is None:
-            raise ValueError, "mtl file doesn't start with newmtl stmt"
-        elif values[0] == 'map_Kd':
-            # load the texture referred to by this declaration
-            mtl[values[0]] = values[1]
-            surf = pygame.image.load(path + mtl['map_Kd'])
-            image = pygame.image.tostring(surf, 'RGBA', 1)
-            ix, iy = surf.get_rect().size
-            texid = mtl['texture_Kd'] = glGenTextures(1)
-            glBindTexture(GL_TEXTURE_2D, texid)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                GL_LINEAR)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                GL_LINEAR)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ix, iy, 0, GL_RGBA,
-                GL_UNSIGNED_BYTE, image)
-        else:
-            mtl[values[0]] = map(float, values[1:])
-    return contents
  
-class OBJ:
+class ObjParser:
     def __init__(self, filename, swapyz=False):
-        path = "/".join(filename.split("/")[:-1])
-        filename = filename.split("/")[-1]
         """Loads a Wavefront OBJ file. """
-        if len(path) >0 and path[-1] != "/":
-            path += "/"
+
+        self.path = "/".join(filename.split("/")[:-1])
+        filename = filename.split("/")[-1]
+        if len(self.path) >0 and self.path[-1] != "/":
+            self.path += "/"
+
         self.vertices = []
         self.normals = []
-        self.texcoords = []
+        self.textureCoords = []
         self.faces = []
  
         material = None
-        for line in open(path + filename, "r"):
+        for line in open(self.path + filename, "r"):
             if line.startswith('#'): continue
             values = line.split()
             if not values: continue
@@ -58,11 +32,11 @@ class OBJ:
                     v = v[0], v[2], v[1]
                 self.normals.append(v)
             elif values[0] == 'vt':
-                self.texcoords.append(map(float, values[1:3]))
+                self.textureCoords.append(map(float, values[1:3]))
             elif values[0] in ('usemtl', 'usemat'):
                 material = values[1]
             elif values[0] == 'mtllib':
-                self.mtl = MTL(path, values[1])
+                self.mtl = self.MTL(values[1])
             elif values[0] == 'f':
                 face = []
                 texcoords = []
@@ -100,8 +74,37 @@ class OBJ:
                 if normals[i] > 0:
                     glNormal3fv(self.normals[normals[i] - 1])
                 if texture_coords[i] > 0:
-                    glTexCoord2fv(self.texcoords[texture_coords[i] - 1])
+                    glTexCoord2fv(self.textureCoords[texture_coords[i] - 1])
                 glVertex3fv(self.vertices[vertices[i] - 1])
             glEnd()
         glDisable(GL_TEXTURE_2D)
         glEndList()
+
+    def MTL(self, filename):
+        contents = {}
+        mtl = None
+        for line in open(self.path + filename, "r"):
+            if line.startswith('#'): continue
+            values = line.split()
+            if not values: continue
+            if values[0] == 'newmtl':
+                mtl = contents[values[1]] = {}
+            elif mtl is None:
+                raise ValueError, "mtl file doesn't start with newmtl stmt"
+            elif values[0] == 'map_Kd':
+                # load the texture referred to by this declaration
+                mtl[values[0]] = values[1]
+                surf = pygame.image.load(self.path + mtl['map_Kd'])
+                image = pygame.image.tostring(surf, 'RGBA', 1)
+                ix, iy = surf.get_rect().size
+                texid = mtl['texture_Kd'] = glGenTextures(1)
+                glBindTexture(GL_TEXTURE_2D, texid)
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    GL_LINEAR)
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                    GL_LINEAR)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ix, iy, 0, GL_RGBA,
+                    GL_UNSIGNED_BYTE, image)
+            else:
+                mtl[values[0]] = map(float, values[1:])
+        return contents

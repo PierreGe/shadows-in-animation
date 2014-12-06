@@ -5,7 +5,7 @@
 import math, random
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
-from objloader import OBJ
+import ObjParser
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -90,7 +90,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         self.objects = []
         for obj in self.object_names:
-            self.objects.append(OBJ(obj[0]))
+            self.objects.append(ObjParser.ObjParser(obj[0]))
  
     # Called on each update/frame
     def paintGL(self):
