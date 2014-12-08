@@ -48,7 +48,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def initMenu(self):
         """ This method will initate the menu """
-        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), 'Quitter', self)
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
@@ -58,14 +58,14 @@ class MainWindow(QtGui.QMainWindow):
 
 
         helpMenu = menubar.addMenu("&Aide")
-        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "images/application-exit.png"), "A propos", self)
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/application-exit.png"), "A propos", self)
         aboutAction.setStatusTip("A propos de cette application")
         aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)
 
     def initToolsBar(self):
         """ This method will initate the toolsBar"""
-        exitAction = QtGui.QAction(QtGui.QIcon('images/application-exit.png'), 'Exit', self)
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +'images/application-exit.png'), 'Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
