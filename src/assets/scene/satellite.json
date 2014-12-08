@@ -1,7 +1,7 @@
 {
   "name": "Satellite",
   "description": "This scene is the most basic one",
-  "algo-compatible": ["Algo A","Algo B","Algo C"],
+  "algo-compatible": ["Algo A","Algo B","Algo C","Algo D"],
   "obj-liste": [
     [
       "assets/obj/satellite/satellite.obj",
