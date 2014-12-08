@@ -9,6 +9,8 @@ import ObjParser
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
+    lightPosition = [-10,10,0]
+    shadows = []
     # Public interface
     def __init__(self, object_names = [], parent=None):
         QtOpenGL.QGLWidget.__init__(self, parent)
@@ -95,8 +97,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def loadObjects(self):
         self.objects = []
-        for obj in self.object_names:
-            self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
+        for obj in self._object_names:
+            item = ObjParser.ObjParser(obj[0])
+            self.objects.append((item, obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
@@ -112,6 +115,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # paint objects
         self.paintFloor()
         self.paintObjects()
+        self.shadowVolume()
 
     def paintFloor(self):
         GL.glColor3f(1,1,1) # WHITE
@@ -165,7 +169,34 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glVertex3d(x3, y3, z3)
         GL.glVertex3d(x4, y4, z4)
         GL.glEnd()
- 
+
+    
+    def getShapeOnGround(self):
+        for point in self.objects[0][0].vertices:
+            if point[1] < self.lightPosition[1]:#If light source is above the item, else no shadow on the ground
+                from_light = [point[i]-self.lightPosition[i] for i in range(3)]#vector between light and item point
+
+                norm = (from_light[0]**2 + from_light[1]**2 + from_light[2]**2)**(1/3.0)
+
+                unit_vector = [from_light[i]/norm for i in range(len(from_light))]
+
+                distance = (point[1])/unit_vector[1]
+            self.shadows.append(point[0]-distance*unit_vector[0])
+            self.shadows.append(point[1]-distance*unit_vector[1])
+            self.shadows.append(point[2]-distance*unit_vector[2])
+            #vecteur directeur de la droite light->point de la forme
+        # self.shapeList = GL.glGenLists(10)
+        # GL.glNewList(self.shapeList, GL.GL_COMPILE)
+        # self.quadrilatere(*(([x*10 for x in self.shapeList])))
+        # GL.glEndList()
+
+        
+
+    def shadowVolume(self):
+        self.getShapeOnGround()
+
+
+
     def normalizeAngle(self, angle):
         while angle < 0:
             angle += 360
