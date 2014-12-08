@@ -96,6 +96,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         self.objects = []
         for obj in self._object_names:
+            print(ObjParser.ObjParser(obj[0]))
             self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
  
     # Called on each update/frame
@@ -122,7 +123,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for obj in self.objects:
             GL.glPushMatrix()
             GL.glTranslated(*obj[1])
-            GL.glCallList(obj[0].gl_list)
+            GL.glCallList(obj[0].getGlList())
             GL.glPopMatrix()
 
  

@@ -1,4 +1,6 @@
 import pygame
+import os
+import cPickle
 from OpenGL.GL import *
 
 # this code come partially from the opensource pygame doc 
@@ -7,18 +9,43 @@ class ObjParser:
     def __init__(self, filename, swapyz=False):
         """Loads a Wavefront OBJ file. """
 
-        self.path = "/".join(filename.split("/")[:-1])
+        self._filePath = "/".join(filename.split("/")[:-1])
         filename = filename.split("/")[-1]
-        if len(self.path) >0 and self.path[-1] != "/":
-            self.path += "/"
+        if len(self._filePath) >0 and self._filePath[-1] != "/":
+            self._filePath += "/"
+        self._cachePath = self._filePath.replace("assets/", "cache/", 1)
 
-        self.vertices = []
-        self.normals = []
-        self.textureCoords = []
-        self.faces = []
- 
+        self._vertices = []
+        self._normals = []
+        self._textureCoords = []
+        self._faces = []
+        self._gl_list = None
+        if os.path.isfile(self._cachePath + filename):
+            self._loadGlList(filename)
+        else:
+            self._parseObjFile(filename, swapyz)
+            self._dumpGlList(filename)
+        
+    def _dumpGlList(self,filename):
+        """ """
+        if not os.path.exists(self._cachePath):
+            os.makedirs(self._cachePath)
+        dumpFile = open(self._cachePath + filename, "wb")
+        cPickle.dump(self.__dict__, dumpFile, 2)
+        dumpFile.close()
+
+    def _loadGlList(self,filename):
+        """ """
+        loadFile = open(self._cachePath + filename, "rb")
+        tmpDict = cPickle.load(loadFile)
+        loadFile.close()
+        self.__dict__.update(tmpDict)
+        self._computeGlList()
+
+    def _parseObjFile(self, filename, swapyz=False):
+        """ """
         material = None
-        for line in open(self.path + filename, "r"):
+        for line in open(self._filePath + filename, "r"):
             if line.startswith('#'): continue
             values = line.split()
             if not values: continue
@@ -26,18 +53,18 @@ class ObjParser:
                 v = map(float, values[1:4])
                 if swapyz:
                     v = v[0], v[2], v[1]
-                self.vertices.append(v)
+                self._vertices.append(v)
             elif values[0] == 'vn':
                 v = map(float, values[1:4])
                 if swapyz:
                     v = v[0], v[2], v[1]
-                self.normals.append(v)
+                self._normals.append(v)
             elif values[0] == 'vt':
-                self.textureCoords.append(map(float, values[1:3]))
+                self._textureCoords.append(map(float, values[1:3]))
             elif values[0] in ('usemtl', 'usemat'):
                 material = values[1]
             elif values[0] == 'mtllib':
-                self.mtl = self.MTL(values[1])
+                self.mtl = self._parseMtlFile(values[1])
             elif values[0] == 'f':
                 face = []
                 texcoords = []
@@ -53,13 +80,16 @@ class ObjParser:
                         norms.append(int(w[2]))
                     else:
                         norms.append(0)
-                self.faces.append((face, norms, texcoords, material))
- 
-        self.gl_list = glGenLists(1)
-        glNewList(self.gl_list, GL_COMPILE)
+                self._faces.append((face, norms, texcoords, material))
+        self._computeGlList()
+
+    def _computeGlList(self):
+        """ """
+        self._gl_list = glGenLists(1)
+        glNewList(self._gl_list, GL_COMPILE)
         glEnable(GL_TEXTURE_2D)
         glFrontFace(GL_CCW)
-        for face in self.faces:
+        for face in self._faces:
             vertices, normals, texture_coords, material = face
  
             mtl = self.mtl[material]
@@ -73,18 +103,19 @@ class ObjParser:
             glBegin(GL_POLYGON)
             for i in range(len(vertices)):
                 if normals[i] > 0:
-                    glNormal3fv(self.normals[normals[i] - 1])
+                    glNormal3fv(self._normals[normals[i] - 1])
                 if texture_coords[i] > 0:
-                    glTexCoord2fv(self.textureCoords[texture_coords[i] - 1])
-                glVertex3fv(self.vertices[vertices[i] - 1])
+                    glTexCoord2fv(self._textureCoords[texture_coords[i] - 1])
+                glVertex3fv(self._vertices[vertices[i] - 1])
             glEnd()
         glDisable(GL_TEXTURE_2D)
         glEndList()
 
-    def MTL(self, mtlFilename):
+    def _parseMtlFile(self, mtlFilename):
+        """ """
         contents = {}
         mtl = None
-        for line in open(self.path + mtlFilename, "r"):
+        for line in open(self._filePath + mtlFilename, "r"):
             if line.startswith('#'): continue
             values = line.split()
             if not values: continue
@@ -95,7 +126,7 @@ class ObjParser:
             elif values[0] == 'map_Kd':
                 # load the texture referred to by this declaration
                 mtl[values[0]] = values[1]
-                surf = pygame.image.load(self.path + mtl['map_Kd'])
+                surf = pygame.image.load(self._filePath + mtl['map_Kd'])
                 image = pygame.image.tostring(surf, 'RGBA', 1)
                 ix, iy = surf.get_rect().size
                 texid = mtl['texture_Kd'] = glGenTextures(1)
@@ -106,3 +137,7 @@ class ObjParser:
             else:
                 mtl[values[0]] = map(float, values[1:])
         return contents
+
+    def getGlList(self):
+        """ """
+        return self._gl_list

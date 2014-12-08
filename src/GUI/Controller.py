@@ -34,7 +34,6 @@ class Controller(object):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
-        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]["obj-liste"]) # name from json file
         self._setStatusReady()
 
     def showGL(self, item):
@@ -46,7 +45,7 @@ class Controller(object):
         # TODO set algo
         self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"])
         self._replaceRightWidget(self._glWidget)
-        
+
         self._setStatusReady()
 
     def showHelp(self):
