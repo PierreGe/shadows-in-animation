@@ -11,12 +11,16 @@ import ObjParser
 class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self.object_names = object_names
+        self._object_names = object_names
+
+    def getObjectNames(self):
+        """ Reload openGLWidget """
+        return self._object_names
 
     def setObjects(self, object_names):
         for obj in self.objects:
             GL.glDeleteLists(1, GL.GL_COMPILE)
-        self.object_names = object_names
+        self._object_names = object_names
         self.loadObjects()
 
     # Rotation
@@ -89,7 +93,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def loadObjects(self):
         self.objects = []
-        for obj in self.object_names:
+        for obj in self._object_names:
             self.objects.append(ObjParser.ObjParser(obj[0]))
  
     # Called on each update/frame

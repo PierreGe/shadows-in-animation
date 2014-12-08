@@ -22,8 +22,8 @@ class Controller(object):
         self._splitPane = None
         self._scene = {} # nom : obj-liste  (from assets/scene/)
         self._parseAllScene() #
-        self.glWidget = None
-        self.helpWidget = HelpWidget.HelpWidget()
+        self._glWidget = None
+        self._helpWidget = HelpWidget.HelpWidget()
 
     def initStatusBar(self,statusBar):
         """ """
@@ -34,7 +34,7 @@ class Controller(object):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
-        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]["obj-liste"]) # name from json file
+        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]["obj-liste"]) # name from json file
         self._setStatusReady()
 
     def showGL(self, item):
@@ -43,21 +43,25 @@ class Controller(object):
         scene = str(item.parent().text(0))
         algo = str(item.text(0))
         # TODO set algo
-        self.glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"])
-        self._replaceRightWidget(self.glWidget)
+        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"])
+        self._replaceRightWidget(self._glWidget)
         self._setStatusReady()
 
     def showHelp(self):
         """ Set the right widget in the splitpane as help """
         self._setStatusComputing()
-        self._replaceRightWidget(self.helpWidget)
+        self._replaceRightWidget(self._helpWidget)
         self._setStatusReady()
 
     def reload(self):
         """ """
         self._setStatusComputing()
 
-        # TODO
+        if self._glWidget:
+            obj = self._glWidget.getObjectNames()
+            self._glWidget = OpenGLWidget.OpenGLWidget(obj)
+        else:
+            print("[WARNING] Unable to reload : no OpenGLWidget loaded!")
 
         self._setStatusReady()
 
