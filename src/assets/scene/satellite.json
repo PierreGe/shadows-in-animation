@@ -1,10 +1,10 @@
 {
-  "name": "Basic Scene",
+  "name": "Satellite",
   "description": "This scene is the most basic one",
   "algo-compatible": ["Algo A","Algo B","Algo C"],
   "obj-liste": [
     [
-      "assets/obj/bonhomme/Stick_Figure_by_Swp.OBJ",
+      "assets/obj/satellite/satellite.obj",
       [
         0,
         0,

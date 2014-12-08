@@ -11,9 +11,8 @@ class TreeWidget(QtGui.QWidget):
     """ """
     def __init__(self,selectController):
         """ """
-        self._controller = selectController
-
         QtGui.QWidget.__init__(self)
+        self._controller = selectController
         self._treeWidget = QtGui.QTreeWidget()
         self._treeWidget.setHeaderHidden(True)
         self._treeWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
@@ -30,12 +29,14 @@ class TreeWidget(QtGui.QWidget):
         for scene in sceneDictionnary:
             name = sceneDictionnary[scene]["name"]
             description = sceneDictionnary[scene]["description"]
-            scene1 = self._addParent(parent, column, name, description)
-            self._addChild(scene1, column, "Algo A", "description Algo A")
+            algosCompatible = sceneDictionnary[scene]["algo-compatible"]
+            scene1 = self._addScene(parent, column, name, description)
+            for algo in algosCompatible:
+                self._addAlgorithm(scene1, column, algo, "description ")
         
         # TODO : associer les algo
 
-    def _addParent(self, parent, column, title, data):
+    def _addScene(self, parent, column, title, data):
         """ """
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
@@ -43,7 +44,7 @@ class TreeWidget(QtGui.QWidget):
         item.setExpanded (True)
         return item
 
-    def _addChild(self, parent, column, title, data):
+    def _addAlgorithm(self, parent, column, title, data):
         """ """
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)

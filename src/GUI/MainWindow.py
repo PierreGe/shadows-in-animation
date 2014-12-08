@@ -16,7 +16,7 @@ class MainWindow(QtGui.QMainWindow):
         """Constructor of the class MainWindow"""
         super(MainWindow, self).__init__()
         # The GUI controller
-        self._controller = None
+        self._controller = Controller.Controller()
         # init the GUI
         self.initUI()
         
@@ -32,7 +32,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self._statusBar = self.statusBar()
         self._statusBar.showMessage('Welcome!')
-        self._controller = Controller.Controller(self._statusBar)
+        self._controller.initStatusBar(self._statusBar)
 
         ex = SplitPane.SplitPane(self._controller)
         self.setCentralWidget(ex)
@@ -42,34 +42,55 @@ class MainWindow(QtGui.QMainWindow):
    
         self.showMaximized()
 
+    def displayHelp(self):
+        """ """
+        # TODO
+        pass
+
     def displayAbout(self):
         """ Display some info"""
         QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015")
 
     def initMenu(self):
         """ This method will initate the menu """
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&Fichier')
+        helpMenu = menubar.addMenu("&Aide")
+
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
-        menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&Fichier')
         fileMenu.addAction(exitAction)
 
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/help-browser.png"), "Aide", self)
+        aboutAction.setStatusTip("Aide pour cette application")
+        aboutAction.triggered.connect(self.displayAbout)
+        helpMenu.addAction(aboutAction)
 
-        helpMenu = menubar.addMenu("&Aide")
-        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/application-exit.png"), "A propos", self)
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "dialog-information.png"), "A propos", self)
         aboutAction.setStatusTip("A propos de cette application")
         aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)
 
+    def reloadOpenGl(self):
+        """ """
+        self._controller.reload()
+
     def initToolsBar(self):
         """ This method will initate the toolsBar"""
-        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +'images/application-exit.png'), 'Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
+        toolbar = self.addToolBar("Tool Bar")
+
+        reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +"images/system-reload.png"), "Reload", self)
+        reloadAction.setShortcut("Ctrl+R")
+        reloadAction.setStatusTip("Reload application")
+        reloadAction.triggered.connect(self.reloadOpenGl)
+        toolbar.addAction(reloadAction)
+
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +"images/application-exit.png"), "Exit", self)
+        exitAction.setShortcut("Ctrl+Q")
+        exitAction.setStatusTip("Exit application")
         exitAction.triggered.connect(self.close)
-        toolbar = self.addToolBar('Exit')
         toolbar.addAction(exitAction)
 
 
