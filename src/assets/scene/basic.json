@@ -1,10 +1,15 @@
-[
-  [
-    "assets/obj/bonhomme/Stick_Figure_by_Swp.OBJ",
+{
+  "name": "Basic Scene",
+  "description": "This scene is the most basic one",
+  "algo-compatible": ["Algo A","Algo B","Algo C"],
+  "obj-liste": [
     [
-      0,
-      2,
-      0
+      "assets/obj/bonhomme/Stick_Figure_by_Swp.OBJ",
+      [
+        0,
+        2,
+        0
+      ]
     ]
   ]
-]
+}

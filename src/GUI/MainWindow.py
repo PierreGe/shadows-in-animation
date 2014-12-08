@@ -2,58 +2,97 @@
 # -*- coding: utf8 -*-
 
 import sys
+import os
+
 from PyQt4 import QtGui, QtCore
 
 import SplitPane
+import Controller
+
 
 class MainWindow(QtGui.QMainWindow):
     """ This class is the GUI's main class """
     def __init__(self):
         """Constructor of the class MainWindow"""
         super(MainWindow, self).__init__()
+        # The GUI controller
+        self._controller = Controller.Controller()
+        # init the GUI
         self.initUI()
         
     def initUI(self): 
         """ This methode will initiate the GUI :
-        The Menu bar
-        The toorls bar
-        The main SplitPane
-        The statusBar  """             
+        - The Menu bar
+        - The toorls bar
+        - The main SplitPane
+        - The statusBar  
+        """             
         # Windows title
         self.setWindowTitle("Les ombres au sein des jeux et des animations")
 
-        ex = SplitPane.SplitPane()
-        self.setCentralWidget(ex)
+        self._statusBar = self.statusBar()
+        self._statusBar.showMessage('Welcome!')
+        self._controller.initStatusBar(self._statusBar)
 
-        # si on veut mettre une bar en bas qui dit par exemple "Computing ..."
-        #statusBar = self.statusBar()
+        ex = SplitPane.SplitPane(self._controller)
+        self.setCentralWidget(ex)
 
         self.initToolsBar()
         self.initMenu()
    
         self.showMaximized()
 
-    def initToolsBar(self):
+    def displayHelp(self):
         """ """
-        exitAction = QtGui.QAction(QtGui.QIcon('images/application-exit.png'), 'Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(self.close)
-        menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&File')
-        fileMenu.addAction(exitAction)
+        # TODO
+        pass
 
-
-        fileMenu = menubar.addMenu('&Help')
-        fileMenu.addAction(exitAction)
+    def displayAbout(self):
+        """ Display some info"""
+        QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015")
 
     def initMenu(self):
-        """ """
-        exitAction = QtGui.QAction(QtGui.QIcon('images/application-exit.png'), 'Exit', self)
+        """ This method will initate the menu """
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&Fichier')
+        helpMenu = menubar.addMenu("&Aide")
+
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
-        toolbar = self.addToolBar('Exit')
+        fileMenu.addAction(exitAction)
+
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/help-browser.png"), "Aide", self)
+        aboutAction.setStatusTip("Aide pour cette application")
+        aboutAction.triggered.connect(self.displayAbout)
+        helpMenu.addAction(aboutAction)
+
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "dialog-information.png"), "A propos", self)
+        aboutAction.setStatusTip("A propos de cette application")
+        aboutAction.triggered.connect(self.displayAbout)
+        helpMenu.addAction(aboutAction)
+
+    def reloadOpenGl(self):
+        """ """
+        self._controller.reload()
+
+    def initToolsBar(self):
+        """ This method will initate the toolsBar"""
+        toolbar = self.addToolBar("Tool Bar")
+
+        reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +"images/system-reload.png"), "Reload", self)
+        reloadAction.setShortcut("Ctrl+R")
+        reloadAction.setStatusTip("Reload application")
+        reloadAction.triggered.connect(self.reloadOpenGl)
+        toolbar.addAction(reloadAction)
+
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +"images/application-exit.png"), "Exit", self)
+        exitAction.setShortcut("Ctrl+Q")
+        exitAction.setStatusTip("Exit application")
+        exitAction.triggered.connect(self.close)
         toolbar.addAction(exitAction)
+
+
         
         

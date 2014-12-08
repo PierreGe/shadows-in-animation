@@ -4,18 +4,19 @@
 from PyQt4 import QtGui, QtCore
 
 import TreeWidget
-import SelectionController
 import HelpWidget
 
 
 class SplitPane(QtGui.QWidget):
     """ """
     
-    def __init__(self):
+    def __init__(self, controller ):
         """ """
         super(SplitPane, self).__init__()
 
-        self._selectController = SelectionController.SelectionController(self)
+        self._controller = controller
+        self._controller.initSplitPane(self)
+
         
         self.splitter = None
         self.right = None
@@ -24,15 +25,15 @@ class SplitPane(QtGui.QWidget):
         self.initUI()
         
     def initUI(self):
-        """ """
+        """ this method will intiate the splitpane"""
         hbox = QtGui.QHBoxLayout(self)
 
-        self.left = TreeWidget.TreeWidget(self._selectController)
+        self.left = TreeWidget.TreeWidget(self._controller)
 
         self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
 
         self.splitter.addWidget(self.left)
-        self._selectController.showHelp()
+        self._controller.showHelp()
 
         self._resize()
 

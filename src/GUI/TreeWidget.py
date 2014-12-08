@@ -11,9 +11,8 @@ class TreeWidget(QtGui.QWidget):
     """ """
     def __init__(self,selectController):
         """ """
-        self._selectController = selectController
-
         QtGui.QWidget.__init__(self)
+        self._controller = selectController
         self._treeWidget = QtGui.QTreeWidget()
         self._treeWidget.setHeaderHidden(True)
         self._treeWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
@@ -26,17 +25,18 @@ class TreeWidget(QtGui.QWidget):
     def _addItems(self, parent):
         """ """
         column = 0
-        scene1 = self._addParent(parent, column, "Scene numero un", "description")
-        scene2 = self._addParent(parent, column, "Scene numero deux", "description")
+        sceneDictionnary = self._controller.getAllScene()
+        for scene in sceneDictionnary:
+            name = sceneDictionnary[scene]["name"]
+            description = sceneDictionnary[scene]["description"]
+            algosCompatible = sceneDictionnary[scene]["algo-compatible"]
+            scene1 = self._addScene(parent, column, name, description)
+            for algo in algosCompatible:
+                self._addAlgorithm(scene1, column, algo, "description ")
+        
+        # TODO : associer les algo
 
-        self._addChild(scene1, column, "Algo A", "description Algo A")
-        self._addChild(scene1, column, "Algo B", "description Algo B")
-
-        self._addChild(scene2, column, "Algo A", "description Algo A")
-        self._addChild(scene2, column, "Algo B", "description Algo B")
-
-
-    def _addParent(self, parent, column, title, data):
+    def _addScene(self, parent, column, title, data):
         """ """
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
@@ -44,7 +44,7 @@ class TreeWidget(QtGui.QWidget):
         item.setExpanded (True)
         return item
 
-    def _addChild(self, parent, column, title, data):
+    def _addAlgorithm(self, parent, column, title, data):
         """ """
         item = QtGui.QTreeWidgetItem(parent, [title])
         item.setData(column, QtCore.Qt.UserRole, data)
@@ -65,9 +65,10 @@ class TreeWidget(QtGui.QWidget):
 
 
     def handleChanged(self, item, column):
+        """ This method is trigered when something is selectionned in the treeview """
         if item.checkState(column) == QtCore.Qt.Checked:
             self._unckeckEverythingExceptItem(item)
-            self._selectController.showGL(item)
+            self._controller.showGL(item)
         if item.checkState(column) == QtCore.Qt.Unchecked:
-            self._selectController.showHelp()
+            self._controller.showHelp()
             #print "unchecked", item, item.text(column)
