@@ -95,7 +95,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def loadObjects(self):
         self.objects = []
-        for obj in self.object_names:
+        for obj in self._object_names:
             self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
  
     # Called on each update/frame
