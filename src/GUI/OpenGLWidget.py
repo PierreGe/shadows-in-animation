@@ -135,7 +135,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintObjects(self):
         """ docstring """
-        GL.glColor3f(1,0,0) # RED
+        #GL.glColor3f(1,0,0) # RED
         for obj in self.objects:
             GL.glPushMatrix()
             GL.glTranslated(*obj[1])
