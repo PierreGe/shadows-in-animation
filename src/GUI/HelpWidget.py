@@ -8,10 +8,10 @@ from PyQt4 import QtGui, QtCore
 
 
 class HelpWidget(QtGui.QWidget):
-    """ """
+    """ Widget contenant un QLabel contenant l'aide du projet"""
     
     def __init__(self):
-        """ """
+        """ Constructeur"""
         super(HelpWidget, self).__init__()
 
         self.textWidget = None
@@ -19,7 +19,7 @@ class HelpWidget(QtGui.QWidget):
         self.initUI()
         
     def initUI(self):
-        """ """
+        """ Intialise la UI du HelpWidget"""
         hbox = QtGui.QHBoxLayout(self)
 
         self.textWidget = QtGui.QLabel(self)
@@ -34,6 +34,8 @@ class HelpWidget(QtGui.QWidget):
         self.textWidget.setText(self._getStringHelp())
         self.textWidget.setStyleSheet(self._getStyleSheet())
 
+        self.textWidget.show()
+
         hbox.addWidget(self.textWidget)
         self.setLayout(hbox)
 
@@ -42,9 +44,9 @@ class HelpWidget(QtGui.QWidget):
         self.show()
 
     def _getStyleSheet(self):
-        """ """
+        """ Retourne la feuille de style du QLabel"""
         return open(os.getcwd() + "/GUI/text-help/text-help.css").read().decode('utf-8')
 
     def _getStringHelp(self):
-        """ """
+        """ Retourne le code html du QLabel"""
         return open(os.getcwd() +"/GUI/text-help/text-help.html").read().decode('utf-8')
