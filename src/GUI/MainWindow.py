@@ -44,8 +44,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def displayHelp(self):
         """ """
-        # TODO
-        pass
+        QtGui.QMessageBox.information(self, "Aide", "Printemps des sciences 2015")
 
     def displayAbout(self):
         """ Display some info"""
@@ -68,7 +67,7 @@ class MainWindow(QtGui.QMainWindow):
         aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)
 
-        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "dialog-information.png"), "A propos", self)
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/dialog-information.png"), "A propos", self)
         aboutAction.setStatusTip("A propos de cette application")
         aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)

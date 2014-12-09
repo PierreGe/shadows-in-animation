@@ -34,23 +34,27 @@ class Controller(object):
         """ """
         self._setStatusComputing()
         self._splitPane = splitPane
-        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene["Basic Scene"]["obj-liste"]) # name from json file
         self._setStatusReady()
 
     def showGL(self, item):
         """ Set the right widget in the splitpane as the gl widget """
         self._setStatusComputing()
+
         scene = str(item.parent().text(0))
         algo = str(item.text(0))
         # TODO set algo
         self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"])
         self._replaceRightWidget(self._glWidget)
+
         self._setStatusReady()
 
     def showHelp(self):
         """ Set the right widget in the splitpane as help """
         self._setStatusComputing()
+
         self._replaceRightWidget(self._helpWidget)
+        self._glWidget = None
+
         self._setStatusReady()
 
     def reload(self):
@@ -60,6 +64,7 @@ class Controller(object):
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
             self._glWidget = OpenGLWidget.OpenGLWidget(obj)
+            self._replaceRightWidget(self._glWidget)
         else:
             print("[WARNING] Unable to reload : no OpenGLWidget loaded!")
 
