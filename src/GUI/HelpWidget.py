@@ -3,6 +3,7 @@
 
 import os
 
+
 from PyQt4 import QtGui, QtCore
 
 
@@ -13,6 +14,8 @@ class HelpWidget(QtGui.QWidget):
         """ """
         super(HelpWidget, self).__init__()
 
+        self.textWidget = None
+
         self.initUI()
         
     def initUI(self):
@@ -20,8 +23,16 @@ class HelpWidget(QtGui.QWidget):
         hbox = QtGui.QHBoxLayout(self)
 
         self.textWidget = QtGui.QLabel(self)
+
+        self.textWidget.setMinimumSize(200, 200)
+        self.textWidget.setAlignment(QtCore.Qt.AlignLeft)
+        self.textWidget.setAcceptDrops(True)
+        self.textWidget.setAutoFillBackground(True)
+
+        self.textWidget.clear()
+
         self.textWidget.setText(self._getStringHelp())
-        self.textWidget.setStyleSheet(self._getStyleSheet());
+        self.textWidget.setStyleSheet(self._getStyleSheet())
 
         hbox.addWidget(self.textWidget)
         self.setLayout(hbox)
@@ -32,8 +43,8 @@ class HelpWidget(QtGui.QWidget):
 
     def _getStyleSheet(self):
         """ """
-        return open(os.getcwd() + "/GUI/text-help/text-help.css").read()
+        return open(os.getcwd() + "/GUI/text-help/text-help.css").read().decode('utf-8')
 
     def _getStringHelp(self):
         """ """
-        return open(os.getcwd() +"/GUI/text-help/text-help.html").read()
+        return open(os.getcwd() +"/GUI/text-help/text-help.html").read().decode('utf-8')
