@@ -20,11 +20,19 @@ class ObjParser:
         self._textureCoords = []
         self._faces = []
         self._gl_list = None
-        if os.path.isfile(self._cachePath + filename):
-            self._loadGlList(filename)
-        else:
+        self._mtlFile = None
+        try:
+            if os.path.isfile(self._cachePath + filename):
+                self._loadGlList(filename)
+            else:
+                raise IOError("File does not exist")
+        except Exception, e:
+            print("[Warning] Unable to load cache")
             self._parseObjFile(filename, swapyz)
-            self._dumpGlList(filename)
+            try :
+                self._dumpGlList(filename)
+            except Exception, e:
+                print("[Warning] Unable to save to cache")
         
     def _dumpGlList(self,filename):
         """ """
@@ -41,6 +49,7 @@ class ObjParser:
         loadFile.close()
         self.__dict__.update(tmpDict)
         self._computeGlList()
+        self._parseMtlFile(self._mtlFile)
 
     def _parseObjFile(self, filename, swapyz=False):
         """ """
@@ -64,6 +73,7 @@ class ObjParser:
             elif values[0] in ('usemtl', 'usemat'):
                 material = values[1]
             elif values[0] == 'mtllib':
+                self._mtlFile = values[1]
                 self.mtl = self._parseMtlFile(values[1])
             elif values[0] == 'f':
                 face = []
