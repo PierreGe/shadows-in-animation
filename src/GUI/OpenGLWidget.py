@@ -9,8 +9,9 @@ import ObjParser
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
-    # Public interface
+    """ docstring """
     def __init__(self, object_names = [], parent=None):
+        """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
         self._object_names = object_names
 
@@ -19,6 +20,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         return self._object_names
 
     def setObjects(self, object_names):
+        """ docstring """
         for obj in self.objects:
             GL.glDeleteLists(1, GL.GL_COMPILE)
         self._object_names = object_names
@@ -26,21 +28,27 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     # Rotation
     def xRotation(self):
+        """ docstring """
         return self.xRot
  
     def yRotation(self):
+        """ docstring """
         return self.yRot
  
     def zRotation(self):
+        """ docstring """
         return self.zRot
  
     def minimumSizeHint(self):
+        """ docstring """
         return QtCore.QSize(50, 50)
  
     def sizeHint(self):
+        """ docstring """
         return QtCore.QSize(400, 400)
  
     def setXRotation(self, angle):
+        """ docstring """
         angle = self.normalizeAngle(angle)
         if angle != self.xRot:
             self.xRot = angle
@@ -48,6 +56,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.updateGL()
  
     def setYRotation(self, angle):
+        """ docstring """
         angle = self.normalizeAngle(angle)
         if angle != self.yRot:
             self.yRot = angle
@@ -55,6 +64,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.updateGL()
  
     def setZRotation(self, angle):
+        """ docstring """
         angle = self.normalizeAngle(angle)
         if angle != self.zRot:
             self.zRot = angle
@@ -63,6 +73,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     # Called at startup
     def initializeGL(self):
+        """ docstring """
         # initial rotation
         self.xRot = 15
         self.yRot = -30
@@ -87,6 +98,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     # Objects construction methods
     def makeFloor(self):
+        """ docstring """
         self.groundPoints = [-1,0,-1,-1,0,1,1,0,1,1,0,-1]
         self.groundList = GL.glGenLists(1)
         GL.glNewList(self.groundList, GL.GL_COMPILE)
@@ -94,6 +106,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glEndList()
 
     def loadObjects(self):
+        """ docstring """
         self.objects = []
         for obj in self._object_names:
             print(ObjParser.ObjParser(obj[0]))
@@ -101,6 +114,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     # Called on each update/frame
     def paintGL(self):
+        """ docstring """
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         # reload new matrix
         GL.glLoadIdentity()
@@ -115,10 +129,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.paintObjects()
 
     def paintFloor(self):
+        """ docstring """
         GL.glColor3f(1,1,1) # WHITE
         GL.glCallList(self.groundList)
 
     def paintObjects(self):
+        """ docstring """
         GL.glColor3f(1,0,0) # RED
         for obj in self.objects:
             GL.glPushMatrix()
@@ -129,6 +145,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     # Called when window is resized
     def resizeGL(self, width, height):
+        """ docstring """
         GL.glViewport(0, 0, width, height)
  
         GL.glMatrixMode(GL.GL_PROJECTION)
@@ -139,9 +156,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     # Events
     def mousePressEvent(self, event):
+        """ docstring """
         self.lastPos = QtCore.QPoint(event.pos())
  
     def mouseMoveEvent(self, event):
+        """ docstring """
         dx = event.x() - self.lastPos.x()
         dy = event.y() - self.lastPos.y()
  
@@ -155,11 +174,14 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.lastPos = QtCore.QPoint(event.pos())
  
     def wheelEvent(self, event):
+        """ docstring """
+        # TODO réparer le zoom, utiliser les frustums
         self.zoom += event.delta()/100.0
         self.updateGL()
  
     # Work methods
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
+        """ docstring """
         GL.glBegin(GL.GL_QUADS)
         GL.glVertex3d(x1, y1, z1)
         GL.glVertex3d(x2, y2, z2)
@@ -168,6 +190,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glEnd()
  
     def normalizeAngle(self, angle):
+        """ Keep angle between 0 and 360"""
         while angle < 0:
             angle += 360
         while angle > 360:
