@@ -9,12 +9,13 @@ import ObjParser
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
-    lightPosition = [-10,10,0]
-    shadows = []
     # Public interface
     def __init__(self, object_names = [], parent=None):
         QtOpenGL.QGLWidget.__init__(self, parent)
+        self.lightPosition = [-10,10,0]
+        self.shadows = []
         self._object_names = object_names
+
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -25,6 +26,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             GL.glDeleteLists(1, GL.GL_COMPILE)
         self._object_names = object_names
         self.loadObjects()
+
 
     # Rotation
     def xRotation(self):
@@ -86,6 +88,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
+        self.shadowVolume()
 
     # Objects construction methods
     def makeFloor(self):
@@ -115,7 +118,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # paint objects
         self.paintFloor()
         self.paintObjects()
-        self.shadowVolume()
 
     def paintFloor(self):
         GL.glColor3f(1,1,1) # WHITE
@@ -136,7 +138,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
         GL.glMatrixMode(GL.GL_PROJECTION)
         GL.glLoadIdentity()
-        GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM
+        GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM ()
  
         GL.glMatrixMode(GL.GL_MODELVIEW)
  
@@ -172,7 +174,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     
     def getShapeOnGround(self):
-        for point in self.objects[0][0].vertices:
+        for point in self.objects[0][0].vertices:#for the vectrices composing the object n°0
             if point[1] < self.lightPosition[1]:#If light source is above the item, else no shadow on the ground
                 from_light = [point[i]-self.lightPosition[i] for i in range(3)]#vector between light and item point
 
@@ -185,15 +187,23 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.shadows.append(point[1]-distance*unit_vector[1])
             self.shadows.append(point[2]-distance*unit_vector[2])
             #vecteur directeur de la droite light->point de la forme
+        print self.shadows
         # self.shapeList = GL.glGenLists(10)
         # GL.glNewList(self.shapeList, GL.GL_COMPILE)
         # self.quadrilatere(*(([x*10 for x in self.shapeList])))
         # GL.glEndList()
 
+
         
 
     def shadowVolume(self):
         self.getShapeOnGround()
+        # GL.glBegin(GL.GL_POINTS)
+        # for i in range(len(self.shadows)/3):
+        #     GL.glVertex3f(self.shadows[i], self.shadows[i+1], self.shadows[i+2])
+        # GL.glEnd()
+
+
 
 
 
