@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2014/Arch Linux)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: rapport-decembre.aux
+The style file: apalike.bst
+Database file #1: mybiblio.bib.bib
+Warning--empty booktitle in shadowalgorithmsdataminer
+Warning--can't use both volume and number fields in crow1977shadow
+Warning--can't use both volume and number fields in hasenfratz2003survey
+Warning--can't use both volume and number fields in shadowvolumeimprovement
+Warning--can't use both volume and number fields in shadowvolumesurvey
+Warning--can't use both volume and number fields in wanggearsalgorithm
+Warning--can't use both volume and number fields in dynamicshadowsalgorithms
+Warning--can't use both volume and number fields in scherzer2011survey
+You've used 11 entries,
+            1935 wiz_defined-function locations,
+            546 strings with 5441 characters,
+and the built_in function-call counts, 5220 in all, are:
+= -- 532
+> -- 162
+< -- 23
++ -- 64
+- -- 54
+* -- 399
+:= -- 815
+add.period$ -- 41
+call.type$ -- 11
+change.case$ -- 81
+chr.to.int$ -- 11
+cite$ -- 19
+duplicate$ -- 250
+empty$ -- 396
+format.name$ -- 69
+if$ -- 1105
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 11
+newline$ -- 58
+num.names$ -- 33
+pop$ -- 92
+preamble$ -- 1
+purify$ -- 81
+quote$ -- 0
+skip$ -- 190
+stack$ -- 0
+substring$ -- 349
+swap$ -- 82
+text.length$ -- 15
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 66
+warning$ -- 8
+while$ -- 43
+width$ -- 0
+write$ -- 158
+(There were 8 warnings)
