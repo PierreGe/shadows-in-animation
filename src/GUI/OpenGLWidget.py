@@ -8,16 +8,68 @@ from OpenGL import GL,GLU
 import ObjParser
 
 
+class Camera(object):
+    """docstring for Camera"""
+    def __init__(self):
+        """ Constructeur de la classe Camera"""
+        self._x = 20
+        self._xInterval = [20,60]
+        self._y = 352
+        self._z = 6
+
+    def getX(self):
+        return self._x
+
+    def getY(self):
+        return self._y
+
+    def getZ(self):
+        return self._z
+
+    def setX(self,x):
+        """ """
+        x = self.normalizeAngle(x)
+        if x < self._xInterval[0]:
+            x = self._xInterval[0]
+        elif x > self._xInterval[1]:
+            x = self._xInterval[1]
+        if x != self._x:
+            self._x = x
+            return True
+        return False
+
+    def setY(self,y):
+        """ """
+        y = self.normalizeAngle(y)
+        if y != self._y:
+            self._y = y
+            return True
+        return False
+
+    def setZ(self,z):
+        """ """
+        z = self.normalizeAngle(z)
+        if z != self._z:
+            self._z = z
+            return True
+        return False
+
+    def normalizeAngle(self, angle):
+        """ Keep angle between 0 and 360"""
+        while angle < 0:
+            angle += 360
+        while angle > 360:
+            angle -= 360
+        return angle
+
+
 class OpenGLWidget(QtOpenGL.QGLWidget):
     """ docstring """
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self.lightPosition = [-10,10,0]
-        self.shadows = []
+        self._camera = Camera()
         self._object_names = object_names
-        self.frustumSize = 10
-
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -29,20 +81,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             GL.glDeleteLists(1, GL.GL_COMPILE)
         self._object_names = object_names
         self.loadObjects()
-
-
-    # Rotation
-    def xRotation(self):
-        """ docstring """
-        return self.xRot
- 
-    def yRotation(self):
-        """ docstring """
-        return self.yRot
- 
-    def zRotation(self):
-        """ docstring """
-        return self.zRot
  
     def minimumSizeHint(self):
         """ docstring """
@@ -54,25 +92,22 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def setXRotation(self, angle):
         """ docstring """
-        angle = self.normalizeAngle(angle)
-        if angle != self.xRot:
-            self.xRot = angle
+        res = self._camera.setX(angle)
+        if res:
             self.emit(QtCore.SIGNAL("xRotationChanged(int)"), angle)
             self.updateGL()
  
     def setYRotation(self, angle):
         """ docstring """
-        angle = self.normalizeAngle(angle)
-        if angle != self.yRot:
-            self.yRot = angle
+        res = self._camera.setY(angle)
+        if res:
             self.emit(QtCore.SIGNAL("yRotationChanged(int)"), angle)
             self.updateGL()
  
     def setZRotation(self, angle):
         """ docstring """
-        angle = self.normalizeAngle(angle)
-        if angle != self.zRot:
-            self.zRot = angle
+        res = self._camera.setZ(angle)
+        if res:
             self.emit(QtCore.SIGNAL("zRotationChanged(int)"), angle)
             self.updateGL()
 
@@ -106,9 +141,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def initializeGL(self):
         """ docstring """
         # initial rotation
-        self.xRot = 20
-        self.yRot = 352
-        self.zRot = 6
         self.zoom = -20
 
         # save mouse cursor position for smooth rotation
@@ -123,7 +155,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
-        self.shadowVolume()
 
     # Objects construction methods
     def makeFloor(self):
@@ -138,26 +169,20 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         self.objects = []
         for obj in self._object_names:
-            item = ObjParser.ObjParser(obj[0])
-            self.objects.append((item, obj[1]))
+            self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
-        print("----")
-        print(self.xRot)
-        print(self.yRot)
-        print(self.zRot)
-        print("----")
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         # reload new matrix
         GL.glLoadIdentity()
         # zoom out camera
-        #GL.glTranslated(0, 0, self.zoom)
+        GL.glTranslated(0, 0, self.zoom)
         # apply rotation
-        GL.glRotated(self.xRot, 1, 0, 0)
-        GL.glRotated(self.yRot, 0, 1, 0)
-        GL.glRotated(self.zRot, 0, 0, 1)
+        GL.glRotated(self._camera.getX(), 1, 0, 0)
+        GL.glRotated(self._camera.getY(), 0, 1, 0)
+        GL.glRotated(self._camera.getZ(), 0, 0, 1)
         # paint objects
         self.initLights((12,12,12))
         self.paintFloor()
@@ -173,7 +198,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         #GL.glColor3f(1,0,0) # RED
         for obj in self.objects:
             GL.glPushMatrix()
-            #GL.glTranslated(*obj[1])
+            GL.glTranslated(*obj[1])
             GL.glCallList(obj[0].getGlList())
             GL.glPopMatrix()
 
@@ -182,14 +207,10 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def resizeGL(self, width, height):
         """ docstring """
         GL.glViewport(0, 0, width, height)
-        self.viewport = (width,height)
-
-        aspect = self.viewport[0]/self.viewport[1]
-        GL.glOrtho(-aspect * self.frustumSize, aspect * self.frustumSize, -self.frustumSize, self.frustumSize, 1, 100)
-        
+ 
         GL.glMatrixMode(GL.GL_PROJECTION)
         GL.glLoadIdentity()
-        #GL.glOrtho(-10, 10, -10, 10, 0.1, 1000) # FRUSTUUUUUUUUM 
+        GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM
  
         GL.glMatrixMode(GL.GL_MODELVIEW)
  
@@ -200,33 +221,27 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def mouseMoveEvent(self, event):
         """ docstring """
+        smoothFactor = 10
         dx = event.x() - self.lastPos.x()
         dy = event.y() - self.lastPos.y()
+
+        dx = int(dx/smoothFactor)
+        dy = int(dy/smoothFactor)
  
         if event.buttons() & QtCore.Qt.LeftButton:
-            #self.setXRotation(self.xRot + 8 * dy)
-            self.setYRotation(self.yRot + 8 * dx)
+            self.setXRotation(self._camera.getX() + 8 * dy)
+            self.setYRotation(self._camera.getY() + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            #self.setXRotation(self.xRot + 8 * dy)
-            self.setZRotation(self.zRot + 8 * dx)
+            self.setXRotation(self._camera.getX() + 8 * dy)
+            self.setZRotation(self._camera.getZ() + 8 * dx)
  
         self.lastPos = QtCore.QPoint(event.pos())
  
     def wheelEvent(self, event):
         """ docstring """
-        # # TODO réparer le zoom, utiliser les frustums
-        #GL.glPushMatrix() # save the current matrix
-        # self.scale += event.delta()/100.0
-        # GL.glScalef(self.scale, self.scale, self.scale)# scale the matrix
-        self.frustumSize += event.delta()
-        aspect = self.viewport[0]/float(self.viewport[1])
-        print -aspect * self.frustumSize, aspect * self.frustumSize, -self.frustumSize, self.frustumSize, -1000+self.frustumSize
-        GL.glFrustum(-aspect * self.frustumSize, aspect * self.frustumSize, -self.frustumSize, self.frustumSize, 0.1+100*self.frustumSize, 1000)
-        # # GL.glTranslated(0, 0, self.zoom)
+        # TODO réparer le zoom, utiliser les frustums
+        self.zoom += event.delta()/100.0
         self.updateGL()
-        # #GL.glOrtho(-10, 10, -10, 10, 0.1+self.zoom, 37) #left,right,bottom,top,near,far
-
-        
  
     # Work methods
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
@@ -237,45 +252,4 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glVertex3d(x3, y3, z3)
         GL.glVertex3d(x4, y4, z4)
         GL.glEnd()
-
-    
-    def getShapeOnGround(self):
-        for point in self.objects[0][0]._vertices:#for the vectrices composing the object n°0
-            if point[1] < self.lightPosition[1]:#If light source is above the item, else no shadow on the ground
-                from_light = [point[i]-self.lightPosition[i] for i in range(3)]#vector between light and item point
-
-                norm = (from_light[0]**2 + from_light[1]**2 + from_light[2]**2)**(1/3.0)
-
-                unit_vector = [from_light[i]/norm for i in range(len(from_light))]
-
-                distance = (point[1])/unit_vector[1]
-            self.shadows.append(point[0]-distance*unit_vector[0])
-            self.shadows.append(point[1]-distance*unit_vector[1])
-            self.shadows.append(point[2]-distance*unit_vector[2])
-            #vecteur directeur de la droite light->point de la forme
-        # self.shapeList = GL.glGenLists(10)
-        # GL.glNewList(self.shapeList, GL.GL_COMPILE)
-        # self.quadrilatere(*(([x*10 for x in self.shapeList])))
-        # GL.glEndList()
-
-
-        
-
-    def shadowVolume(self):
-        self.getShapeOnGround()
-        # GL.glBegin(GL.GL_POINTS)
-        # for i in range(len(self.shadows)/3):
-        #     GL.glVertex3f(self.shadows[i], self.shadows[i+1], self.shadows[i+2])
-        # GL.glEnd()
-
-
-
-
-
-    def normalizeAngle(self, angle):
-        """ Keep angle between 0 and 360"""
-        while angle < 0:
-            angle += 360
-        while angle > 360:
-            angle -= 360
-        return angle
+ 
