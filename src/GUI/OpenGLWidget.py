@@ -70,28 +70,51 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.zRot = angle
             self.emit(QtCore.SIGNAL("zRotationChanged(int)"), angle)
             self.updateGL()
+
+
+    def initLights(self,position):
+        'light which change position every frame'
+        
+        position = list(position)
+        position.append(1.0)
+
+        GL.glPushMatrix()
+        GL.glDisable(GL.GL_LIGHTING)
+        GL.glPointSize(5.0)
+        GL.glBegin(GL.GL_POINTS)
+        GL.glColor4f(1.0,1.0,1.0,1.0)
+        GL.glVertex4fv(position)
+        GL.glEnd()
+        GL.glPopMatrix() 
+
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 ))   # Setup The Diffuse Light 
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 ))  # Setup The Specular Light
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))   # Setup The Ambient Light 
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position)             # Position of The Light  
+
+        GL.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 1.0)
+        GL.glEnable(GL.GL_LIGHT0)
+        
+        GL.glEnable(GL.GL_LIGHTING)
  
     # Called at startup
     def initializeGL(self):
         """ docstring """
         # initial rotation
-        self.xRot = 15
-        self.yRot = -30
-        self.zRot = 0
-        self.zoom = -30
+        self.xRot = 20
+        self.yRot = 352
+        self.zRot = 6
+        self.zoom = -20
 
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
-        # create some light sources FIX THAT SHIT
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION,  (-40, 200, 100, 0.0))
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, (0.2, 0.2, 0.2, 1.0))
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, (0.5, 0.5, 0.5, 1.0))
-        GL.glEnable(GL.GL_COLOR_MATERIAL)
-        GL.glEnable(GL.GL_LIGHT0)
-        GL.glEnable(GL.GL_LIGHTING)
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
+
+        # init some light
+        self.initLights((12,12,12))
+
         # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
@@ -115,6 +138,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
+        print("----")
+        print(self.xRot)
+        print(self.yRot)
+        print(self.zRot)
+        print("----")
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         # reload new matrix
         GL.glLoadIdentity()
@@ -125,6 +153,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glRotated(self.yRot, 0, 1, 0)
         GL.glRotated(self.zRot, 0, 0, 1)
         # paint objects
+        self.initLights((12,12,12))
         self.paintFloor()
         self.paintObjects()
 
@@ -165,10 +194,10 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         dy = event.y() - self.lastPos.y()
  
         if event.buttons() & QtCore.Qt.LeftButton:
-            self.setXRotation(self.xRot + 8 * dy)
+            #self.setXRotation(self.xRot + 8 * dy)
             self.setYRotation(self.yRot + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            self.setXRotation(self.xRot + 8 * dy)
+            #self.setXRotation(self.xRot + 8 * dy)
             self.setZRotation(self.zRot + 8 * dx)
  
         self.lastPos = QtCore.QPoint(event.pos())
