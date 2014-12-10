@@ -81,6 +81,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             GL.glDeleteLists(1, GL.GL_COMPILE)
         self._object_names = object_names
         self.loadObjects()
+
+    # ---------- Partie : Qt ------------
  
     def minimumSizeHint(self):
         """ docstring """
@@ -111,9 +113,37 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.emit(QtCore.SIGNAL("zRotationChanged(int)"), angle)
             self.updateGL()
 
+        # Events
+    def mousePressEvent(self, event):
+        """ This method is called when there is a click """
+        self.lastPos = QtCore.QPoint(event.pos())
+ 
+    def mouseMoveEvent(self, event):
+        """ This method is called when there is a mouse (drag) event"""
+        smoothFactor = 10
+        dx = event.x() - self.lastPos.x()
+        dy = event.y() - self.lastPos.y()
+        dx = int(dx/smoothFactor)
+        dy = int(dy/smoothFactor)
+        if event.buttons() & QtCore.Qt.LeftButton:
+            self.setXRotation(self._camera.getX() + 8 * dy)
+            self.setYRotation(self._camera.getY() + 8 * dx)
+        elif event.buttons() & QtCore.Qt.RightButton:
+            self.setXRotation(self._camera.getX() + 8 * dy)
+            self.setZRotation(self._camera.getZ() + 8 * dx)
+        self.lastPos = QtCore.QPoint(event.pos())
+ 
+    def wheelEvent(self, event):
+        """ docstring """
+        # TODO réparer le zoom, utiliser les frustums
+        self.zoom += event.delta()/100.0
+        self.updateGL()
+
+    # ---------- Partie : Opengl ------------
+
 
     def initLights(self,position):
-        'light which change position every frame'
+        "light with a custom position"
         
         position = list(position)
         position.append(1.0)
@@ -122,19 +152,18 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glDisable(GL.GL_LIGHTING)
         GL.glPointSize(5.0)
         GL.glBegin(GL.GL_POINTS)
-        GL.glColor4f(1.0,1.0,1.0,1.0)
+        GL.glColor4f(1,0.475, 0.294, 1) # yellow-orrange point
         GL.glVertex4fv(position)
         GL.glEnd()
         GL.glPopMatrix() 
 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 ))   # Setup The Diffuse Light 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 ))  # Setup The Specular Light
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))   # Setup The Ambient Light 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position)             # Position of The Light  
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 )) 
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 )) 
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position)
 
         GL.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 1.0)
         GL.glEnable(GL.GL_LIGHT0)
-        
         GL.glEnable(GL.GL_LIGHTING)
  
     # Called at startup
@@ -190,7 +219,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintFloor(self):
         """ docstring """
-        GL.glColor3f(1,1,1) # WHITE
+        GL.glColor4f(1.0,1.0,1.0,1.0) # WHITE
         GL.glCallList(self.groundList)
 
     def paintObjects(self):
@@ -213,35 +242,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM
  
         GL.glMatrixMode(GL.GL_MODELVIEW)
- 
-    # Events
-    def mousePressEvent(self, event):
-        """ docstring """
-        self.lastPos = QtCore.QPoint(event.pos())
- 
-    def mouseMoveEvent(self, event):
-        """ docstring """
-        smoothFactor = 10
-        dx = event.x() - self.lastPos.x()
-        dy = event.y() - self.lastPos.y()
 
-        dx = int(dx/smoothFactor)
-        dy = int(dy/smoothFactor)
- 
-        if event.buttons() & QtCore.Qt.LeftButton:
-            self.setXRotation(self._camera.getX() + 8 * dy)
-            self.setYRotation(self._camera.getY() + 8 * dx)
-        elif event.buttons() & QtCore.Qt.RightButton:
-            self.setXRotation(self._camera.getX() + 8 * dy)
-            self.setZRotation(self._camera.getZ() + 8 * dx)
- 
-        self.lastPos = QtCore.QPoint(event.pos())
- 
-    def wheelEvent(self, event):
-        """ docstring """
-        # TODO réparer le zoom, utiliser les frustums
-        self.zoom += event.delta()/100.0
-        self.updateGL()
  
     # Work methods
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
