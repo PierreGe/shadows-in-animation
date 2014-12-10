@@ -13,7 +13,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
+        self.lightPosition = [-10,10,0]
+        self.shadows = []
         self._object_names = object_names
+        self.frustumSize = 10
+
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -25,6 +29,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             GL.glDeleteLists(1, GL.GL_COMPILE)
         self._object_names = object_names
         self.loadObjects()
+
 
     # Rotation
     def xRotation(self):
@@ -95,6 +100,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
+        self.shadowVolume()
 
     # Objects construction methods
     def makeFloor(self):
@@ -109,8 +115,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         self.objects = []
         for obj in self._object_names:
-            print(ObjParser.ObjParser(obj[0]))
-            self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
+            item = ObjParser.ObjParser(obj[0])
+            self.objects.append((item, obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
@@ -119,7 +125,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # reload new matrix
         GL.glLoadIdentity()
         # zoom out camera
-        GL.glTranslated(0, 0, self.zoom)
+        #GL.glTranslated(0, 0, self.zoom)
         # apply rotation
         GL.glRotated(self.xRot, 1, 0, 0)
         GL.glRotated(self.yRot, 0, 1, 0)
@@ -138,7 +144,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         #GL.glColor3f(1,0,0) # RED
         for obj in self.objects:
             GL.glPushMatrix()
-            GL.glTranslated(*obj[1])
+            #GL.glTranslated(*obj[1])
             GL.glCallList(obj[0].getGlList())
             GL.glPopMatrix()
 
@@ -147,10 +153,14 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def resizeGL(self, width, height):
         """ docstring """
         GL.glViewport(0, 0, width, height)
- 
+        self.viewport = (width,height)
+
+        aspect = self.viewport[0]/self.viewport[1]
+        GL.glOrtho(-aspect * self.frustumSize, aspect * self.frustumSize, -self.frustumSize, self.frustumSize, 1, 100)
+        
         GL.glMatrixMode(GL.GL_PROJECTION)
         GL.glLoadIdentity()
-        GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM
+        #GL.glOrtho(-10, 10, -10, 10, 0.1, 1000) # FRUSTUUUUUUUUM 
  
         GL.glMatrixMode(GL.GL_MODELVIEW)
  
@@ -175,9 +185,19 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def wheelEvent(self, event):
         """ docstring """
-        # TODO réparer le zoom, utiliser les frustums
-        self.zoom += event.delta()/100.0
+        # # TODO réparer le zoom, utiliser les frustums
+        #GL.glPushMatrix() # save the current matrix
+        # self.scale += event.delta()/100.0
+        # GL.glScalef(self.scale, self.scale, self.scale)# scale the matrix
+        self.frustumSize += event.delta()
+        aspect = self.viewport[0]/float(self.viewport[1])
+        print -aspect * self.frustumSize, aspect * self.frustumSize, -self.frustumSize, self.frustumSize, -1000+self.frustumSize
+        GL.glFrustum(-aspect * self.frustumSize, aspect * self.frustumSize, -self.frustumSize, self.frustumSize, 0.1+100*self.frustumSize, 1000)
+        # # GL.glTranslated(0, 0, self.zoom)
         self.updateGL()
+        # #GL.glOrtho(-10, 10, -10, 10, 0.1+self.zoom, 37) #left,right,bottom,top,near,far
+
+        
  
     # Work methods
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
@@ -188,7 +208,41 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glVertex3d(x3, y3, z3)
         GL.glVertex3d(x4, y4, z4)
         GL.glEnd()
- 
+
+    
+    def getShapeOnGround(self):
+        for point in self.objects[0][0]._vertices:#for the vectrices composing the object n°0
+            if point[1] < self.lightPosition[1]:#If light source is above the item, else no shadow on the ground
+                from_light = [point[i]-self.lightPosition[i] for i in range(3)]#vector between light and item point
+
+                norm = (from_light[0]**2 + from_light[1]**2 + from_light[2]**2)**(1/3.0)
+
+                unit_vector = [from_light[i]/norm for i in range(len(from_light))]
+
+                distance = (point[1])/unit_vector[1]
+            self.shadows.append(point[0]-distance*unit_vector[0])
+            self.shadows.append(point[1]-distance*unit_vector[1])
+            self.shadows.append(point[2]-distance*unit_vector[2])
+            #vecteur directeur de la droite light->point de la forme
+        # self.shapeList = GL.glGenLists(10)
+        # GL.glNewList(self.shapeList, GL.GL_COMPILE)
+        # self.quadrilatere(*(([x*10 for x in self.shapeList])))
+        # GL.glEndList()
+
+
+        
+
+    def shadowVolume(self):
+        self.getShapeOnGround()
+        # GL.glBegin(GL.GL_POINTS)
+        # for i in range(len(self.shadows)/3):
+        #     GL.glVertex3f(self.shadows[i], self.shadows[i+1], self.shadows[i+2])
+        # GL.glEnd()
+
+
+
+
+
     def normalizeAngle(self, angle):
         """ Keep angle between 0 and 360"""
         while angle < 0:

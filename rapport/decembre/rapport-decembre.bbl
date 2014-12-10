@@ -1,0 +1,68 @@
+\begin{thebibliography}{}
+
+\bibitem[Andrew~Woo, 1990]{surveyofshadowalgorithms}
+Andrew~Woo, Pierre~Poulin, A.~F. (1990).
+\newblock A survey of shadow algorithms.
+\newblock In {\em IEEE Computer Graphics and Applications}, volume~10, pages
+  13--32.
+
+\bibitem[Andrew~Woo, 2012]{shadowalgorithmsdataminer}
+Andrew~Woo, P.~P. (2012).
+\newblock Shadow algorithms data miner.
+\newblock A K Peters/CRC Press.
+
+\bibitem[Crow, 1977]{crow1977shadow}
+Crow, F.~C. (1977).
+\newblock Shadow algorithms for computer graphics.
+\newblock In {\em ACM SIGGRAPH Computer Graphics}, volume~11, pages 242--248.
+  ACM.
+
+\bibitem[Fuchs et~al., 1986]{fuchs1986fast}
+Fuchs, H., Goldfeather, J., Hultquist, J.~P., Spach, S., Austin, J.~D.,
+  Brooks~Jr, F.~P., Eyles, J.~G., and Poulton, J. (1986).
+\newblock Fast spheres, shadows, textures, transparencies, and image
+  enhancements in pixel-planes.
+\newblock In {\em Advances in computer graphics I}, pages 169--187. Springer.
+
+\bibitem[Hasenfratz et~al., 2003]{hasenfratz2003survey}
+Hasenfratz, J.-M., Lapierre, M., Holzschuch, N., Sillion, F., GRAVIR, A.,
+  et~al. (2003).
+\newblock A survey of real-time soft shadows algorithms.
+\newblock In {\em Computer Graphics Forum}, volume~22, pages 753--774. Wiley
+  Online Library.
+
+\bibitem[Heidmann, 1991]{heidmann1991real}
+Heidmann, T. (1991).
+\newblock Real shadows, real time.
+\newblock {\em Iris Universe}, 18:28--31.
+
+\bibitem[Jaakko~Lehtinen, 2006]{shadowvolumeimprovement}
+Jaakko~Lehtinen, Samuli~Laine, T.~A. (2006).
+\newblock An improved physically-based soft shadow volume algorithm.
+\newblock In {\em Eurographics}, volume~25. The Eurographics Association and
+  Blackwell Publishing.
+
+\bibitem[Kolivand and Sunar, 2013]{shadowvolumesurvey}
+Kolivand, H. and Sunar, M.~S. (2013).
+\newblock A survey of shadow volume algorithms in computer graphics.
+\newblock In {\em IETE Technical Review}, volume~30. Medknow Publications \&
+  Media Pvt. Ltd.
+
+\bibitem[Lili~Wang and Popescu, 2014]{wanggearsalgorithm}
+Lili~Wang, Shiheng~Zhou, W. and Popescu, V. (2014).
+\newblock Gears: A general and efficient algorithm for rendering shadows.
+\newblock In {\em Computer Graphics Forum}, volume~33, pages 264--275. Wiley
+  Online Library.
+
+\bibitem[Savchenko, 2005]{dynamicshadowsalgorithms}
+Savchenko, S. (2005).
+\newblock Algorithms for dynamic shadows.
+\newblock In {\em Dr Dobb's Journal}, volume~30, page~50. ProQuest Central.
+
+\bibitem[Scherzer et~al., 2011]{scherzer2011survey}
+Scherzer, D., Wimmer, M., and Purgathofer, W. (2011).
+\newblock A survey of real-time hard shadow mapping methods.
+\newblock In {\em Computer Graphics Forum}, volume~30, pages 169--186. Wiley
+  Online Library.
+
+\end{thebibliography}
