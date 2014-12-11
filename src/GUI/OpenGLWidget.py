@@ -7,6 +7,9 @@ from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 import ObjParser
 
+from cgkit.cgtypes import mat4,vec3
+
+
 
 class Camera(object):
     """docstring for Camera"""
@@ -244,6 +247,21 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             print ("GL.GL_FRAMEBUFFER_COMPLETE failed, CANNOT use FBO\n");
 
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER,0)
+
+        lightInvDir = vec3(0.5,2.0,2.0);
+ 
+        #Compute the MVP matrix from the light's point of view
+        depthProjectionMatrix = mat4()
+        depthProjectionMatrix = depthProjectionMatrix.orthographic(-10.0,10.0,-10.0,10.0,-10.0,20.0)
+        depthViewMatrix = mat4.lookAt(lightInvDir, vec3(0.0,0.0,0.0), vec3(0.0,1.0,0.0));
+        
+        depthModelMatrix = mat4(1.0);
+        depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+
+        #Send our transformation to the currently bound shader,
+        #in the "MVP" uniform
+        # TODO shader ::  GL.glUniformMatrix4fv(depthMatrixID, 1, GL.GL_FALSE, depthMVP)
+
  
     # Called at startup
     def initializeGL(self):
