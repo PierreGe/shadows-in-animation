@@ -209,84 +209,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
 
     # ---------- Partie : Opengl ------------
-
-    def _shadowMap(self):
-        GL.glDepthFunc(GL.GL_LESS)
-        GL.glEnable(GL.GL_DEPTH_TEST)
-
-        self.fbo = GL.glGenFramebuffers(1);
-        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, self.fbo);
-        # GL.glDeleteFramebuffers(1, self.fbo);
-
-        GL.glGenTextures(1, self.textureBuffer);
-        GL.glBindTexture(GL.GL_TEXTURE_2D, self.textureBuffer);
-        GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_DEPTH_COMPONENT, 640, 480, 0, GL.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_BYTE, None)
-
-        GL.glFramebufferTexture2D(GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_TEXTURE_2D, self.textureBuffer, 0)
-
-        self.renderBuffer = GL.glGenRenderbuffers(1)
-        GL.glBindRenderbuffer( GL.GL_RENDERBUFFER, self.renderBuffer )
-        GL.glRenderbufferStorage(GL.GL_RENDERBUFFER,GL.GL_RGBA,640,480)
-        GL.glFramebufferRenderbuffer( GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_RENDERBUFFER, self.renderBuffer )
-        GL.glBindRenderbuffer( GL.GL_RENDERBUFFER, 0 )
-        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0 )
-
-        GL.glBindTexture( GL.GL_TEXTURE_2D, self.textureBuffer)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP)
-
-        GL.glBindTexture( GL.GL_TEXTURE_2D, 0 )
-        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, self.fbo )
-
-        GL.glDrawBuffer(GL.GL_NONE);
-
-        # GL.glViewport(0,0,640,480)
-        FBOstatus = GL.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER)
-        if FBOstatus != GL.GL_FRAMEBUFFER_COMPLETE:
-            print ("GL.GL_FRAMEBUFFER_COMPLETE failed, CANNOT use FBO\n");
-
-        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER,0)
-
-        lightInvDir = vec3(0.5,2.0,2.0);
- 
-        #Compute the MVP matrix from the light's point of view
-        depthProjectionMatrix = mat4()
-        depthProjectionMatrix = depthProjectionMatrix.orthographic(-10.0,10.0,-10.0,10.0,-10.0,20.0)
-        depthViewMatrix = mat4.lookAt(lightInvDir, vec3(0.0,0.0,0.0), vec3(0.0,1.0,0.0));
-        
-        depthModelMatrix = mat4(1.0);
-        depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
-
-        VERTEX_SHADER = shaders.compileShader("""#version 300
-            // Input vertex data, different for all executions of this shader.
-            layout(location = 0) in vec3 vertexPosition_modelspace;
-             
-            // Values that stay constant for the whole mesh.
-            uniform mat4 depthMVP;
-             
-            void main(){
-             gl_Position =  depthMVP * vec4(vertexPosition_modelspace,1);
-            }""", GL.GL_VERTEX_SHADER)
-
-        FRAGMENT_SHADER = shaders.compileShader("""#version 300
-            // Ouput data
-            layout(location = 0) out float fragmentdepth;
-             
-            void main(){
-                // Not really needed, OpenGL does it anyway
-                fragmentdepth = gl_FragCoord.z;
-            }""", GL.GL_FRAGMENT_SHADER)
-
-        depthProgramID = shaders.compileProgram(VERTEX_SHADER, FRAGMENT_SHADER)
-
-        depthMatrixID = GL.glGetUniformLocation(depthProgramID, "depthMVP")
-
-        #Send our transformation to the currently bound shader,
-        #in the "MVP" uniform
-        GL.glUniformMatrix4fv(depthMatrixID, 1, GL.GL_FALSE, "depthMVP")
-
  
     # Called at startup
     def initializeGL(self):
@@ -338,8 +260,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
-        self._shadowMap()
-
     def paintFloor(self):
         """ docstring """
         GL.glColor4f(1.0,1.0,1.0,1.0) # WHITE
