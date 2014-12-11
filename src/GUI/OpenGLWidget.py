@@ -5,6 +5,7 @@
 import math, random
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
+from OpenGL.GL import shaders
 import ObjParser
 
 from cgkit.cgtypes import mat4,vec3
@@ -258,9 +259,33 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         depthModelMatrix = mat4(1.0);
         depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
+        VERTEX_SHADER = shaders.compileShader("""#version 300
+            // Input vertex data, different for all executions of this shader.
+            layout(location = 0) in vec3 vertexPosition_modelspace;
+             
+            // Values that stay constant for the whole mesh.
+            uniform mat4 depthMVP;
+             
+            void main(){
+             gl_Position =  depthMVP * vec4(vertexPosition_modelspace,1);
+            }""", GL.GL_VERTEX_SHADER)
+
+        FRAGMENT_SHADER = shaders.compileShader("""#version 300
+            // Ouput data
+            layout(location = 0) out float fragmentdepth;
+             
+            void main(){
+                // Not really needed, OpenGL does it anyway
+                fragmentdepth = gl_FragCoord.z;
+            }""", GL.GL_FRAGMENT_SHADER)
+
+        depthProgramID = shaders.compileProgram(VERTEX_SHADER, FRAGMENT_SHADER)
+
+        depthMatrixID = GL.glGetUniformLocation(depthProgramID, "depthMVP")
+
         #Send our transformation to the currently bound shader,
         #in the "MVP" uniform
-        # TODO shader ::  GL.glUniformMatrix4fv(depthMatrixID, 1, GL.GL_FALSE, depthMVP)
+        GL.glUniformMatrix4fv(depthMatrixID, 1, GL.GL_FALSE, "depthMVP")
 
  
     # Called at startup
