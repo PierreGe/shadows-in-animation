@@ -92,6 +92,44 @@ class MainWindow(QtGui.QMainWindow):
         exitAction.triggered.connect(self.close)
         toolbar.addAction(exitAction)
 
+        toolbar.addSeparator()
+
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText("Position lumière :  X ".decode("utf8"))
+        toolbar.addWidget(textWidget)
+
+
+        sliderX = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        sliderX.valueChanged.connect(self._controller.lightPercentX)
+        sliderX.setSliderPosition(99)
+        toolbar.addWidget(sliderX)
+
+
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText("  Z ")
+        toolbar.addWidget(textWidget)
+
+        sliderZ = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        sliderZ.valueChanged.connect(self._controller.lightPercentZ)
+        sliderZ.setSliderPosition(99)
+        toolbar.addWidget(sliderZ)
+
+
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText("  Hauteur ")
+        toolbar.addWidget(textWidget)
+
+        sliderY = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        sliderY.valueChanged.connect(self._controller.lightPercentY)
+        sliderY.setSliderPosition(99)
+        toolbar.addWidget(sliderY)
+
+        # un espace blanc
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText(" "* 100)
+        toolbar.addWidget(textWidget)
+
+
 
         
         

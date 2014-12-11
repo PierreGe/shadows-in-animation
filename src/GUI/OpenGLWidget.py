@@ -66,7 +66,17 @@ class Camera(object):
 class Light(object):
     """docstring for Light"""
     def __init__(self):
-        self._position = None
+        self._xInterval = [-20,20]
+        self._yInterval = [0,30]
+        self._zInterval = [-20,20]
+        xInit = (self._xInterval[1])
+        yInit = (self._yInterval[1])
+        zInit = (self._zInterval[1])
+        self.setLights([xInit, yInit, zInit])
+
+    def resetLight(self):
+        """ """
+        self.__init__()
 
     def getPosition(self):
         return self._position
@@ -76,6 +86,15 @@ class Light(object):
         
         self._position = list(position)
         self._position.append(1.0)
+
+
+    def setLightsRatio(self,positionPercent):
+        "light with a custom position"
+        x = self._xInterval[0] + (float(positionPercent[0])/100 * ( abs(self._xInterval[0]) + abs(self._xInterval[1])))
+        y = self._yInterval[0] + (float(positionPercent[1])/100 * ( abs(self._yInterval[0]) + abs(self._yInterval[1])))
+        z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
+        #print("{0}, {1}, {2}".format(x,y,z))
+        self.setLights([x,y,z])
 
     def renderLight(self):
         """ """
@@ -179,6 +198,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.zoom += event.delta()/100.0
         self.updateGL()
 
+    def updateLights(self,position):
+        """ """
+        self._light.setLightsRatio(position)
+        self.updateGL()
+
+
     # ---------- Partie : Opengl ------------
 
 
@@ -227,7 +252,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glRotated(self._camera.getY(), 0, 1, 0)
         GL.glRotated(self._camera.getZ(), 0, 0, 1)
         # paint objects
-        self._light.setLights((12,12,12))
         self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
