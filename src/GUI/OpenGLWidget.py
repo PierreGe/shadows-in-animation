@@ -6,7 +6,7 @@ import math, random
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from OpenGL.GL import shaders
-import ObjParser
+from ObjParser import ObjParser
 
 from cgkit.cgtypes import mat4,vec3
 
@@ -241,8 +241,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         """ docstring """
         self.objects = []
-        for obj in self._object_names:
-            self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
+        for index, obj in enumerate(self._object_names):
+            self.objects.append((ObjParser(obj[0]).build(index+1), obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
@@ -271,7 +271,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for obj in self.objects:
             GL.glPushMatrix()
             GL.glTranslated(*obj[1])
-            GL.glCallList(obj[0].getGlList())
+            GL.glCallList(obj[0])
             GL.glPopMatrix()
 
  
