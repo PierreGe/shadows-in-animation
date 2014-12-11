@@ -63,12 +63,52 @@ class Camera(object):
         return angle
 
 
+class Light(object):
+    """docstring for Light"""
+    def __init__(self):
+        self._position = None
+
+    def getPosition(self):
+        return self._position
+
+    def setLights(self,position):
+        "light with a custom position"
+        
+        self._position = list(position)
+        self._position.append(1.0)
+
+    def renderLight(self):
+        """ """
+        if not self._position:
+            print("[ERROR] Light position not set !")
+
+        GL.glPushMatrix()
+        GL.glDisable(GL.GL_LIGHTING)
+        GL.glPointSize(5.0)
+        GL.glBegin(GL.GL_POINTS)
+        GL.glColor4f(1,0.475, 0.294, 1) # yellow-orrange point
+        GL.glVertex4fv(self._position)
+        GL.glEnd()
+        GL.glPopMatrix() 
+
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 )) 
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 )) 
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))
+        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, self._position)
+
+        GL.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 1.0)
+        GL.glEnable(GL.GL_LIGHT0)
+        GL.glEnable(GL.GL_LIGHTING)
+        
+
+
 class OpenGLWidget(QtOpenGL.QGLWidget):
     """ docstring """
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
         self._camera = Camera()
+        self._light = Light()
         self._object_names = object_names
 
     def getObjectNames(self):
@@ -142,29 +182,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # ---------- Partie : Opengl ------------
 
 
-    def initLights(self,position):
-        "light with a custom position"
-        
-        position = list(position)
-        position.append(1.0)
-
-        GL.glPushMatrix()
-        GL.glDisable(GL.GL_LIGHTING)
-        GL.glPointSize(5.0)
-        GL.glBegin(GL.GL_POINTS)
-        GL.glColor4f(1,0.475, 0.294, 1) # yellow-orrange point
-        GL.glVertex4fv(position)
-        GL.glEnd()
-        GL.glPopMatrix() 
-
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 )) 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 )) 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position)
-
-        GL.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 1.0)
-        GL.glEnable(GL.GL_LIGHT0)
-        GL.glEnable(GL.GL_LIGHTING)
  
     # Called at startup
     def initializeGL(self):
@@ -177,9 +194,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
-
-        # init some light
-        self.initLights((12,12,12))
 
         # create floor and load .obj objects
         self.makeFloor()
@@ -213,7 +227,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glRotated(self._camera.getY(), 0, 1, 0)
         GL.glRotated(self._camera.getZ(), 0, 0, 1)
         # paint objects
-        self.initLights((12,12,12))
+        self._light.setLights((12,12,12))
+        self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
 
