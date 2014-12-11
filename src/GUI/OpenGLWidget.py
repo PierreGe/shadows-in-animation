@@ -238,7 +238,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         GL.glDrawBuffer(GL.GL_NONE);
 
-        GL.glViewport(0,0,640,480)
+        # GL.glViewport(0,0,640,480)
         FBOstatus = GL.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER)
         if FBOstatus != GL.GL_FRAMEBUFFER_COMPLETE:
             print ("GL.GL_FRAMEBUFFER_COMPLETE failed, CANNOT use FBO\n");
