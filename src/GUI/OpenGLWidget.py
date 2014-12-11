@@ -206,6 +206,32 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     # ---------- Partie : Opengl ------------
 
+    def _shadowMap(self):
+        """ """
+        # The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
+        # fb = GL.glGenFramebuffers(1);
+        # GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, fb);
+
+        # # Depth texture. Slower than a depth buffer, but you can sample it later in your shader
+        # textureBuffer = 0
+        # GL.glGenTextures(1, textureBuffer);
+        # GL.glBindTexture(GL.GL_TEXTURE_2D, textureBuffer);
+
+        # GL.glTexImage2D(GL.GL_TEXTURE_2D, 0,GL.GL_DEPTH_COMPONENT16, 1024, 1024, 0,GL.GL_DEPTH_COMPONENT, GL.GL_FLOAT, 0);
+        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
+
+        # GL.glFramebufferTexture(GL.GL_FRAMEBUFFER, GL.GL_DEPTH_ATTACHMENT, depthTexture, 0);
+
+        # GL.glDrawBuffer(GL.GL_NONE); # No color buffer is drawn to.
+
+        # # Always check that our framebuffer is ok
+        # if(GL.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER) != GL.GL_FRAMEBUFFER_COMPLETE):
+        #     print("ERRROR : FRAME BUFFER IS NOT OK")
+        #     return false;
+
 
  
     # Called at startup
@@ -255,6 +281,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
+        self._shadowMap()
 
     def paintFloor(self):
         """ docstring """
