@@ -207,36 +207,50 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # ---------- Partie : Opengl ------------
 
     def _shadowMap(self):
-        """ """
-        # The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
-        # fb = GL.glGenFramebuffers(1);
-        # GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, fb);
+        GL.glDepthFunc(GL.GL_LESS)
+        GL.glEnable(GL.GL_DEPTH_TEST)
 
-        # # Depth texture. Slower than a depth buffer, but you can sample it later in your shader
-        # textureBuffer = 0
-        # GL.glGenTextures(1, textureBuffer);
-        # GL.glBindTexture(GL.GL_TEXTURE_2D, textureBuffer);
+        self.fbo = GL.glGenFramebuffers(1);
+        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, self.fbo);
+        # GL.glDeleteFramebuffers(1, self.fbo);
 
-        # GL.glTexImage2D(GL.GL_TEXTURE_2D, 0,GL.GL_DEPTH_COMPONENT16, 1024, 1024, 0,GL.GL_DEPTH_COMPONENT, GL.GL_FLOAT, 0);
-        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
-        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
-        # GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
+        GL.glGenTextures(1, self.textureBuffer);
+        GL.glBindTexture(GL.GL_TEXTURE_2D, self.textureBuffer);
+        GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_DEPTH_COMPONENT, 640, 480, 0, GL.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_BYTE, None)
 
-        # GL.glFramebufferTexture(GL.GL_FRAMEBUFFER, GL.GL_DEPTH_ATTACHMENT, depthTexture, 0);
+        GL.glFramebufferTexture2D(GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_TEXTURE_2D, self.textureBuffer, 0)
 
-        # GL.glDrawBuffer(GL.GL_NONE); # No color buffer is drawn to.
+        self.renderBuffer = GL.glGenRenderbuffers(1)
+        GL.glBindRenderbuffer( GL.GL_RENDERBUFFER, self.renderBuffer )
+        GL.glRenderbufferStorage(GL.GL_RENDERBUFFER,GL.GL_RGBA,640,480)
+        GL.glFramebufferRenderbuffer( GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_RENDERBUFFER, self.renderBuffer )
+        GL.glBindRenderbuffer( GL.GL_RENDERBUFFER, 0 )
+        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0 )
 
-        # # Always check that our framebuffer is ok
-        # if(GL.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER) != GL.GL_FRAMEBUFFER_COMPLETE):
-        #     print("ERRROR : FRAME BUFFER IS NOT OK")
-        #     return false;
+        GL.glBindTexture( GL.GL_TEXTURE_2D, self.textureBuffer)
+        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
+        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
+        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP)
+        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP)
 
+        GL.glBindTexture( GL.GL_TEXTURE_2D, 0 )
+        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, self.fbo )
 
+        GL.glDrawBuffer(GL.GL_NONE);
+
+        GL.glViewport(0,0,640,480)
+        FBOstatus = GL.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER)
+        if FBOstatus != GL.GL_FRAMEBUFFER_COMPLETE:
+            print ("GL.GL_FRAMEBUFFER_COMPLETE failed, CANNOT use FBO\n");
+
+        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER,0)
  
     # Called at startup
     def initializeGL(self):
         """ docstring """
+        self.fbo = 0;
+        self.textureBuffer = 0;
+        self.renderBuffer = 0
         # initial rotation
         self.zoom = -20
 
