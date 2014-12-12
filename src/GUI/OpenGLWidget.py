@@ -26,8 +26,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        for index, obj in enumerate(self.objects, 1):
-            GL.glDeleteLists(index, GL.GL_COMPILE)
+        for obj in self.objects:
+            GL.glDeleteLists(1, GL.GL_COMPILE)
         GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
         self._object_names = object_names
         self.loadObjects()
@@ -86,7 +86,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def wheelEvent(self, event):
         """ docstring """
         # TODO réparer le zoom, utiliser les frustums
-        self.zoom += event.delta()/100.0
+        self.zoom += event.delta()/1000.0
         self.updateGL()
 
     def updateLights(self,position):
@@ -131,25 +131,28 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         """ docstring """
         self.objects = []
-        for index, obj in enumerate(self._object_names, 1):
-            self.objects.append((ObjParser(obj[0]).build(index), obj[1]))
+        for obj in self._object_names:
+            self.objects.append((ObjParser(obj[0]).build(1), obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-        # reload new matrix
-        GL.glLoadIdentity()
-        # zoom out camera
-        GL.glTranslated(0, 0, self.zoom)
-        # apply rotation
-        GL.glRotated(self._camera.getX(), 1, 0, 0)
-        GL.glRotated(self._camera.getY(), 0, 1, 0)
-        GL.glRotated(self._camera.getZ(), 0, 0, 1)
         # paint objects
         self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
+
+        # set frustum
+        GL.glMatrixMode(GL.GL_MODELVIEW)
+        GL.glLoadIdentity()
+        GL.glTranslated(0,0,self.zoom)
+        GL.glOrtho(1*self.zoom, -1*self.zoom, 1*self.zoom, -1*self.zoom, 1, 100) # FRUSTUUUUUUUUM
+
+        # apply rotation
+        GL.glRotated(self._camera.getX(), 1, 0, 0)
+        GL.glRotated(self._camera.getY(), 0, 1, 0)
+        GL.glRotated(self._camera.getZ(), 0, 0, 1)
 
     def paintFloor(self):
         """ docstring """
@@ -158,23 +161,21 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintObjects(self):
         """ docstring """
-        #GL.glColor3f(1,0,0) # RED
         for obj in self.objects:
-            GL.glPushMatrix()
             GL.glTranslated(*obj[1])
             GL.glCallList(obj[0])
-            GL.glPopMatrix()
 
  
     # Called when window is resized
     def resizeGL(self, width, height):
         """ docstring """
+        # set openGL in the center of the widget
         GL.glViewport(0, 0, width, height)
  
+        # set frustum
         GL.glMatrixMode(GL.GL_PROJECTION)
         GL.glLoadIdentity()
         GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM
- 
         GL.glMatrixMode(GL.GL_MODELVIEW)
 
  
