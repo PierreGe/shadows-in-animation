@@ -105,7 +105,7 @@ class ObjParser:
                 glBindTexture(GL_TEXTURE_2D, texid)
             else:
                 # just use diffuse colour
-                glColor(*mtl['Kd'])
+                glColor(*self._mtl.getColor())
  
             glBegin(GL_POLYGON)
             for i in range(len(vertices)):
