@@ -28,7 +28,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        for index, obj in enumerateu(self.objects, 1):
+        for index, obj in enumerate(self.objects, 1):
             GL.glDeleteLists(index, GL.GL_COMPILE)
         self._object_names = object_names
         self.loadObjects()
