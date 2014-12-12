@@ -99,7 +99,7 @@ class ObjParser:
         for face in self._faces:
             vertices, normals, texture_coords, material = face
             
-            texid = self._mtl.texid
+            texid = self._mtl.getTexID()
             if texid != 0:
                 # use diffuse texmap
                 glBindTexture(GL_TEXTURE_2D, texid)

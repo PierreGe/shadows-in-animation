@@ -14,19 +14,22 @@ class MtlParser (dict):
 
 
     def _parseMtlFile(self):
-        for line in open(self._filePath + self._filename, "r"):
-            if line.startswith('#'): continue
-            values = line.split()
-            if not values: continue
-            if values[0] == 'newmtl':
-                self[values[1]] = {}
-            elif self is {}:
-                raise ValueError, "mtl file doesn't start with newmtl stmt"
-            elif values[0] == 'map_Kd':
-                # load the texture referred to by this declaration
-                self[values[0]] = values[1]
-            else:
-                self[values[0]] = map(float, values[1:])
+        if (os.path.exists(self._filePath + self._filename)):
+            for line in open(self._filePath + self._filename, "r"):
+                if line.startswith('#'): continue
+                values = line.split()
+                if not values: continue
+                if values[0] == 'newmtl':
+                    self[values[1]] = {}
+                elif self is {}:
+                    raise ValueError, "mtl file doesn't start with newmtl stmt"
+                elif values[0] == 'map_Kd':
+                    # load the texture referred to by this declaration
+                    self[values[0]] = values[1]
+                else:
+                    self[values[0]] = map(float, values[1:])
+        else:
+            self['Kd'] = (0.5, 0.5, 0.5)
 
     # return a 3-tuple containing a basic color for the material
     def getColor(self):
@@ -38,7 +41,7 @@ class MtlParser (dict):
 
     def build(self, index):
         # if has a texture and texture exists
-        if ('map_Kd' in self && os.path.exists(self._filePath + self['map_Kd'])):
+        if ('map_Kd' in self) and os.path.exists(self._filePath + self['map_Kd']):
             glEnable(GL_TEXTURE_2D)
             # generate an image texture
             self._texid = self['texture_Kd'] = glGenTextures(index)
