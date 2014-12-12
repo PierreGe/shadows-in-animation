@@ -42,7 +42,7 @@ class MtlParser (dict):
     def build(self, index):
         # if has a texture and texture exists
         if ('map_Kd' in self) and os.path.exists(self._filePath + self['map_Kd']):
-            glEnable(GL_TEXTURE_2D)
+            # glEnable(GL_TEXTURE_2D)
             # generate an image texture
             self._texid = self['texture_Kd'] = glGenTextures(index)
             glBindTexture(GL_TEXTURE_2D, self._texid)
@@ -54,5 +54,5 @@ class MtlParser (dict):
             ix, iy = surf.get_rect().size
             # apply image as a texture
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ix, iy, 0, GL_RGBA,GL_UNSIGNED_BYTE, image)
-            glDisable(GL_TEXTURE_2D)
+            # glDisable(GL_TEXTURE_2D)
             
