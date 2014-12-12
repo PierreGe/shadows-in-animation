@@ -104,7 +104,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.textureBuffer = 0;
         self.renderBuffer = 0
         # initial rotation
-        self.zoom = -20
+        self.zoom = -2
 
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
@@ -154,6 +154,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glRotated(self._camera.getY(), 0, 1, 0)
         GL.glRotated(self._camera.getZ(), 0, 0, 1)
 
+    # Paint scene objects methods
     def paintFloor(self):
         """ docstring """
         GL.glColor4f(1.0,1.0,1.0,1.0) # WHITE
