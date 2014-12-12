@@ -1,0 +1,15 @@
+{
+  "name": "Le petit bonhomme en bois",
+  "description": "Il avait un long nez",
+  "algo-compatible": ["Algo A","Algo B","Algo C"],
+  "obj-liste": [
+    [ 
+      "assets/obj/bonhomme-bois/dummy_obj.obj",
+      [
+        2,
+        2,
+        0
+      ]
+    ]
+  ]
+}
