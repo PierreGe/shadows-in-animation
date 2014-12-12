@@ -6,123 +6,11 @@ import math, random
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from OpenGL.GL import shaders
-import ObjParser
+from ObjParser import ObjParser
 
 from cgkit.cgtypes import mat4,vec3
-
-
-
-class Camera(object):
-    """docstring for Camera"""
-    def __init__(self):
-        """ Constructeur de la classe Camera"""
-        self._x = 20
-        self._xInterval = [20,60]
-        self._y = 352
-        self._z = 6
-
-    def getX(self):
-        return self._x
-
-    def getY(self):
-        return self._y
-
-    def getZ(self):
-        return self._z
-
-    def setX(self,x):
-        """ """
-        x = self.normalizeAngle(x)
-        if x < self._xInterval[0]:
-            x = self._xInterval[0]
-        elif x > self._xInterval[1]:
-            x = self._xInterval[1]
-        if x != self._x:
-            self._x = x
-            return True
-        return False
-
-    def setY(self,y):
-        """ """
-        y = self.normalizeAngle(y)
-        if y != self._y:
-            self._y = y
-            return True
-        return False
-
-    def setZ(self,z):
-        """ """
-        z = self.normalizeAngle(z)
-        if z != self._z:
-            self._z = z
-            return True
-        return False
-
-    def normalizeAngle(self, angle):
-        """ Keep angle between 0 and 360"""
-        while angle < 0:
-            angle += 360
-        while angle > 360:
-            angle -= 360
-        return angle
-
-
-class Light(object):
-    """docstring for Light"""
-    def __init__(self):
-        self._xInterval = [-20,20]
-        self._yInterval = [0,30]
-        self._zInterval = [-20,20]
-        xInit = (self._xInterval[1])
-        yInit = (self._yInterval[1])
-        zInit = (self._zInterval[1])
-        self.setLights([xInit, yInit, zInit])
-
-    def resetLight(self):
-        """ """
-        self.__init__()
-
-    def getPosition(self):
-        return self._position
-
-    def setLights(self,position):
-        "light with a custom position"
-        
-        self._position = list(position)
-        self._position.append(1.0)
-
-
-    def setLightsRatio(self,positionPercent):
-        "light with a custom position"
-        x = self._xInterval[0] + (float(positionPercent[0])/100 * ( abs(self._xInterval[0]) + abs(self._xInterval[1])))
-        y = self._yInterval[0] + (float(positionPercent[1])/100 * ( abs(self._yInterval[0]) + abs(self._yInterval[1])))
-        z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
-        #print("{0}, {1}, {2}".format(x,y,z))
-        self.setLights([x,y,z])
-
-    def renderLight(self):
-        """ """
-        if not self._position:
-            print("[ERROR] Light position not set !")
-
-        GL.glPushMatrix()
-        GL.glDisable(GL.GL_LIGHTING)
-        GL.glPointSize(5.0)
-        GL.glBegin(GL.GL_POINTS)
-        GL.glColor4f(1,0.475, 0.294, 1) # yellow-orrange point
-        GL.glVertex4fv(self._position)
-        GL.glEnd()
-        GL.glPopMatrix() 
-
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 )) 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 )) 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, self._position)
-
-        GL.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 1.0)
-        GL.glEnable(GL.GL_LIGHT0)
-        GL.glEnable(GL.GL_LIGHTING)
-        
+from Camera import Camera
+from Light import Light       
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -130,8 +18,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._camera = Camera()
-        self._light = Light()
         self._object_names = object_names
 
     def getObjectNames(self):
@@ -140,8 +26,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        for obj in self.objects:
-            GL.glDeleteLists(1, GL.GL_COMPILE)
+        for index, obj in enumerate(self.objects, 1):
+            GL.glDeleteLists(index, GL.GL_COMPILE)
+        GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
         self._object_names = object_names
         self.loadObjects()
 
@@ -225,6 +112,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
+        # create camera and light
+        self._camera = Camera()
+        self._light = Light()
         # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
@@ -241,8 +131,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         """ docstring """
         self.objects = []
-        for obj in self._object_names:
-            self.objects.append((ObjParser.ObjParser(obj[0]), obj[1]))
+        for index, obj in enumerate(self._object_names, 1):
+            self.objects.append((ObjParser(obj[0]).build(index), obj[1]))
  
     # Called on each update/frame
     def paintGL(self):
@@ -260,6 +150,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
+
     def paintFloor(self):
         """ docstring """
         GL.glColor4f(1.0,1.0,1.0,1.0) # WHITE
@@ -271,7 +162,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for obj in self.objects:
             GL.glPushMatrix()
             GL.glTranslated(*obj[1])
-            GL.glCallList(obj[0].getGlList())
+            GL.glCallList(obj[0])
             GL.glPopMatrix()
 
  

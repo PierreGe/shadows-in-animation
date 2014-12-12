@@ -56,18 +56,18 @@ class MainWindow(QtGui.QMainWindow):
         fileMenu = menubar.addMenu('&Fichier')
         helpMenu = menubar.addMenu("&Aide")
 
-        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/application-exit.png"), 'Quitter', self)
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
         fileMenu.addAction(exitAction)
 
-        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/help-browser.png"), "Aide", self)
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/help-browser.png"), "Aide", self)
         aboutAction.setStatusTip("Aide pour cette application")
         aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)
 
-        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" + "images/dialog-information.png"), "A propos", self)
+        aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/dialog-information.png"), "A propos", self)
         aboutAction.setStatusTip("A propos de cette application")
         aboutAction.triggered.connect(self.displayAbout)
         helpMenu.addAction(aboutAction)
@@ -80,13 +80,13 @@ class MainWindow(QtGui.QMainWindow):
         """ This method will initate the toolsBar"""
         toolbar = self.addToolBar("Tool Bar")
 
-        reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +"images/system-reload.png"), "Reload", self)
+        reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)
         reloadAction.setShortcut("Ctrl+R")
         reloadAction.setStatusTip("Reload application")
         reloadAction.triggered.connect(self.reloadOpenGl)
         toolbar.addAction(reloadAction)
 
-        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/GUI/" +"images/application-exit.png"), "Exit", self)
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/application-exit.png"), "Exit", self)
         exitAction.setShortcut("Ctrl+Q")
         exitAction.setStatusTip("Exit application")
         exitAction.triggered.connect(self.close)
