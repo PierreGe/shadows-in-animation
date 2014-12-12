@@ -10,64 +10,7 @@ from ObjParser import ObjParser
 
 from cgkit.cgtypes import mat4,vec3
 from Camera import Camera
-
-
-class Light(object):
-    """docstring for Light"""
-    def __init__(self):
-        self._xInterval = [-20,20]
-        self._yInterval = [0,30]
-        self._zInterval = [-20,20]
-        xInit = (self._xInterval[1])
-        yInit = (self._yInterval[1])
-        zInit = (self._zInterval[1])
-        self.setLights([xInit, yInit, zInit])
-
-    def resetLight(self):
-        """ """
-        self.__init__()
-
-    def getPosition(self):
-        return self._position
-
-    def setLights(self,position):
-        "light with a custom position"
-        
-        self._position = list(position)
-        self._position.append(1.0)
-
-
-    def setLightsRatio(self,positionPercent):
-        "light with a custom position"
-        x = self._xInterval[0] + (float(positionPercent[0])/100 * ( abs(self._xInterval[0]) + abs(self._xInterval[1])))
-        y = self._yInterval[0] + (float(positionPercent[1])/100 * ( abs(self._yInterval[0]) + abs(self._yInterval[1])))
-        z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
-        #print("{0}, {1}, {2}".format(x,y,z))
-        self.setLights([x,y,z])
-
-    def renderLight(self):
-        """ """
-        if not self._position:
-            print("[ERROR] Light position not set !")
-
-        GL.glPushMatrix()
-        GL.glDisable(GL.GL_LIGHTING)
-        GL.glPointSize(5.0)
-        GL.glBegin(GL.GL_POINTS)
-        GL.glColor4f(1,0.475, 0.294, 1) # yellow-orrange point
-        GL.glVertex4fv(self._position)
-        GL.glEnd()
-        GL.glPopMatrix() 
-
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 )) 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_SPECULAR, ( 0.6,0.6,0.6,1.0 )) 
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))
-        GL.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, self._position)
-
-        GL.glLightf(GL.GL_LIGHT0, GL.GL_CONSTANT_ATTENUATION, 1.0)
-        GL.glEnable(GL.GL_LIGHT0)
-        GL.glEnable(GL.GL_LIGHTING)
-        
+from Light import Light        
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
