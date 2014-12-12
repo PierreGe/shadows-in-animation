@@ -18,8 +18,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._camera = Camera()
-        self._light = Light()
         self._object_names = object_names
 
     def getObjectNames(self):
@@ -30,6 +28,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         for index, obj in enumerate(self.objects, 1):
             GL.glDeleteLists(index, GL.GL_COMPILE)
+        GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
         self._object_names = object_names
         self.loadObjects()
 
@@ -113,6 +112,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
+        # create camera and light
+        self._camera = Camera()
+        self._light = Light()
         # create floor and load .obj objects
         self.makeFloor()
         self.loadObjects()
@@ -148,6 +150,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.renderLight()
         self.paintFloor()
         self.paintObjects()
+
     def paintFloor(self):
         """ docstring """
         GL.glColor4f(1.0,1.0,1.0,1.0) # WHITE
