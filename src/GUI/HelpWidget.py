@@ -45,8 +45,8 @@ class HelpWidget(QtGui.QWidget):
 
     def _getStyleSheet(self):
         """ Retourne la feuille de style du QLabel"""
-        return open(os.getcwd() + "/GUI/text-help/text-help.css").read().decode('utf-8')
+        return open(os.getcwd() + "/assets/text-help/text-help.css").read().decode('utf-8')
 
     def _getStringHelp(self):
         """ Retourne le code html du QLabel"""
-        return open(os.getcwd() +"/GUI/text-help/text-help.html").read().decode('utf-8')
+        return open(os.getcwd() +"/assets/text-help/text-help.html").read().decode('utf-8')

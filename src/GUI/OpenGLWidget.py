@@ -10,7 +10,7 @@ from ObjParser import ObjParser
 
 from cgkit.cgtypes import mat4,vec3
 from Camera import Camera
-from Light import Light        
+from Light import Light       
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
