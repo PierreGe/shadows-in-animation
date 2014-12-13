@@ -21,17 +21,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._object_names = object_names
+        self._objectNames = object_names
 
     def getObjectNames(self):
         """ Reload openGLWidget """
-        return self._object_names
+        return self._objectNames
 
     def setObjects(self, object_names):
         """ docstring """
         GL.glDeleteLists(1, GL.GL_COMPILE)
         GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
-        self._object_names = object_names
+        self._objectNames = object_names
         self.loadObjects()
 
     # ---------- Partie : Qt ------------
@@ -150,8 +150,10 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             } """)
 
         self.floor = Program(vertex, fragment)
-        self.floor['position'] =  [[ 5, 0, 5], [-5, 0, 5], [-5, 0.1, 5], [ 5,0.1, 5],
-                 [ 5,0.1,-5], [ 5, 0,-5], [-5, 0,-5], [-5,0.1,-5]]
+        self.floor['color'] = (0.5, 0.5, 0.5, 1)
+        # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
+        self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
+                 [ 10,0.1,-10], [ 10, 0,-10], [-10, 0,-10], [-10,0.1,-10]]
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
         self.floor_indices = IndexBuffer(I)
@@ -163,7 +165,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         """ docstring """
         self.objects = []
-        for obj in self._object_names:
+        for obj in self._objectNames:
             self.objects.append((ObjParser(obj[0]).build(1), obj[1]))
  
     # Called on each update/frame
