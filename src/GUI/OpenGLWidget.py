@@ -193,16 +193,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         # set openGL in the center of the widget
         GL.glViewport(0, 0, width, height)
+        # #from tuto
+        #projection = perspective( 45.0, width/float(height), 2.0, 10.0 )
+        #program['projection'] = projection
  
-        # set frustum
- 
-    # Work methods
-    def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
-        """ docstring """
-        GL.glBegin(GL.GL_QUADS)
-        GL.glVertex3d(x1, y1, z1)
-        GL.glVertex3d(x2, y2, z2)
-        GL.glVertex3d(x3, y3, z3)
-        GL.glVertex3d(x4, y4, z4)
-        GL.glEnd()
  
