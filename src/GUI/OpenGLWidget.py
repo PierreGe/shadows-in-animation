@@ -120,6 +120,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.vertex = VertexShader("shaders/vertex.shader")
         self.fragment = FragmentShader("shaders/fragment.shader")
 
+        GL.glEnable(GL.GL_DEPTH_TEST)
         # create camera and light
         self._camera = Camera()
         self._light = Light()
@@ -187,12 +188,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintObjects(self):
         """ docstring """
         for obj in self.objects:
-            model = self.model
-            obj[0]['model'] = model
-            obj[0]['view'] = self.view
+            view = self.view
+            translate(view, *obj[1])
+            obj[0]['model'] = self.model
+            obj[0]['view'] = view
             obj[0]['projection'] = self.projection
             obj[0]['color'] = (1,1,1,1)
-            translate(model, *obj[1])
             obj[0].draw(GL.GL_TRIANGLE_STRIP)
 
  
