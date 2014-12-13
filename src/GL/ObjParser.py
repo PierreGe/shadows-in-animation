@@ -32,6 +32,22 @@ class ObjParser:
                 self._dumpGlList(filename)
             except Exception, e:
                 print("[Warning] Unable to save to cache")
+
+    def getVertices(self):
+        return self._vertices
+
+    def getNormals(self):
+        return self._normals
+
+    def getTextureCoords(self):
+        return self._textureCoords
+
+    def getFaces(self):
+        return self._faces
+
+    def getMtl(self):
+        return self._mtl
+
         
     def _dumpGlList(self,filename):
         """ """
