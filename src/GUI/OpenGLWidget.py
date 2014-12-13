@@ -7,6 +7,8 @@ from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from OpenGL.GL import shaders
 from ObjParser import ObjParser
+from vispy.gloo import *
+import numpy as np
 
 from cgkit.cgtypes import mat4,vec3
 from Camera import Camera
@@ -26,8 +28,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        for obj in self.objects:
-            GL.glDeleteLists(1, GL.GL_COMPILE)
+        GL.glDeleteLists(1, GL.GL_COMPILE)
         GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
         self._object_names = object_names
         self.loadObjects()
@@ -122,11 +123,28 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
-        self.groundPoints = [-1,0,-1,-1,0,1,1,0,1,1,0,-1]
-        self.groundList = GL.glGenLists(1)
-        GL.glNewList(self.groundList, GL.GL_COMPILE)
-        self.quadrilatere(*(([x*10 for x in self.groundPoints])))
-        GL.glEndList()
+        vertex = VertexShader("""
+            uniform float scale;
+            uniform vec4 color;
+            attribute vec3 position;
+            varying vec4 v_color;
+            void main()
+            {
+                gl_Position = vec4(scale*position, 1.0);
+                v_color = color;
+            } """)
+
+        fragment = FragmentShader("""
+            varying vec4 v_color;
+            void main()
+            {
+                gl_FragColor = v_color;
+            } """)
+
+        self.floor = Program(vertex, fragment)
+        self.floor['color'] = (0.5, 0.5, 0.5, 1)
+        self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
+        self.floor['scale'] = 1.0
 
     def loadObjects(self):
         """ docstring """
@@ -157,8 +175,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Paint scene objects methods
     def paintFloor(self):
         """ docstring """
-        GL.glColor4f(1.0,1.0,1.0,1.0) # WHITE
-        GL.glCallList(self.groundList)
+        self.floor.draw(gl.GL_TRIANGLE_STRIP)
 
     def paintObjects(self):
         """ docstring """
