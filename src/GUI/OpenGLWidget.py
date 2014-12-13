@@ -150,8 +150,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             } """)
 
         self.floor = Program(vertex, fragment)
-        self.floor['position'] =  [[ 1, 0, 1], [-1, 0, 1], [-1, 0.1, 1], [ 1,0.1, 1],
-                 [ 1,0.1,-1], [ 1, 0,-1], [-1, 0,-1], [-1,0.1,-1]]
+        self.floor['position'] =  [[ 5, 0, 5], [-5, 0, 5], [-5, 0.1, 5], [ 5,0.1, 5],
+                 [ 5,0.1,-5], [ 5, 0,-5], [-5, 0,-5], [-5,0.1,-5]]
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
         self.floor_indices = IndexBuffer(I)
