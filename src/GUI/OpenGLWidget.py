@@ -151,7 +151,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             newObj = Program(self.vertex, self.fragment)
             parser = ObjParser(obj[0])
             newObj['position'] = parser.getVertices()
-            self.objects.append((newObj, obj[1]))
+            self.objects.append((newObj, obj[1], IndexBuffer(parser.getIndices())))
  
     # Called on each update/frame
     def paintGL(self):
@@ -194,7 +194,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj[0]['view'] = view
             obj[0]['projection'] = self.projection
             obj[0]['color'] = (1,1,1,1)
-            obj[0].draw(GL.GL_TRIANGLE_STRIP)
+            obj[0].draw(GL.GL_TRIANGLE_STRIP, obj[2])
 
  
     # Called when window is resized

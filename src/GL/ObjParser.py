@@ -48,6 +48,15 @@ class ObjParser:
     def getMtl(self):
         return self._mtl
 
+    def getIndices(self):
+        indices = []
+        for face in self._faces:
+            vertices, normals, texture_coords, material = face
+            for i in range(len(vertices)):
+                indices.append(vertices[i] -1)
+        return indices
+
+
         
     def _dumpGlList(self,filename):
         """ """
