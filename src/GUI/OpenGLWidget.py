@@ -177,7 +177,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         # set frustum
         self.view = np.eye(4, dtype=np.float32)
-        translate(self.view, 0, 0, self.zoom)
+        translate(self.view, 0, -1, self.zoom)
         self.projection = ortho(1*self.zoom, -1*self.zoom, 1*self.zoom, -1*self.zoom, 1, 100)
 
         # apply rotation
