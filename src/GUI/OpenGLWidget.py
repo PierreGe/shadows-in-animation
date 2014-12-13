@@ -8,6 +8,7 @@ from OpenGL import GL,GLU
 from OpenGL.GL import shaders
 from ObjParser import ObjParser
 from vispy.gloo import *
+from vispy.util.transforms import *
 import numpy as np
 
 from cgkit.cgtypes import mat4,vec3
@@ -113,6 +114,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
+        self.projection = ortho(-10, 10, -10, 10, 1, 37)
+        self.model = np.eye(4, dtype=np.float32)
+        self.view = np.eye(4, dtype=np.float32)
+        translate(self.view, 0, 0, -10)
+
         # create camera and light
         self._camera = Camera()
         self._light = Light()
@@ -124,13 +130,16 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def makeFloor(self):
         """ docstring """
         vertex = VertexShader("""
+            uniform mat4 model;
+            uniform mat4 view;
+            uniform mat4 projection;
             uniform float scale;
             uniform vec4 color;
             attribute vec3 position;
             varying vec4 v_color;
             void main()
             {
-                gl_Position = vec4(scale*position, 1.0);
+                gl_Position = projection * view * model * vec4(scale*position, 1.0);
                 v_color = color;
             } """)
 
@@ -143,7 +152,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self.floor = Program(vertex, fragment)
         self.floor['color'] = (0.5, 0.5, 0.5, 1)
-        self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
+        # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
+        self.floor['position'] =  [[ 1, 0, 1], [-1, 0, 1], [-1, 0.1, 1], [ 1,0.1, 1],
+                 [ 1,0.1,-1], [ 1, 0,-1], [-1, 0,-1], [-1,0.1,-1]]
         self.floor['scale'] = 1.0
 
     def loadObjects(self):
@@ -162,20 +173,26 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.paintObjects()
 
         # set frustum
-        GL.glMatrixMode(GL.GL_MODELVIEW)
-        GL.glLoadIdentity()
-        GL.glTranslated(0,0,self.zoom)
-        GL.glOrtho(1*self.zoom, -1*self.zoom, 1*self.zoom, -1*self.zoom, 1, 100) # FRUSTUUUUUUUUM
+        self.view = np.eye(4, dtype=np.float32)
+        translate(self.view, 0, 0, self.zoom)
+        self.projection = ortho(1*self.zoom, -1*self.zoom, 1*self.zoom, -1*self.zoom, 1, 100)
 
         # apply rotation
-        GL.glRotated(self._camera.getX(), 1, 0, 0)
-        GL.glRotated(self._camera.getY(), 0, 1, 0)
-        GL.glRotated(self._camera.getZ(), 0, 0, 1)
+        self.model = np.eye(4, dtype=np.float32)
+        rotate(self.model, self._camera.getX(), 1, 0, 0)
+        rotate(self.model, self._camera.getY(), 0, 1, 0)
+        rotate(self.model, self._camera.getZ(), 0, 0, 1)
 
     # Paint scene objects methods
     def paintFloor(self):
         """ docstring """
-        self.floor.draw(gl.GL_TRIANGLE_STRIP)
+        self.floor['model'] = self.model
+        self.floor['view'] = self.view
+        self.floor['projection'] = self.projection
+        I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
+             1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
+        indices = IndexBuffer(I)
+        self.floor.draw(gl.GL_TRIANGLE_STRIP, indices)
 
     def paintObjects(self):
         """ docstring """
@@ -191,11 +208,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glViewport(0, 0, width, height)
  
         # set frustum
-        GL.glMatrixMode(GL.GL_PROJECTION)
-        GL.glLoadIdentity()
-        GL.glOrtho(-10, 10, -10, 10, 1, 37) # FRUSTUUUUUUUUM
-        GL.glMatrixMode(GL.GL_MODELVIEW)
-
  
     # Work methods
     def quadrilatere(self, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4): 
