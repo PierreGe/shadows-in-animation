@@ -114,10 +114,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
-        self.projection = ortho(-10, 10, -10, 10, 1, 37)
+        self.projection = np.eye(4, dtype=np.float32)
         self.model = np.eye(4, dtype=np.float32)
         self.view = np.eye(4, dtype=np.float32)
-        translate(self.view, 0, 0, -10)
+        self.vertex = VertexShader("shaders/vertex.shader")
+        self.fragment = FragmentShader("shaders/fragment.shader")
 
         # create camera and light
         self._camera = Camera()
@@ -129,27 +130,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
-        vertex = VertexShader("""
-            uniform mat4 model;
-            uniform mat4 view;
-            uniform mat4 projection;
-            uniform vec4 color;
-            attribute vec3 position;
-            varying vec4 v_color;
-            void main()
-            {
-                gl_Position = projection * view * model * vec4(position, 1.0);
-                v_color = color;
-            } """)
-
-        fragment = FragmentShader("""
-            varying vec4 v_color;
-            void main()
-            {
-                gl_FragColor = v_color;
-            } """)
-
-        self.floor = Program(vertex, fragment)
+        self.floor = Program(self.vertex, self.fragment)
         self.floor['color'] = (0.5, 0.5, 0.5, 1)
         # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
         self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
