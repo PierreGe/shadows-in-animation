@@ -133,13 +133,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             uniform mat4 model;
             uniform mat4 view;
             uniform mat4 projection;
-            uniform float scale;
             uniform vec4 color;
             attribute vec3 position;
             varying vec4 v_color;
             void main()
             {
-                gl_Position = projection * view * model * vec4(scale*position, 1.0);
+                gl_Position = projection * view * model * vec4(position, 1.0);
                 v_color = color;
             } """)
 
@@ -153,12 +152,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor = Program(vertex, fragment)
         self.floor['color'] = (0.5, 0.5, 0.5, 1)
         # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
-        self.floor['position'] =  [[ 1, 0, 1], [-1, 0, 1], [-1, 0.01, 1], [ 1,0.01, 1],
-                 [ 1,0.01,-1], [ 1, 0,-1], [-1, 0,-1], [-1,0.01,-1]]
-        self.floor['scale'] = 1.0
+        self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
+                 [ 10,0.1,-10], [ 10, 0,-10], [-10, 0,-10], [-10,0.1,-10]]
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
         self.floor_indices = IndexBuffer(I)
+        O = [0,1, 1,2, 2,3, 3,0,
+             4,7, 7,6, 6,5, 5,4,
+             0,5, 1,6, 2,7, 3,4 ]
+        self.floor_outline = IndexBuffer(O)
 
     def loadObjects(self):
         """ docstring """
@@ -172,8 +174,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         # paint objects
         self._light.renderLight()
-        self.paintFloor()
-        self.paintObjects()
 
         # set frustum
         self.view = np.eye(4, dtype=np.float32)
@@ -186,6 +186,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         rotate(self.model, self._camera.getY(), 0, 1, 0)
         rotate(self.model, self._camera.getZ(), 0, 0, 1)
 
+        self.paintFloor()
+        self.paintObjects()
+
     # Paint scene objects methods
     def paintFloor(self):
         """ docstring """
@@ -194,12 +197,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor['projection'] = self.projection
         self.floor['color'] = (0.5,0.5,0.5,1)
         self.floor.draw(gl.GL_TRIANGLE_STRIP, self.floor_indices)
-        O = [0,1, 1,2, 2,3, 3,0,
-             4,7, 7,6, 6,5, 5,4,
-             0,5, 1,6, 2,7, 3,4 ]
-        outline = IndexBuffer(O)
-        self.floor['color'] = (1,1,1,1)
-        self.floor.draw(gl.GL_LINES, outline)
+        self.floor['color'] = (0,0,0,1)
+        self.floor.draw(gl.GL_LINES, self.floor_outline)
 
     def paintObjects(self):
         """ docstring """
