@@ -34,7 +34,7 @@ class Light(object):
         self.setLights([x,y,z])
 
     def renderLight(self):
-        """ """
+        """ old open GL, shoud not be used """
         if not self._position:
             print("[ERROR] Light position not set !")
 
