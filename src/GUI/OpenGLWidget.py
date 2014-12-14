@@ -130,7 +130,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._camera = Camera()
         self._light = Light()
         # create floor and load .obj objects
-        # self.makeFloor()
+        self.makeFloor()
         self.makeCube()
 
     # Objects construction methods
@@ -139,9 +139,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor = Program(
             VertexShader("shaders/vertex.shader"), 
             FragmentShader("shaders/fragment.shader"))
-        # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
-        self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
-                 [ 10,0.1,-10], [ 10, 0,-10], [-10, 0,-10], [-10,0.1,-10]]
+        vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10]]
+        self.floor['position'] =  vertices
+        normals = []
+        for index in range(len(vertices)):
+            prev = vertices[index-1]
+            curr = vertices[index]
+            next = vertices[(index+1)%len(vertices)]
+            diff1 = np.subtract(prev, curr)
+            diff2 = np.subtract(next, curr)
+            normals.append(np.cross(diff2, diff1))
+        self.floor['normal'] = normals
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
         self.floor_indices = IndexBuffer(I)
@@ -149,6 +157,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
         self.floor_outline = IndexBuffer(O)
+        self.floor["u_light_position"] = 2, 2, 2
+        self.floor["u_light_intensity"] = 1, 1, 1
 
     def makeCube(self):
         """ docstring """
@@ -193,15 +203,13 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         rotate(self.model, self._camera.getY(), 0, 1, 0)
         rotate(self.model, self._camera.getZ(), 0, 0, 1)
 
-        # self.paintFloor()
+        self.paintFloor()
         self.paintCube()
 
     # Paint scene objects methods
     def paintFloor(self):
         """ docstring """
         normal = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
-        self.floor["u_light_position"] = 2, 2, 2
-        self.floor["u_light_intensity"] = 1, 1, 1
         self.floor["u_normal"] = normal
         self.floor['u_model'] = self.model
         self.floor['u_view'] = self.view
@@ -226,15 +234,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.cube['u_color'] = (0,0,0,1)
         self.cube.draw(gl.GL_LINES, self.cube_outline)
 
-    def paintObjects(self):
-        """ docstring """
-        for obj in self.objects:
-            view = self.view
-            translate(view, *obj[1])
-            obj[0]['model'] = self.model
-            obj[0]['view'] = view
-            obj[0]['projection'] = self.projection
-            obj[0].draw(GL.GL_TRIANGLE_STRIP)
+    # def paintObjects(self):
+    #     """ docstring """
+    #     for obj in self.objects:
+    #         view = self.view
+    #         translate(view, *obj[1])
+    #         obj[0]['model'] = self.model
+    #         obj[0]['view'] = view
+    #         obj[0]['projection'] = self.projection
+    #         obj[0].draw(GL.GL_TRIANGLE_STRIP)
 
  
     # Called when window is resized
