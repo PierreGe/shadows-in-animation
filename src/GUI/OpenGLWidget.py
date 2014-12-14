@@ -7,10 +7,9 @@ from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from OpenGL.GL import shaders
 from ObjParser import ObjParser
-from vispy.gloo import *
+import vispy.gloo as gloo
 from vispy.util.transforms import *
-from vispy.io import imread
-import numpy as np
+import numpy
 
 from cgkit.cgtypes import mat4,vec3
 from Camera import Camera
@@ -118,8 +117,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.projection = np.eye(4, dtype=np.float32)
         self.model = np.eye(4, dtype=np.float32)
         self.view = np.eye(4, dtype=np.float32)
-        self.vertexshader = VertexShader("shaders/objvertex.shader")
-        self.fragmentshader = FragmentShader("shaders/objfragment.shader")
+        self.vertexshader = gloo.VertexShader("shaders/objvertex.shader")
+        self.fragmentshader = gloo.FragmentShader("shaders/objfragment.shader")
 
         GL.glEnable(GL.GL_DEPTH_TEST)
         # create camera and light
@@ -132,31 +131,34 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
-        self.floor = Program(
-            VertexShader("shaders/vertex.shader"), 
-            FragmentShader("shaders/fragment.shader"))
+        self.floor = gloo.Program(
+            gloo.VertexShader("shaders/vertex.shader"), 
+            gloo.FragmentShader("shaders/fragment.shader"))
         self.floor['color'] = (0.5, 0.5, 0.5, 1)
         # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
         self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
                  [ 10,0.1,-10], [ 10, 0,-10], [-10, 0,-10], [-10,0.1,-10]]
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
-        self.floor_indices = IndexBuffer(I)
+        self.floor_indices = gloo.IndexBuffer(I)
         O = [0,1, 1,2, 2,3, 3,0,
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
-        self.floor_outline = IndexBuffer(O)
+        self.floor_outline = gloo.IndexBuffer(O)
 
     def loadObjects(self):
         """ docstring """
         self.objects = []
         for obj in self._objectNames:
-            newObj = Program(self.vertexshader, self.fragmentshader)
+            newObj = gloo.Program(self.vertexshader, self.fragmentshader)
             parser = ObjParser(obj[0])
-            newObj['position'] = parser.getVertices()
-            newObj['texcoord'] = parser.getTextureCoords()
-            newObj['u_texture'] = Texture2D(imread(parser.getMtl().getTexture()))
-            self.objects.append((newObj, obj[1], IndexBuffer(parser.getIndices())))
+            face = parser.getFaces()
+            faceBuff = gloo.IndexBuffer(face.astype(numpy.uint16))
+            newObj['a_position'] = gloo.VertexBuffer(parser.getVertices())
+            newObj['a_texcoord'] = gloo.VertexBuffer(parser.getTextureCoords())
+            #newObj['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
+            newObj['color'] = (0.5,0.5,0.8,1)
+            self.objects.append((newObj, obj[1], faceBuff))
  
     # Called on each update/frame
     def paintGL(self):
@@ -186,9 +188,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor['view'] = self.view
         self.floor['projection'] = self.projection
         self.floor['color'] = (0.5,0.5,0.5,1)
-        self.floor.draw(gl.GL_TRIANGLE_STRIP, self.floor_indices)
+        self.floor.draw(GL.GL_TRIANGLE_STRIP, self.floor_indices)
         self.floor['color'] = (0,0,0,1)
-        self.floor.draw(gl.GL_LINES, self.floor_outline)
+        self.floor.draw('triangles', self.floor_outline)
 
     def paintObjects(self):
         """ docstring """
@@ -198,7 +200,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj[0]['model'] = self.model
             obj[0]['view'] = view
             obj[0]['projection'] = self.projection
-            obj[0].draw(GL.GL_TRIANGLE_STRIP)
+            obj[0].draw('triangles',obj[2])
 
  
     # Called when window is resized
