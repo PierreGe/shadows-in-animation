@@ -4,7 +4,7 @@
   "algo-compatible": ["Algo A","Algo B","Algo C"],
   "obj-liste": [
     [ 
-      "assets/obj/bonhomme-bois/dummy_obj.obj",
+      "assets/obj/bonhomme-bois/dummy_obj2.obj",
       [
         2,
         2,
