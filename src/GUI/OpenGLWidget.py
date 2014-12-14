@@ -141,7 +141,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         program = gloo.Program(self.vertexshader, self.fragmentshader)
         vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10],
-                    [ 10, 0.1, 10], [10, 0.1, -10], [-10, 0.1, -10], [-10, 0.1, 10]]
+                    [ 10, -0.1, 10], [10, -0.1, -10], [-10, -0.1, -10], [-10, -0.1, 10]]
         program['position'] =  gloo.VertexBuffer(vertices)
         normals = []
         for index in range(len(vertices)):
