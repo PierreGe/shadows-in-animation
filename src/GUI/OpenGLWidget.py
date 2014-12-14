@@ -160,6 +160,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
         self.floor_outline = gloo.IndexBuffer(O)
+        self.floor['u_light_position'] = 2, 2, 2
+        self.floor['u_light_intensity'] = 1, 1, 1
 
     def makeCube(self):
         """ docstring """
