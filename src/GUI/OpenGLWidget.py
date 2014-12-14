@@ -139,7 +139,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor = Program(
             VertexShader("shaders/vertex.shader"), 
             FragmentShader("shaders/fragment.shader"))
-        vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10]]
+        vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10],
+                    [ 10, 0.1, 10], [10, 0.1, -10], [-10, 0.1, -10], [-10, 0.1, 10]]
         self.floor['position'] =  vertices
         normals = []
         for index in range(len(vertices)):
@@ -174,16 +175,16 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.cube['u_light_position'] = 2, 2, 2
         self.cube['u_light_intensity'] = 1, 1, 1
 
-    def loadObjects(self):
-        """ docstring """
-        self.objects = []
-        for obj in self._objectNames:
-            newObj = Program(self.vertexshader, self.fragmentshader)
-            parser = ObjParser(obj[0])
-            newObj['position'] = parser.getVertices()
-            newObj['texcoord'] = parser.getTextureCoords()
-            newObj['u_texture'] = Texture2D(imread(parser.getMtl().getTexture()))
-            self.objects.append((newObj, obj[1], IndexBuffer(parser.getIndices())))
+    # def loadObjects(self):
+    #     """ docstring """
+    #     self.objects = []
+    #     for obj in self._objectNames:
+    #         newObj = Program(self.vertexshader, self.fragmentshader)
+    #         parser = ObjParser(obj[0])
+    #         newObj['position'] = parser.getVertices()
+    #         newObj['texcoord'] = parser.getTextureCoords()
+    #         newObj['u_texture'] = Texture2D(imread(parser.getMtl().getTexture()))
+    #         self.objects.append((newObj, obj[1], IndexBuffer(parser.getIndices())))
  
     # Called on each update/frame
     def paintGL(self):
@@ -223,9 +224,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintCube(self):
         """ docstring """
         normal = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
+        view = self.view
+        translate(view, 0, 1.1, 0)
         self.cube['u_normal'] = normal
         self.cube['u_model'] = self.model
-        self.cube['u_view'] = self.view
+        self.cube['u_view'] = view
         self.cube['u_projection'] = self.projection
         # set_state(blend=False, depth_test=True, polygon_offset_fill=True)
         self.cube['u_color'] = (1,1,1,1)
