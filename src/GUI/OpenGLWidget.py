@@ -245,7 +245,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintObjects(self):
         normal = numpy.array(numpy.matrix(numpy.dot(self.view, self.model)).I.T)
         for obj in self.objects:
-            model = self.model
+            model = self.model.copy()
             translate(model, *obj.position)
             obj.program['u_normal'] = normal
             obj.program['u_model'] = model
