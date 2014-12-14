@@ -10,7 +10,7 @@ from ObjParser import ObjParser
 from vispy.gloo import *
 from vispy.util.transforms import *
 from vispy.io import imread
-from vispy.geometry import create_cube
+from vispy.geometry import *
 import numpy as np
 
 from cgkit.cgtypes import mat4,vec3
@@ -132,6 +132,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create floor and load .obj objects
         self.makeFloor()
         self.makeCube()
+        self.makeSphere()
 
     # Objects construction methods
     def makeFloor(self):
@@ -175,6 +176,23 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.cube['u_light_position'] = 2, 2, 2
         self.cube['u_light_intensity'] = 1, 1, 1
 
+    def makeSphere(self):
+        sphere = create_sphere(36,36)
+        V = sphere.vertices()
+        N = sphere.vertex_normals()
+        F = sphere.faces()
+        vertices = VertexBuffer(V)
+        normals = VertexBuffer(N)
+        self.sphere_indices = IndexBuffer(F)
+
+        self.sphere = Program(
+            VertexShader("shaders/vertex.shader"),
+            FragmentShader("shaders/fragment.shader"))
+        self.sphere['position'] = vertices
+        self.sphere['normal'] = normals
+        self.sphere['u_light_position'] = 2, 2, 2
+        self.sphere['u_light_intensity'] = 1, 1, 1
+
     # def loadObjects(self):
     #     """ docstring """
     #     self.objects = []
@@ -196,7 +214,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # set frustum
         self.view = np.eye(4, dtype=np.float32)
         translate(self.view, 0, -1, self.zoom)
-        self.projection = ortho(1*self.zoom, -1*self.zoom, 1*self.zoom, -1*self.zoom, 1, 100)
+        self.projection = perspective(60, 4.0/3.0, 0.1, 100)
 
         # apply rotation
         self.model = np.eye(4, dtype=np.float32)
@@ -206,6 +224,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self.paintFloor()
         self.paintCube()
+        self.paintSphere()
 
     # Paint scene objects methods
     def paintFloor(self):
@@ -223,19 +242,29 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Paint scene objects methods
     def paintCube(self):
         """ docstring """
+        model = self.model
+        translate(model, 0, 1.1, 0)
         normal = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
-        view = self.view
-        translate(view, 0, 1.1, 0)
         self.cube['u_normal'] = normal
         self.cube['u_model'] = self.model
-        self.cube['u_view'] = view
+        self.cube['u_view'] = self.view
         self.cube['u_projection'] = self.projection
-        # set_state(blend=False, depth_test=True, polygon_offset_fill=True)
         self.cube['u_color'] = (1,1,1,1)
         self.cube.draw(gl.GL_TRIANGLE_STRIP, self.cube_indices)
-        # set_state(polygon_offset_fill=False, blend=True, depth_mask=False)
         self.cube['u_color'] = (0,0,0,1)
         self.cube.draw(gl.GL_LINES, self.cube_outline)
+
+    def paintSphere(self):
+        model = self.model
+        translate(model, 0, 2, 0)
+        normal = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
+        self.sphere['u_normal'] = normal
+        self.sphere['u_model'] = self.model
+        self.sphere['u_view'] = self.view
+        self.sphere['u_projection'] = self.projection
+        self.sphere['u_color'] = (1,1,1,1)
+        self.sphere.draw(gl.GL_TRIANGLE_STRIP, self.sphere_indices)
+
 
     # def paintObjects(self):
     #     """ docstring """
