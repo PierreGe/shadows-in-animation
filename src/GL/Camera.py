@@ -8,8 +8,8 @@ class Camera(object):
     It's nearly thread-safe"""
     def __init__(self):
         """ Constructeur de la classe Camera"""
-        self._x = 20
-        self._xInterval = [20,60]
+        self._x = 7
+        self._xInterval = [7,45]
         self._y = 352
         self._z = 6
         self.lock = threading.Lock()
