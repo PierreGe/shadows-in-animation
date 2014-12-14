@@ -27,6 +27,7 @@ class ObjParser:
                 raise IOError("File does not exist")
         except Exception, e:
             print("[ERROR] Unable to load object")
+            raise
 
     def getVertices(self):
         return self._vertices
