@@ -10,6 +10,7 @@ from ObjParser import ObjParser
 from vispy.gloo import *
 from vispy.util.transforms import *
 from vispy.io import imread
+from vispy.geometry import create_cube
 import numpy as np
 
 from cgkit.cgtypes import mat4,vec3
@@ -121,12 +122,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.vertexshader = VertexShader("shaders/objvertex.shader")
         self.fragmentshader = FragmentShader("shaders/objfragment.shader")
 
-        GL.glEnable(GL.GL_DEPTH_TEST)
+        set_state(clear_color=(0.30, 0.30, 0.35, 1.00), depth_test=True,
+                       polygon_offset=(1, 1),
+                       blend_func=('src_alpha', 'one_minus_src_alpha'),
+                       line_width=0.75)
         # create camera and light
         self._camera = Camera()
         self._light = Light()
         # create floor and load .obj objects
-        self.makeFloor()
+        # self.makeFloor()
         self.makeCube()
 
     # Objects construction methods
@@ -148,19 +152,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def makeCube(self):
         """ docstring """
+        V, F, O = create_cube()
+        vertices = VertexBuffer(V)
+        self.cube_indices = IndexBuffer(F)
+        self.cube_outline = IndexBuffer(O)
+
         self.cube = Program(
             VertexShader("shaders/vertex.shader"), 
             FragmentShader("shaders/fragment.shader"))
-        # self.cube['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
-        self.cube['position'] =  [[ 2, 0, 2], [-2, 0, 2], [-2, 5, 2], [ 2,5, 2],
-                 [ 2,5,-2], [ 2, 0,-2], [-2, 0,-2], [-2,5,-2]]
-        I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
-             1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
-        self.cube_indices = IndexBuffer(I)
-        O = [0,1, 1,2, 2,3, 3,0,
-             4,7, 7,6, 6,5, 5,4,
-             0,5, 1,6, 2,7, 3,4 ]
-        self.cube_outline = IndexBuffer(O)
+        self.cube.bind(vertices)
+        self.cube['u_light_position'] = 2, 2, 2
+        self.cube['u_light_intensity'] = 1, 1, 1
 
     def loadObjects(self):
         """ docstring """
@@ -176,9 +178,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+        clear(color=True, depth=True)
         # paint objects
-        self._light.renderLight()
+        # self._light.renderLight()
 
         # set frustum
         self.view = np.eye(4, dtype=np.float32)
@@ -191,29 +193,37 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         rotate(self.model, self._camera.getY(), 0, 1, 0)
         rotate(self.model, self._camera.getZ(), 0, 0, 1)
 
-        self.paintFloor()
+        # self.paintFloor()
         self.paintCube()
 
     # Paint scene objects methods
     def paintFloor(self):
         """ docstring """
-        self.floor['model'] = self.model
-        self.floor['view'] = self.view
-        self.floor['projection'] = self.projection
-        self.floor['color'] = (0.5,0.5,0.5,1)
+        normal = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
+        self.floor["u_light_position"] = 2, 2, 2
+        self.floor["u_light_intensity"] = 1, 1, 1
+        self.floor["u_normal"] = normal
+        self.floor['u_model'] = self.model
+        self.floor['u_view'] = self.view
+        self.floor['u_projection'] = self.projection
+        self.floor['u_color'] = (0.5,0.5,0.5,1)
         self.floor.draw(gl.GL_TRIANGLE_STRIP, self.floor_indices)
-        self.floor['color'] = (0,0,0,1)
+        self.floor['u_color'] = (0,0,0,1)
         self.floor.draw(gl.GL_LINES, self.floor_outline)
 
     # Paint scene objects methods
     def paintCube(self):
         """ docstring """
-        self.cube['model'] = self.model
-        self.cube['view'] = self.view
-        self.cube['projection'] = self.projection
-        self.cube['color'] = (1,1,1,1)
+        normal = np.array(np.matrix(np.dot(self.view, self.model)).I.T)
+        self.cube['u_normal'] = normal
+        self.cube['u_model'] = self.model
+        self.cube['u_view'] = self.view
+        self.cube['u_projection'] = self.projection
+        # set_state(blend=False, depth_test=True, polygon_offset_fill=True)
+        self.cube['u_color'] = (1,1,1,1)
         self.cube.draw(gl.GL_TRIANGLE_STRIP, self.cube_indices)
-        self.cube['color'] = (0,0,0,1)
+        # set_state(polygon_offset_fill=False, blend=True, depth_mask=False)
+        self.cube['u_color'] = (0,0,0,1)
         self.cube.draw(gl.GL_LINES, self.cube_outline)
 
     def paintObjects(self):
