@@ -127,7 +127,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light = Light()
         # create floor and load .obj objects
         self.makeFloor()
-        self.loadObjects()
+        self.makeCube()
 
     # Objects construction methods
     def makeFloor(self):
@@ -146,6 +146,23 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
         self.floor_outline = IndexBuffer(O)
+
+    def makeCube(self):
+        """ docstring """
+        self.cube = Program(
+            VertexShader("shaders/vertex.shader"), 
+            FragmentShader("shaders/fragment.shader"))
+        self.cube['color'] = (0.5, 0.5, 0.5, 1)
+        # self.cube['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
+        self.cube['position'] =  [[ 2, 0, 2], [-2, 0, 2], [-2, 5, 2], [ 2,5, 2],
+                 [ 2,5,-2], [ 2, 0,-2], [-2, 0,-2], [-2,5,-2]]
+        I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
+             1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
+        self.cube_indices = IndexBuffer(I)
+        O = [0,1, 1,2, 2,3, 3,0,
+             4,7, 7,6, 6,5, 5,4,
+             0,5, 1,6, 2,7, 3,4 ]
+        self.cube_outline = IndexBuffer(O)
 
     def loadObjects(self):
         """ docstring """
@@ -177,7 +194,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         rotate(self.model, self._camera.getZ(), 0, 0, 1)
 
         self.paintFloor()
-        self.paintObjects()
+        self.paintCube()
 
     # Paint scene objects methods
     def paintFloor(self):
@@ -189,6 +206,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor.draw(gl.GL_TRIANGLE_STRIP, self.floor_indices)
         self.floor['color'] = (0,0,0,1)
         self.floor.draw(gl.GL_LINES, self.floor_outline)
+
+    # Paint scene objects methods
+    def paintCube(self):
+        """ docstring """
+        self.cube['model'] = self.model
+        self.cube['view'] = self.view
+        self.cube['projection'] = self.projection
+        self.cube['color'] = (0.5,0.5,0.5,1)
+        self.cube.draw(gl.GL_TRIANGLE_STRIP, self.cube_indices)
+        self.cube['color'] = (0,0,0,1)
+        self.cube.draw(gl.GL_LINES, self.cube_outline)
 
     def paintObjects(self):
         """ docstring """
