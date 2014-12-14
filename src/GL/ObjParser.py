@@ -34,13 +34,23 @@ class ObjParser:
                 print("[Warning] Unable to save to cache")
 
     def getVertices(self):
-        return self._vertices
+        ret = []
+        for face in self._faces:
+            vertices, normals, texture_coords, material = face
+            for i in range(len(vertices)):
+                ret.append(self._vertices[vertices[i] -1])
+        return ret
 
     def getNormals(self):
         return self._normals
 
     def getTextureCoords(self):
-        return self._textureCoords
+        ret = []
+        for face in self._faces:
+            vertices, normals, texture_coords, material = face
+            for i in range(len(vertices)):
+                ret.append(self._textureCoords[texture_coords[i] -1])
+        return ret
 
     def getFaces(self):
         return self._faces

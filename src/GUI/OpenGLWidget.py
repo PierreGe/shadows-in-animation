@@ -9,6 +9,7 @@ from OpenGL.GL import shaders
 from ObjParser import ObjParser
 from vispy.gloo import *
 from vispy.util.transforms import *
+from vispy.io import imread
 import numpy as np
 
 from cgkit.cgtypes import mat4,vec3
@@ -117,8 +118,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.projection = np.eye(4, dtype=np.float32)
         self.model = np.eye(4, dtype=np.float32)
         self.view = np.eye(4, dtype=np.float32)
-        self.vertex = VertexShader("shaders/vertex.shader")
-        self.fragment = FragmentShader("shaders/fragment.shader")
+        self.vertexshader = VertexShader("shaders/objvertex.shader")
+        self.fragmentshader = FragmentShader("shaders/objfragment.shader")
 
         GL.glEnable(GL.GL_DEPTH_TEST)
         # create camera and light
@@ -131,7 +132,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
-        self.floor = Program(self.vertex, self.fragment)
+        self.floor = Program(
+            VertexShader("shaders/vertex.shader"), 
+            FragmentShader("shaders/fragment.shader"))
         self.floor['color'] = (0.5, 0.5, 0.5, 1)
         # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
         self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
@@ -148,9 +151,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         self.objects = []
         for obj in self._objectNames:
-            newObj = Program(self.vertex, self.fragment)
+            newObj = Program(self.vertexshader, self.fragmentshader)
             parser = ObjParser(obj[0])
             newObj['position'] = parser.getVertices()
+            newObj['texcoord'] = parser.getTextureCoords()
+            newObj['u_texture'] = Texture2D(imread(parser.getMtl().getTexture()))
             self.objects.append((newObj, obj[1], IndexBuffer(parser.getIndices())))
  
     # Called on each update/frame
@@ -193,8 +198,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj[0]['model'] = self.model
             obj[0]['view'] = view
             obj[0]['projection'] = self.projection
-            obj[0]['color'] = (1,1,1,1)
-            obj[0].draw(GL.GL_TRIANGLE_STRIP, obj[2])
+            obj[0].draw(GL.GL_TRIANGLE_STRIP)
 
  
     # Called when window is resized

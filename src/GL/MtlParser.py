@@ -39,6 +39,9 @@ class MtlParser (dict):
     def getTexID(self):
         return self._texid
 
+    def getTexture(self):
+        return self._filePath + self['map_Kd']
+
     def build(self, index):
         # if has a texture and texture exists
         if ('map_Kd' in self) and os.path.exists(self._filePath + self['map_Kd']):
