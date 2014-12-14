@@ -1,0 +1,173 @@
+Help on package vispy.io in vispy:
+
+NNAAMMEE
+    vispy.io - Utilities related to data reading, writing, fetching, and generation.
+
+FFIILLEE
+    /usr/local/lib/python2.7/dist-packages/vispy/io/__init__.py
+
+PPAACCKKAAGGEE  CCOONNTTEENNTTSS
+    datasets
+    image
+    mesh
+    tests (package)
+    wavefront
+
+FFUUNNCCTTIIOONNSS
+    iimmrreeaadd(filename, format=None)
+        Read image data from disk
+        
+        Requires imageio or PIL.
+        
+        Parameters
+        ----------
+        filename : str
+            Filename to read.
+        format : str | None
+            Format of the file. If None, it will be inferred from the filename.
+        
+        Returns
+        -------
+        data : array
+            Image data.
+        
+        See also
+        --------
+        imsave, read_png, write_png
+    
+    iimmssaavvee(filename, im, format=None)
+        Save image data to disk
+        
+        Requires imageio or PIL.
+        
+        Parameters
+        ----------
+        filename : str
+            Filename to write.
+        im : array
+            Image data.
+        format : str | None
+            Format of the file. If None, it will be inferred from the filename.
+        
+        See also
+        --------
+        imread, read_png, write_png
+    
+    llooaadd__ccrraattee()
+        Load an image of a crate
+        
+        Returns
+        -------
+        crate : array
+            256x256x3 crate image.
+    
+    llooaadd__ddaattaa__ffiillee(fname, directory=None, force_download=False)
+        Get a standard vispy demo data file
+        
+        Parameters
+        ----------
+        fname : str
+            The filename on the remote ``demo-data`` repository to download,
+            e.g. ``'molecular_viewer/micelle.npy'``. These correspond to paths
+            on ``https://github.com/vispy/demo-data/``.
+        directory : str | None
+            Directory to use to save the file. By default, the vispy
+            configuration directory is used.
+        force_download : bool
+            If True, the file will be downloaded even if a local copy exists
+            (and this copy will be overwritten).
+        
+        Returns
+        -------
+        fname : str
+            The path to the file on the local system.
+    
+    llooaadd__iirriiss()
+        Load the iris dataset
+        
+        Returns
+        -------
+        iris : NpzFile
+            data['data'] : a (150, 4) NumPy array with the iris' features
+            data['group'] : a (150,) NumPy array with the iris' group
+    
+    rreeaadd__mmeesshh(fname)
+        Read mesh data from file.
+        
+        Parameters
+        ----------
+        fname : str
+            File name to read. Format will be inferred from the filename.
+            Currently only '.obj' and '.obj.gz' are supported.
+        
+        Returns
+        -------
+        vertices : array
+            Vertices.
+        faces : array | None
+            Triangle face definitions.
+        normals : array
+            Normals for the mesh.
+        texcoords : array | None
+            Texture coordinates.
+    
+    rreeaadd__ppnngg(filename)
+        Read a PNG file to RGB8 or RGBA8
+        
+        Unlike imread, this requires no external dependencies.
+        
+        Parameters
+        ----------
+        filename : str
+            File to read.
+        
+        Returns
+        -------
+        data : array
+            Image data.
+        
+        See also
+        --------
+        write_png, imread, imsave
+    
+    wwrriittee__mmeesshh(fname, vertices, faces, normals, texcoords, name='', format='obj', overwrite=False)
+        Write mesh data to file.
+        
+        Parameters
+        ----------
+        fname : str
+            Filename to write. Must end with ".obj" or ".gz".
+        vertices : array
+            Vertices.
+        faces : array | None
+            Triangle face definitions.
+        normals : array
+            Normals for the mesh.
+        texcoords : array | None
+            Texture coordinates.
+        name : str
+            Name of the object.
+        format : str
+            Currently only "obj" is supported.
+        overwrite : bool
+            If the file exists, overwrite it.
+    
+    wwrriittee__ppnngg(filename, data)
+        Write a PNG file
+        
+        Unlike imsave, this requires no external dependencies.
+        
+        Parameters
+        ----------
+        filename : str
+            File to save to.
+        data : array
+            Image data.
+        
+        See also
+        --------
+        read_png, imread, imsave
+
+DDAATTAA
+    ____aallll____ = ['imread', 'imsave', 'load_iris', 'load_crate', 'load_data_f...
+
