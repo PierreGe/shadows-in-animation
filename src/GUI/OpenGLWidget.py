@@ -135,7 +135,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.floor = Program(
             VertexShader("shaders/vertex.shader"), 
             FragmentShader("shaders/fragment.shader"))
-        self.floor['color'] = (0.5, 0.5, 0.5, 1)
         # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
         self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
                  [ 10,0.1,-10], [ 10, 0,-10], [-10, 0,-10], [-10,0.1,-10]]
@@ -152,7 +151,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.cube = Program(
             VertexShader("shaders/vertex.shader"), 
             FragmentShader("shaders/fragment.shader"))
-        self.cube['color'] = (0.5, 0.5, 0.5, 1)
         # self.cube['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
         self.cube['position'] =  [[ 2, 0, 2], [-2, 0, 2], [-2, 5, 2], [ 2,5, 2],
                  [ 2,5,-2], [ 2, 0,-2], [-2, 0,-2], [-2,5,-2]]
@@ -213,7 +211,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.cube['model'] = self.model
         self.cube['view'] = self.view
         self.cube['projection'] = self.projection
-        self.cube['color'] = (0.5,0.5,0.5,1)
+        self.cube['color'] = (1,1,1,1)
         self.cube.draw(gl.GL_TRIANGLE_STRIP, self.cube_indices)
         self.cube['color'] = (0,0,0,1)
         self.cube.draw(gl.GL_LINES, self.cube_outline)
