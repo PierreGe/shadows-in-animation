@@ -21,7 +21,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._objectNames = object_names
+        self._objectNames = object_names[0]
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -31,7 +31,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         GL.glDeleteLists(1, GL.GL_COMPILE)
         GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
-        self._objectNames = object_names
+        self._objectNames = object_names[0]
         self.loadObjects()
 
     # ---------- Partie : Qt ------------
@@ -149,6 +149,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         """ docstring """
         self.objects = []
+        print(self._objectNames)
         for obj in self._objectNames:
             newObj = gloo.Program(self.vertexshader, self.fragmentshader)
             parser = ObjParser(obj[0])
