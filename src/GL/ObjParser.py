@@ -42,14 +42,21 @@ class ObjParser:
         return ret
 
     def getNormals(self):
-        return self._normals
+        ret = []
+        for face in self._faces:
+            vertices, normals, texture_coords, material = face
+            for i in range(len(vertices)):
+                if normals[i]  > 0:
+                    ret.append(self._normals[normals[i] - 1])
+        return ret
 
     def getTextureCoords(self):
         ret = []
         for face in self._faces:
             vertices, normals, texture_coords, material = face
             for i in range(len(vertices)):
-                ret.append(self._textureCoords[texture_coords[i] -1])
+                if texture_coords[i] > 0:
+                    ret.append(self._textureCoords[texture_coords[i] -1])
         return ret
 
     def getFaces(self):
