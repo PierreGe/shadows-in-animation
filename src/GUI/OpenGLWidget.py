@@ -212,6 +212,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             indices = gloo.IndexBuffer(face.astype(numpy.uint16))
             program = gloo.Program(self.vertexshader, self.fragmentshader)
             program['position'] = gloo.VertexBuffer(parser.getVertices())
+            # should use a VertexBuffer but it says datatype float64 is not ok
             program['normal'] = parser.getNormals()
             program['u_light_position'] = 2, 2, 2
             program['u_light_intensity'] = 1, 1, 1
