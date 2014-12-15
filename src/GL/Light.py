@@ -40,26 +40,3 @@ class Light(object):
         z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
         #print("{0}, {1}, {2}".format(x,y,z))
         self.setPosition([x,y,z])
-
-    def renderLight(self):
-        """ old open GL, shoud not be used """
-        if not self._position:
-            print("[ERROR] Light position not set !")
-
-        glPushMatrix()
-        glDisable(GL_LIGHTING)
-        glPointSize(5.0)
-        glBegin(GL_POINTS)
-        glColor4f(1,0.475, 0.294, 1) # yellow-orrange point
-        glVertex4fv(self._position)
-        glEnd()
-        glPopMatrix() 
-
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, ( 1.0,1.0,1.0,1.0 )) 
-        glLightfv(GL_LIGHT0, GL_SPECULAR, ( 0.6,0.6,0.6,1.0 )) 
-        glLightfv(GL_LIGHT0, GL_AMBIENT, ( 0.1,0.1,0.1,1.0 ))
-        glLightfv(GL_LIGHT0, GL_POSITION, self._position)
-
-        glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0)
-        glEnable(GL_LIGHT0)
-        glEnable(GL_LIGHTING)

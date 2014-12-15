@@ -131,6 +131,13 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # self.makeSphere((0,3,0),(1,1,1,1))
         self.loadObjects()
 
+        self.shadowMap['position'] = gloo.VertexBuffer(self.positions)
+        self.indices = gloo.IndexBuffer(numpy.array(self.indices))
+        
+        shape = 1024,1024
+        self.renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+        self.fbo = gloo.FrameBuffer(self.renderTexture)
+
 
     # maybe define that function else where ?
     def lookAt(self, eye, center, up):
@@ -197,8 +204,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                                         (0.5,0.5,0.5,1),
                                         indices,
                                         outlines))
-        self.positions.append(gloo.VertexBuffer(vertices))
-        self.indices.append(indices)
+        self.positions = vertices
+        self.indices = I
 # 
     def makeCube(self, position, color):
         """ docstring """
@@ -248,8 +255,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                                             position,
                                             color,
                                             indices))
-            self.positions.append(vertices)
-            self.indices.append(indices)
+            self.positions.extend(parser.getVertices().tolist())
+            # should add maximum of previous list to item
+            self.indices.extend([item for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
  
     # Called on each update/frame
     def paintGL(self):
@@ -264,11 +272,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.paintObjects()
 
     def paintObjects(self):
-        shape = 1024,1024
-        renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
-        depthBuffer = gloo.DepthBuffer(shape)
-        fbo = gloo.FrameBuffer(renderTexture)
-
         for index, obj in enumerate(self.objects):
             # apply rotation and translation
             model = numpy.eye(4, dtype=numpy.float32)
@@ -277,11 +280,10 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             rotate(model, self._camera.getY(), 0, 1, 0)
             rotate(model, self._camera.getZ(), 0, 0, 1)
             # create shadow map
-            with fbo:
-                self.shadowMap['u_model'] = model
+            with self.fbo:
+                self.shadowMap['u_model'] = numpy.eye(4, dtype=numpy.float32)
                 self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
-                self.shadowMap['position'] = self.positions[index]
-                self.shadowMap.draw('triangles', obj.indices)
+                self.shadowMap.draw('triangles', self.indices)
 
             # draw object
             biasMatrix = numpy.matrix([[0.5, 0.0, 0.0, 0.0],
@@ -296,52 +298,13 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj.program['u_view'] = self.view
             obj.program['u_projection'] = self.projection
             obj.program['u_bias_matrix'] = biasMatrix
-            obj.program['u_shadow_map'] = renderTexture
+            obj.program['u_shadow_map'] = self.renderTexture
             if (obj.visible):
                 obj.program['u_color'] = obj.color
                 obj.program.draw('triangles', obj.indices)
                 if (obj.outline):
                     obj.program['u_color'] = (0,0,0,1)
                     obj.program.draw('lines', obj.outline)
-
-
-    def shadowMapTexture(self):
-        fbo = GL.glGenFramebuffers(1)
-        GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, fbo)
-        texture = GL.glGenTextures( 1 )
-        GL.glBindTexture( GL.GL_TEXTURE_2D, texture )
-        GL.glTexImage2D(
-            GL.GL_TEXTURE_2D, 0, GL.GL_DEPTH_COMPONENT,
-            1024, 1024, 0,
-            GL.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_BYTE, None
-        )
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP)
-        GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP)
-        GL.glFramebufferTexture2D(
-            GL.GL_FRAMEBUFFER,
-            GL.GL_DEPTH_ATTACHMENT,
-            GL.GL_TEXTURE_2D,
-            texture,
-            0 #mip-map level...
-        )
-        # if sys.platform in ('win32','darwin'):
-        #     """Win32 and OS-x require that a colour buffer be bound..."""
-        #     color = GL.glGenRenderbuffers(1)
-        #     GL.glBindRenderbuffer( GL.GL_RENDERBUFFER, color )
-        #     GL.glRenderbufferStorage(
-        #         GL.GL_RENDERBUFFER,
-        #         GL.GL_RGBA,
-        #         1024,
-        #         1024,
-        #     )
-        #     GL.glFramebufferRenderbuffer( GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_RENDERBUFFER, color )
-        #     GL.glBindRenderbuffer( GL.GL_RENDERBUFFER, 0 )
-        # GL.glViewport(0,0,1024,1024)
-        GL.glDrawBuffer( GL.GL_NONE )
-        GL.glClear(GL.GL_DEPTH_BUFFER_BIT)
-        return texture
 
     # Called when window is resized
     def resizeGL(self, width, height):
