@@ -115,9 +115,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 // Not really needed, OpenGL does it anyway
                 //fragmentdepth = gl_FragCoord.z;
                 gl_FragDepth = gl_FragCoord.z;
+                gl_FragColor = vec4(gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z);
             }
             """)
-        self.shadowMap['u_projection'] = ortho(-10,10,-10,10,-10,100)
+        self.shadowMap['u_projection'] = ortho(-5,5,-5,5,-10,100)
+
         self.positions = []
         self.indices = []
 
@@ -197,7 +199,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                                         outlines))
         self.positions.append(gloo.VertexBuffer(vertices))
         self.indices.append(indices)
-
+# 
     def makeCube(self, position, color):
         """ docstring """
         V, F, O = create_cube()
@@ -263,8 +265,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintObjects(self):
         shape = 1024,1024
-        renderTexture = gloo.Texture2D(shape=(shape + (3,)), dtype=numpy.float32)
-        fbo = gloo.FrameBuffer(renderTexture, gloo.DepthBuffer(shape))
+        renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+        depthBuffer = gloo.DepthBuffer(shape)
+        fbo = gloo.FrameBuffer(renderTexture)
 
         for index, obj in enumerate(self.objects):
             # apply rotation and translation
@@ -279,7 +282,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
                 self.shadowMap['position'] = self.positions[index]
                 self.shadowMap.draw('triangles', obj.indices)
+
             # draw object
+            biasMatrix = numpy.matrix([[0.5, 0.0, 0.0, 0.0],
+                                    [0.0, 0.5, 0.0, 0.0],
+                                    [0.0, 0.0, 0.5, 0.0],
+                                    [0.5, 0.5, 0.5, 1.0]])
             normal = numpy.array(numpy.matrix(numpy.dot(self.view, model)).I.T)
             obj.program['u_normal'] = normal
             obj.program['u_light_position'] = self._light.getPosition()
@@ -287,6 +295,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj.program['u_model'] = model
             obj.program['u_view'] = self.view
             obj.program['u_projection'] = self.projection
+            obj.program['u_bias_matrix'] = biasMatrix
+            obj.program['u_shadow_map'] = renderTexture
             if (obj.visible):
                 obj.program['u_color'] = obj.color
                 obj.program.draw('triangles', obj.indices)

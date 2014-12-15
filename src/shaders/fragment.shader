@@ -4,10 +4,12 @@ uniform mat4 u_normal;
 
 uniform vec3 u_light_intensity;
 uniform vec3 u_light_position;
+uniform sampler2D u_shadow_map;
 
 varying vec3 v_position;
 varying vec3 v_normal;
 varying vec4 v_color;
+varying vec4 v_shadow_coord;
 
 void main()
 {
@@ -30,5 +32,7 @@ void main()
     // 2. The color/intensities of the light: light.intensities
     // 3. The texture and texture coord: texture(tex, fragTexCoord)
 
-    gl_FragColor = v_color * brightness * vec4(u_light_intensity, 1);
+    vec4 visibility = texture2DProj( u_shadow_map, v_shadow_coord );
+
+    gl_FragColor = v_color * visibility * vec4(u_light_intensity, 1);
 }
