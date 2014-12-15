@@ -1,19 +1,14 @@
 #!/usr/bin/python2
 # -*- coding: utf8 -*-
 
-
-import math, random
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
-from OpenGL.GL import shaders
-from ObjParser import ObjParser
 import vispy.gloo as gloo
 from vispy.util.transforms import *
-from vispy.io import imread
 from vispy.geometry import *
 import numpy
 
-from cgkit.cgtypes import mat4,vec3
+from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light   
 from SceneObject import SceneObject    
@@ -33,7 +28,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def setObjects(self, object_names):
         """ docstring """
         self._objectNames = object_names[0]
-        self.loadObjects()
+        self.initializeGL()
 
     # ---------- Partie : Qt ------------
  
@@ -104,7 +99,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create floor and load .obj objects
         self.objects = []
         self.makeFloor()
-        # examples
+        # examples : should be removed or used for empty scenes
         self.makeCube((0,1.1,0),(0,1,0,1))
         self.makeSphere((0,3,0),(1,1,1,1))
         self.loadObjects()
