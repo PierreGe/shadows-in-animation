@@ -234,19 +234,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         translate(self.view, 0, -1, self.zoom)
         self.projection = perspective(60, 4.0/3.0, 0.1, 100)
 
-        # apply rotation
-        self.model = numpy.eye(4, dtype=numpy.float32)
-        rotate(self.model, self._camera.getX(), 1, 0, 0)
-        rotate(self.model, self._camera.getY(), 0, 1, 0)
-        rotate(self.model, self._camera.getZ(), 0, 0, 1)
-
         self.paintObjects()
 
     def paintObjects(self):
-        normal = numpy.array(numpy.matrix(numpy.dot(self.view, self.model)).I.T)
         for obj in self.objects:
-            model = self.model.copy()
+            # apply rotation
+            model = numpy.eye(4, dtype=numpy.float32)
             translate(model, *obj.position)
+            rotate(model, self._camera.getX(), 1, 0, 0)
+            rotate(model, self._camera.getY(), 0, 1, 0)
+            rotate(model, self._camera.getZ(), 0, 0, 1)
+            normal = numpy.array(numpy.matrix(numpy.dot(self.view, model)).I.T)
             obj.program['u_normal'] = normal
             obj.program['u_model'] = model
             obj.program['u_view'] = self.view
