@@ -109,7 +109,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.textureBuffer = 0;
         self.renderBuffer = 0
         # initial rotation
-        self.zoom = -2
+        self.zoom = -10
 
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
@@ -231,7 +231,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         # set frustum
         self.view = numpy.eye(4, dtype=numpy.float32)
-        translate(self.view, 0, -1, self.zoom)
+        translate(self.view, 0, -4, self.zoom)
         self.projection = perspective(60, 4.0/3.0, 0.1, 100)
 
         self.paintObjects()
