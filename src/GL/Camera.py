@@ -12,6 +12,7 @@ class Camera(object):
         self._xInterval = [7,45]
         self._y = 352
         self._z = 6
+        self._zoom = -10.0
         self.lock = threading.Lock()
 
     def getX(self):
@@ -22,6 +23,9 @@ class Camera(object):
 
     def getZ(self):
         return self._z
+
+    def getZoom(self):
+        return self._zoom
 
     def setX(self,x):
         """ set the X value after having normalized it"""
@@ -59,6 +63,12 @@ class Camera(object):
             res = True
         self.lock.release()
         return res
+
+    def zoomIn(self):
+        self._zoom += 0.1
+
+    def zoomOut(self):
+        self._zoom -= 0.1
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""

@@ -32,8 +32,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        GL.glDeleteLists(1, GL.GL_COMPILE)
-        GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
         self._objectNames = object_names[0]
         self.loadObjects()
 
@@ -46,27 +44,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def sizeHint(self):
         """ docstring """
         return QtCore.QSize(400, 400)
- 
-    def setXRotation(self, angle):
-        """ docstring """
-        res = self._camera.setX(angle)
-        if res:
-            self.emit(QtCore.SIGNAL("xRotationChanged(int)"), angle)
-            self.updateGL()
- 
-    def setYRotation(self, angle):
-        """ docstring """
-        res = self._camera.setY(angle)
-        if res:
-            self.emit(QtCore.SIGNAL("yRotationChanged(int)"), angle)
-            self.updateGL()
- 
-    def setZRotation(self, angle):
-        """ docstring """
-        res = self._camera.setZ(angle)
-        if res:
-            self.emit(QtCore.SIGNAL("zRotationChanged(int)"), angle)
-            self.updateGL()
 
         # Events
     def mousePressEvent(self, event):
@@ -80,18 +57,23 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         dy = event.y() - self.lastPos.y()
         dx = int(dx/smoothFactor)
         dy = int(dy/smoothFactor)
+        res = False
         if event.buttons() & QtCore.Qt.LeftButton:
-            self.setXRotation(self._camera.getX() + 8 * dy)
-            self.setYRotation(self._camera.getY() + 8 * dx)
+            res |= self._camera.setX(self._camera.getX() + 8 * dy)
+            res |= self._camera.setY(self._camera.getY() + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            self.setXRotation(self._camera.getX() + 8 * dy)
-            self.setZRotation(self._camera.getZ() + 8 * dx)
+            res |= self._camera.setX(self._camera.getX() + 8 * dy)
+            res |= self._camera.setZ(self._camera.getZ() + 8 * dx)
         self.lastPos = QtCore.QPoint(event.pos())
+        if res:
+            self.updateGL()
  
     def wheelEvent(self, event):
         """ docstring """
-        # TODO réparer le zoom, utiliser les frustums
-        self.zoom += event.delta()/1000.0
+        if (event.delta() > 0):
+            self._camera.zoomIn()
+        else:
+            self._camera.zoomOut()
         self.updateGL()
 
     def updateLights(self,position):
@@ -105,15 +87,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called at startup
     def initializeGL(self):
         """ docstring """
-        self.fbo = 0;
-        self.textureBuffer = 0;
-        self.renderBuffer = 0
-        # initial rotation
-        self.zoom = -10
-
-        # save mouse cursor position for smooth rotation
-        self.lastPos = QtCore.QPoint()
-
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
@@ -127,10 +100,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create camera and light
         self._camera = Camera()
         self._light = Light()
+
         # create floor and load .obj objects
-
         self.objects = []
-
         self.makeFloor()
         # examples
         self.makeCube((0,1.1,0),(0,1,0,1))
@@ -221,7 +193,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         # set frustum
         self.view = numpy.eye(4, dtype=numpy.float32)
-        translate(self.view, 0, -4, self.zoom)
+        translate(self.view, 0, -4, self._camera.getZoom())
         self.projection = perspective(60, 4.0/3.0, 0.1, 100)
 
         self.paintObjects()
