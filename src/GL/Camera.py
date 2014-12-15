@@ -27,11 +27,11 @@ class Camera(object):
         """ set the X value after having normalized it"""
         self.lock.acquire()
         res = False
-        x = self._normalizeAngle(x)
         if x < self._xInterval[0]:
             x = self._xInterval[0]
         elif x > self._xInterval[1]:
             x = self._xInterval[1]
+        x = self._normalizeAngle(x)
         if x != self._x:
             self._x = x
             res = True
