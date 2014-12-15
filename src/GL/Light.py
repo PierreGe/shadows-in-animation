@@ -9,7 +9,8 @@ class Light(object):
         xInit = (self._xInterval[1])
         yInit = (self._yInterval[1])
         zInit = (self._zInterval[1])
-        self.setLights([xInit, yInit, zInit])
+        self.setPosition([xInit, yInit, zInit])
+        self._intensity = [1,1,1]
 
     def resetLight(self):
         """ """
@@ -18,11 +19,18 @@ class Light(object):
     def getPosition(self):
         return self._position
 
-    def setLights(self,position):
+    def getIntensity(self):
+        """ """
+        return self._intensity
+
+    def setPosition(self, position):
         "light with a custom position"
         
         self._position = list(position)
-        self._position.append(1.0)
+
+    def setIntensity(self, intensity):
+        """ """
+        self._intensity = intensity
 
 
     def setLightsRatio(self,positionPercent):
@@ -31,7 +39,7 @@ class Light(object):
         y = self._yInterval[0] + (float(positionPercent[1])/100 * ( abs(self._yInterval[0]) + abs(self._yInterval[1])))
         z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
         #print("{0}, {1}, {2}".format(x,y,z))
-        self.setLights([x,y,z])
+        self.setPosition([x,y,z])
 
     def renderLight(self):
         """ old open GL, shoud not be used """

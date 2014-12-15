@@ -159,8 +159,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
         outlines = gloo.IndexBuffer(O)
-        program['u_light_position'] = 2, 2, 2
-        program['u_light_intensity'] = 1, 1, 1
+        program['u_light_position'] = self._light.getPosition()
+        program['u_light_intensity'] = self._light.getIntensity()
         self.objects.append(SceneObject(program, 
                                         (0,0,0),
                                         (0.5,0.5,0.5,1),
@@ -176,8 +176,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         program = gloo.Program(self.vertexshader, self.fragmentshader)
         program.bind(vertices)
-        program['u_light_position'] = 2, 2, 2
-        program['u_light_intensity'] = 1, 1, 1
+        program['u_light_position'] = self._light.getPosition()
+        program['u_light_intensity'] = self._light.getIntensity()
         self.objects.append(SceneObject(program,
                                         position,
                                         color,
@@ -196,8 +196,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         program = gloo.Program(self.vertexshader, self.fragmentshader)
         program['position'] = vertices
         program['normal'] = normals
-        program['u_light_position'] = 2, 2, 2
-        program['u_light_intensity'] = 1, 1, 1
+        program['u_light_position'] = self._light.getPosition()
+        program['u_light_intensity'] = self._light.getIntensity()
         self.objects.append(SceneObject(program,
                                         position,
                                         color,
@@ -214,8 +214,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             program['position'] = gloo.VertexBuffer(parser.getVertices())
             # should use a VertexBuffer but it says datatype float64 is not ok
             program['normal'] = parser.getNormals()
-            program['u_light_position'] = 2, 2, 2
-            program['u_light_intensity'] = 1, 1, 1
+            program['u_light_position'] = self._light.getPosition()
+            program['u_light_intensity'] = self._light.getIntensity()
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
             self.objects.append(SceneObject(program,
                                             position,
@@ -246,6 +246,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             rotate(model, self._camera.getZ(), 0, 0, 1)
             normal = numpy.array(numpy.matrix(numpy.dot(self.view, model)).I.T)
             obj.program['u_normal'] = normal
+            obj.program['u_light_position'] = self._light.getPosition()
+            obj.program['u_light_intensity'] = self._light.getIntensity()
             obj.program['u_model'] = model
             obj.program['u_view'] = self.view
             obj.program['u_projection'] = self.projection
