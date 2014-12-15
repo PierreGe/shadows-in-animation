@@ -257,9 +257,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                                             indices))
             self.positions.extend(parser.getVertices().tolist())
             # should add maximum of previous list to item
-            max_index = max(self.indices)
+            max_index = max(self.indices)+1
             self.indices.extend([item+max_index for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
- 
+
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
@@ -273,6 +273,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.paintObjects()
 
     def paintObjects(self):
+        # create shadow map
+        with self.fbo:
+            self.shadowMap['u_model'] = numpy.eye(4, dtype=numpy.float32)
+            self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+            self.shadowMap.draw('triangles', self.indices)
+
         for index, obj in enumerate(self.objects):
             # apply rotation and translation
             model = numpy.eye(4, dtype=numpy.float32)
@@ -280,11 +286,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             rotate(model, self._camera.getX(), 1, 0, 0)
             rotate(model, self._camera.getY(), 0, 1, 0)
             rotate(model, self._camera.getZ(), 0, 0, 1)
-            # create shadow map
-            with self.fbo:
-                self.shadowMap['u_model'] = numpy.eye(4, dtype=numpy.float32)
-                self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
-                self.shadowMap.draw('triangles', self.indices)
 
             # draw object
             biasMatrix = numpy.matrix([[0.5, 0.0, 0.0, 0.0],
