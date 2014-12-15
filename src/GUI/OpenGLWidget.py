@@ -110,17 +110,14 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             """
             // should we trust openGL to do that ?
             //out float fragmentdepth;
-            uniform vec4 u_color;
              
             void main(){
                 // Not really needed, OpenGL does it anyway
                 //fragmentdepth = gl_FragCoord.z;
                 gl_FragDepth = gl_FragCoord.z;
-                gl_FragColor = u_color;
             }
             """)
         self.shadowMap['u_projection'] = ortho(-10,10,-10,10,-10,100)
-        self.shadowMap['u_color'] = (1,1,1,1)
         self.positions = []
         self.indices = []
 
@@ -276,6 +273,13 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             rotate(model, self._camera.getX(), 1, 0, 0)
             rotate(model, self._camera.getY(), 0, 1, 0)
             rotate(model, self._camera.getZ(), 0, 0, 1)
+            # create shadow map
+            with fbo:
+                self.shadowMap['u_model'] = model
+                self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+                self.shadowMap['position'] = self.positions[index]
+                self.shadowMap.draw('triangles', obj.indices)
+            # draw object
             normal = numpy.array(numpy.matrix(numpy.dot(self.view, model)).I.T)
             obj.program['u_normal'] = normal
             obj.program['u_light_position'] = self._light.getPosition()
@@ -289,15 +293,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 if (obj.outline):
                     obj.program['u_color'] = (0,0,0,1)
                     obj.program.draw('lines', obj.outline)
-
-            # gloo.clear(color=True, depth=True)
-            with fbo:
-                self.shadowMap['u_model'] = model
-                self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
-                self.shadowMap['position'] = self.positions[index]
-                self.shadowMap.draw('triangles', obj.indices)
-            print renderTexture.data
-
 
 
     def shadowMapTexture(self):
