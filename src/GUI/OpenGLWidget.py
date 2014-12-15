@@ -132,7 +132,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.objects = []
 
         self.makeFloor()
-        self.makeCube((0,1.1,0),(1,1,1,1))
+        # examples
+        self.makeCube((0,1.1,0),(0,1,0,1))
         self.makeSphere((0,3,0),(1,1,1,1))
         self.loadObjects()
 
@@ -159,8 +160,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
         outlines = gloo.IndexBuffer(O)
-        program['u_light_position'] = self._light.getPosition()
-        program['u_light_intensity'] = self._light.getIntensity()
         self.objects.append(SceneObject(program, 
                                         (0,0,0),
                                         (0.5,0.5,0.5,1),
@@ -176,8 +175,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         program = gloo.Program(self.vertexshader, self.fragmentshader)
         program.bind(vertices)
-        program['u_light_position'] = self._light.getPosition()
-        program['u_light_intensity'] = self._light.getIntensity()
         self.objects.append(SceneObject(program,
                                         position,
                                         color,
@@ -196,8 +193,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         program = gloo.Program(self.vertexshader, self.fragmentshader)
         program['position'] = vertices
         program['normal'] = normals
-        program['u_light_position'] = self._light.getPosition()
-        program['u_light_intensity'] = self._light.getIntensity()
         self.objects.append(SceneObject(program,
                                         position,
                                         color,
@@ -212,10 +207,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             indices = gloo.IndexBuffer(face.astype(numpy.uint16))
             program = gloo.Program(self.vertexshader, self.fragmentshader)
             program['position'] = gloo.VertexBuffer(parser.getVertices())
-            # should use a VertexBuffer but it says datatype float64 is not ok
-            program['normal'] = parser.getNormals()
-            program['u_light_position'] = self._light.getPosition()
-            program['u_light_intensity'] = self._light.getIntensity()
+            program['normal'] = gloo.VertexBuffer(parser.getNormals().astype(numpy.float32))
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
             self.objects.append(SceneObject(program,
                                             position,
@@ -226,8 +218,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintGL(self):
         """ docstring """
         gloo.clear(color=True, depth=True)
-        # paint objects
-        # self._light.renderLight()
 
         # set frustum
         self.view = numpy.eye(4, dtype=numpy.float32)
@@ -238,7 +228,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintObjects(self):
         for obj in self.objects:
-            # apply rotation
+            # apply rotation and translation
             model = numpy.eye(4, dtype=numpy.float32)
             translate(model, *obj.position)
             rotate(model, self._camera.getX(), 1, 0, 0)
@@ -253,10 +243,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj.program['u_projection'] = self.projection
             if (obj.visible):
                 obj.program['u_color'] = obj.color
-                if (obj.indices):
-                    obj.program.draw('triangles', obj.indices)
-                else:
-                    obj.program.draw('triangles')
+                obj.program.draw('triangles', obj.indices)
                 if (obj.outline):
                     obj.program['u_color'] = (0,0,0,1)
                     obj.program.draw('lines', obj.outline)
@@ -267,8 +254,5 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         # set openGL in the center of the widget
         GL.glViewport(0, 0, width, height)
-        # #from tuto
-        #projection = perspective( 45.0, width/float(height), 2.0, 10.0 )
-        #program['projection'] = projection
  
  
