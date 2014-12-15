@@ -133,7 +133,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self.shadowMap['position'] = gloo.VertexBuffer(self.positions)
         self.indices = gloo.IndexBuffer(numpy.array(self.indices))
-        
+
         shape = 1024,1024
         self.renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
         self.fbo = gloo.FrameBuffer(self.renderTexture)
@@ -257,7 +257,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                                             indices))
             self.positions.extend(parser.getVertices().tolist())
             # should add maximum of previous list to item
-            self.indices.extend([item for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
+            max_index = max(self.indices)
+            self.indices.extend([item+max_index for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
  
     # Called on each update/frame
     def paintGL(self):
