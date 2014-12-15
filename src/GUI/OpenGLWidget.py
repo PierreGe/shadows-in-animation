@@ -16,18 +16,18 @@ from SceneObject import SceneObject
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
     """ docstring """
-    def __init__(self, object_names = [], parent=None):
+    def __init__(self, objectNames = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._objectNames = object_names[0]
+        self._objectNames = objectNames
 
     def getObjectNames(self):
         """ Reload openGLWidget """
         return self._objectNames
 
-    def setObjects(self, object_names):
+    def setObjects(self, objectNames):
         """ docstring """
-        self._objectNames = object_names[0]
+        self._objectNames = objectNames
         self.initializeGL()
 
     # ---------- Partie : Qt ------------

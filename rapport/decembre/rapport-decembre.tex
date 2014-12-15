@@ -126,14 +126,61 @@ Toutefois, nous n'implémenterons pas d'algorithme de \textit{hard shadows} en t
 
 Les ombres sont un des éléments les plus important dans la représentation d'une scène. Ce sont elles qui vont donner des informations indispensables pour la perception humaine d'une scène non réelle mais réaliste. Une implémentation de celles-ci doit être la plus précise et correcte pour ne pas briser le réalisme d'une scène générée par ordinateur.
 
-Nous allons nous concentrer sur deux types d'implémentation : les Shadow Volumes algorithms et les Shadow Map algorithms. Nous allons premièrement mettre en pratique les algorithmes basiques, puis ensuite nous tourner vers des améliorations ou des spécialisations de ceux-ci.
+Plusieurs types d'algorithmes permettant de générer ces ombres ont été présentés au fil du temps. Nous pouvons séparer ces algorithmes en deux grandes catégories : les \textit{Hard Shadow} et les \textit{Soft Shadow}. Les algorithmes générant des \textit{Hard Shadow} ne seront pas considérés ici car ils génèrent une ombre uniformément noire, ne représentent que l'ombre générée par un point lumineux et ne sont donc que très rarement utilisés car non réalistes. D'un autre côté, les algorithmes de \textit{Soft Shadow} sont beaucoup plus réalistes et sont ceux qui sont le plus utilisés. Ces algorithmes seront donc ceux qui seront le plus étudiés ici.
 
+Il existe plusieurs types de \textit{Soft Shadow algorithms}, les principaux sont ceux de \textit{Shadow mapping}, de \textit{Shadow volume} et celui de \textit{Ray tracing}.
+
+L'algorithme de \textit{Ray tracing} consiste à tracer un rayon depuis le point de vue jusque chaque pixel créant une \textit{ray surface}. La surface la plus proche du point de vue sera donc celle qui sera visible. A partir de chaque pixel, il faudra ensuite relier la source lumineuse. Si ce rayon a une intersection avec un quelconque objet, ce pixel sera dans l'ombre. Ceci n'est évidemment pas optimal puisqu'il nécessite un calcul pour chaque pixel de la scène.
+
+Nous allons donc nous concentrer sur deux types d'implémentation : les \textit{Shadow Volumes algorithms} et les \textit{Shadow Map algorithms}. Ce sont en effet ceux qui sont actuellement les plus utilisés. Nous allons premièrement mettre en pratique les algorithmes basiques, puis ensuite nous tourner vers des améliorations ou des spécialisations de ceux-ci.
+
+
+\pagebreak
 \section{Shadow Volume}
 
-L'algorithme de Shadow Volume a été introduit par Crow \cite{crow1977shadow}. Il a ensuite été implémenté grâce à l'accelération matérielle\cite{fuchs1986fast} mais n'a été que peu utilisé jusqu'à la proposition de Tim Heidmann d'accéléré matériellement cet algorithme sur du matériel de tous les jours.\cite{heidmann1991real}
 
+L'algorithme de \textit{Shadow Volume} a été introduit par Crow \cite{crow1977shadow}. Il a ensuite été implémenté grâce à l'accelération matérielle\cite{fuchs1986fast} mais n'a été que peu utilisé jusqu'à la proposition de Tim Heidmann d'accélérer matériellement cet algorithme sur du matériel de tous les jours. Cette logique a donné naissance à l'algorithme de \textit{z-pass}\cite{heidmann1991real}.
+\\
 
-Le principe des Shadow Algorithm est de générer un polyèdre convexe à partir des objets présents dans la scène. Il s'agit ensuite de compter le nombre de faces traversées en reliant le point fixé et la caméra. Un shadow count sera alors dressé, celui-ci sera incrémenter lorsque l'on rentre dans un polyèdre généré, et décrémenté lorsque l'on en ressort. Le shadow count représentera alors le niveau d'ombre dans lequel est plongé le point fixé et l'absence d'ombre si celui-ci est égal à 0.\cite{surveyofshadowalgorithms}
+Le principe des \textit{Shadow Volume Algorithm} est de générer un polyèdre convexe à partir des objets présents dans la scène. Il s'agit ensuite de compter le nombre de faces traversées en reliant le point fixé et la caméra. Un \textit{shadow count} sera alors dressé, celui-ci sera incrémenter lorsque l'on rentre dans un polyèdre généré, et décrémenté lorsque l'on en ressort. Le \textit{shadow count} représentera alors le niveau d'ombre dans lequel est plongé le point fixé et l'absence d'ombre si celui-ci est égal à 0.\cite{surveyofshadowalgorithms} Ce comptage peut être théoriquement réaliser jusqu'à une distance infinie, grâce à une méthode appelée \textit{z-fail} ou \textit{Depth fail}\cite{bilodeau1999real,carmack2000z}.
+\\
+
+Les algorithmes de \textit{z-pass} ont néanmoins un souci dans le cas où l'on place l'observateur dans l'ombre ( dans un ou plusieurs shadow volumes). Ce problème a été en partie résolu par HORNUS et autres\cite{hornus2005zp+}, qui vont proposer d'aligner la vue de la source lumineuse avec celle de l'observateur. Cette solution n'est pas encore optimale mais à ce jour, aucune autre alternative n'a été proposée.
+\\
+
+Dans l'article \cite{lloyd2004cc}, les auteurs présentent une nouvelle technique qui utilise le \textit{Culling and Clamping (CC)} permettant d'éviter de générer des \textit{shadow volumes} qui sont eux-même dans l'ombre ou qui n'interviennent pas dans l'image finale, ce qui a pour but d'améliorer les performances et donc d'accélérer la génération des ombres dans une scène.
+\\
+
+Aila et Akenine-Molle font remarquer en 2004 \cite{aila2004hierarchical} que les performances de génération des ombres sont inversément proportionnelles à la taille des \textit{shadow volumes}. Pour remédier à cela, ils proposent un nouvel algorithme visant à réduire le temps de rastérisation. Cet algorithme est composé de deux étapes. La première étape consiste à trouver des zones de 8x8 pixels dont les bords sont soit complêtement dans l'ombre soit complêtement illuminés. La seconde étape verra s'effectuer une génération pixel par pixel de l'ombre des pixels se trouvant aux bords de l'ombre.
+\\
+
+En 2004, Chan et Durand\cite{chan2004efficient} utilisèrent une technique utilisant à la fois un algorithme de \textit{shadow mapping} et un algorithme de \textit{shadow volume}. Le premier est d'abord utilisé pour créer une \textit{hard shadow} et obtenir la silhouette de l'ombre. L'algorithme de \textit{shadow volume} est ensuite utilisé pour généré une ombre correcte (\textit{soft shadow}) à partir de cette silhouette.
+
+\pagebreak
+\section{Shadow Maps}
+
+L'algorithme de \textit{Shadow Mapping} a, quant à lui, été introduit par Lance Williams \cite{williams1978casting}.
+\\
+
+Le principe des \textit{Shadow Mapping Algorithm} est de dresser dans un premier temps une carte de disparité (\textit{depth map/image}) de la scène, comme vue depuis la source de lumière. Pour chaque \textit{texel}, la profondeur de l'objet le plus proche de la source lumineuse sera stockée. Cet algorithme n'est pas optimal et la technique du \textit{Percentage closer filtering}\cite{reeves1987rendering,fernando2005percentage} résoud un problème d'aliasing présent.
+\\
+
+Dans le début des années 2000, plusieurs algorithmes utilisant un \textit{filtering} furent présentés. Celui-ci permet d'utiliser une shadow map de basse résolution tout en présentant des résultats convaincants. En 2005, Donelly et Lauritzen \cite{donnelly2006variance} proposent un algorithme utilisant la variance de la distribution des profondeurs, visant à réduire fortement l'aliasing habituellement présent dans les algorithme de \textit{shadow mapping} basiques tout en nécessitant peu de stockages et de calculs supplémentaires. En 2008, un nouvel algorithme est présenté\cite{annen2008exponential}, proposant une autre méthode pour réduire l'aliasing mais avec une technique encore plus efficace et produisant moins d'artefacts graphiques. 
+\\
+
+Cependant, l'utilisation de \textit{shadow map} de basse résolution entraine un flou forcé, empêchant la création d'ombres nettes. D'autres algorithmes ont été proposés pour améliorer la précision sans demander de ressources trop énormes. 
+\\
+
+Les premiers sont les algorithmes appelés \textit{Perspective Shadow Map}\cite{wimmer2004light,stamminger2002perspective,lloyd2008logarithmic} utilisent le \textit{warping}, qui permet d'avoir de bons résultats mais dégénerent en \textit{shadow map} ordinaire.
+\\
+
+Les seconds utilisent le \textit{Partitioning}. Cette approche permet de diviser le frustum de vue et d'utiliser une \textit{shadow map} pour chaque sous-frustum. Cependant, pour être le plus précis possible, cette technique requiert un grand nombre de subdivisions, ce qui affecte les performances.
+\\
+
+Un des seuls algorithmes qui présente une précision au pixel près et qui présente des bonnes performances pour le temps réel est celui qui a été présenté par Sintorn et Assarsson\cite{sintorn2009hair}. Celui-ci se focalise sur les ombres de la pilosité, qui nécessite de la précision et obtient pourtant des résultats corrects.
+\\
+
+L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte : la dynamicité de la scène illuminée ainsi que celle de la lumière.\todo{}
 
 
 
