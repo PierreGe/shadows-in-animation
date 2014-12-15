@@ -19,7 +19,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._objectNames = object_names[0]
+        self._objectNames = object_names
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -27,7 +27,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        self._objectNames = object_names[0]
+        self._objectNames = object_names
         self.initializeGL()
 
     # ---------- Partie : Qt ------------

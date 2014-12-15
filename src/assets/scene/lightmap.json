@@ -3,8 +3,6 @@
   "description": "Il avait un long nez",
   "algo-compatible": ["Algo A"],
   "obj-liste": [
-    [ 
       ["assets/obj/lightmap/lightmap.obj",[2,2,0]]
-    ]
   ]
 }

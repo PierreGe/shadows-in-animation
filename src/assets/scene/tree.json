@@ -3,8 +3,6 @@
   "description": "This scene is a tree",
   "algo-compatible": ["Algo A","Algo B","Algo C","Algo D"],
   "obj-liste": [
-    [
       ["assets/obj/tree-palmier/FR01e.obj",[0,0,0]]
-    ]
   ]
 }
