@@ -1,20 +1,17 @@
 #!/usr/bin/python2
 # -*- coding: utf8 -*-
 
-
-import math, random
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
-from OpenGL.GL import shaders
-from ObjParser import ObjParser
-from vispy.gloo import *
+import vispy.gloo as gloo
 from vispy.util.transforms import *
-from vispy.io import imread
-import numpy as np
+from vispy.geometry import *
+import numpy
 
-from cgkit.cgtypes import mat4,vec3
+from ObjParser import ObjParser
 from Camera import Camera
-from Light import Light       
+from Light import Light   
+from SceneObject import SceneObject    
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -22,7 +19,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, object_names = [], parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._objectNames = object_names
+        self._objectNames = object_names[0]
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -30,10 +27,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def setObjects(self, object_names):
         """ docstring """
-        GL.glDeleteLists(1, GL.GL_COMPILE)
-        GL.glDeleteTextures(len(self.objects), [i+1 for i in range(len(self.objects))])
-        self._objectNames = object_names
-        self.loadObjects()
+        self._objectNames = object_names[0]
+        self.initializeGL()
 
     # ---------- Partie : Qt ------------
  
@@ -44,27 +39,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def sizeHint(self):
         """ docstring """
         return QtCore.QSize(400, 400)
- 
-    def setXRotation(self, angle):
-        """ docstring """
-        res = self._camera.setX(angle)
-        if res:
-            self.emit(QtCore.SIGNAL("xRotationChanged(int)"), angle)
-            self.updateGL()
- 
-    def setYRotation(self, angle):
-        """ docstring """
-        res = self._camera.setY(angle)
-        if res:
-            self.emit(QtCore.SIGNAL("yRotationChanged(int)"), angle)
-            self.updateGL()
- 
-    def setZRotation(self, angle):
-        """ docstring """
-        res = self._camera.setZ(angle)
-        if res:
-            self.emit(QtCore.SIGNAL("zRotationChanged(int)"), angle)
-            self.updateGL()
 
         # Events
     def mousePressEvent(self, event):
@@ -78,18 +52,23 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         dy = event.y() - self.lastPos.y()
         dx = int(dx/smoothFactor)
         dy = int(dy/smoothFactor)
+        res = False
         if event.buttons() & QtCore.Qt.LeftButton:
-            self.setXRotation(self._camera.getX() + 8 * dy)
-            self.setYRotation(self._camera.getY() + 8 * dx)
+            res |= self._camera.setX(self._camera.getX() + 8 * dy)
+            res |= self._camera.setY(self._camera.getY() + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            self.setXRotation(self._camera.getX() + 8 * dy)
-            self.setZRotation(self._camera.getZ() + 8 * dx)
+            res |= self._camera.setX(self._camera.getX() + 8 * dy)
+            res |= self._camera.setZ(self._camera.getZ() + 8 * dx)
         self.lastPos = QtCore.QPoint(event.pos())
+        if res:
+            self.updateGL()
  
     def wheelEvent(self, event):
         """ docstring """
-        # TODO réparer le zoom, utiliser les frustums
-        self.zoom += event.delta()/1000.0
+        if (event.delta() > 0):
+            self._camera.zoomIn()
+        else:
+            self._camera.zoomOut()
         self.updateGL()
 
     def updateLights(self,position):
@@ -103,130 +82,138 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called at startup
     def initializeGL(self):
         """ docstring """
-        self.fbo = 0;
-        self.textureBuffer = 0;
-        self.renderBuffer = 0
-        # initial rotation
-        self.zoom = -2
-
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
-        # save mouse cursor position for smooth rotation
-        self.lastPos = QtCore.QPoint()
+        self.vertexshader = gloo.VertexShader("shaders/vertex.shader")
+        self.fragmentshader = gloo.FragmentShader("shaders/fragment.shader")
 
-        self.projection = np.eye(4, dtype=np.float32)
-        self.model = np.eye(4, dtype=np.float32)
-        self.view = np.eye(4, dtype=np.float32)
-        self.vertexshader = VertexShader("shaders/objvertex.shader")
-        self.fragmentshader = FragmentShader("shaders/objfragment.shader")
-
-        GL.glEnable(GL.GL_DEPTH_TEST)
+        gloo.set_state(clear_color=(0.30, 0.30, 0.35, 1.00), depth_test=True,
+                       polygon_offset=(1, 1),
+                       blend_func=('src_alpha', 'one_minus_src_alpha'),
+                       line_width=0.75)
         # create camera and light
         self._camera = Camera()
         self._light = Light()
+
         # create floor and load .obj objects
+        self.objects = []
         self.makeFloor()
-        self.makeCube()
+        # examples : should be removed or used for empty scenes
+        self.makeCube((0,1.1,0),(0,1,0,1))
+        self.makeSphere((0,3,0),(1,1,1,1))
+        self.loadObjects()
 
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
-        self.floor = Program(
-            VertexShader("shaders/vertex.shader"), 
-            FragmentShader("shaders/fragment.shader"))
-        self.floor['color'] = (0.5, 0.5, 0.5, 1)
-        # self.floor['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
-        self.floor['position'] =  [[ 10, 0, 10], [-10, 0, 10], [-10, 0.1, 10], [ 10,0.1, 10],
-                 [ 10,0.1,-10], [ 10, 0,-10], [-10, 0,-10], [-10,0.1,-10]]
+        program = gloo.Program(self.vertexshader, self.fragmentshader)
+        vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10],
+                    [ 10, -0.1, 10], [10, -0.1, -10], [-10, -0.1, -10], [-10, -0.1, 10]]
+        program['position'] =  gloo.VertexBuffer(vertices)
+        normals = []
+        for index in range(len(vertices)):
+            prev = vertices[index-1]
+            curr = vertices[index]
+            next = vertices[(index+1)%len(vertices)]
+            diff1 = numpy.subtract(prev, curr)
+            diff2 = numpy.subtract(next, curr)
+            normals.append(numpy.cross(diff2, diff1))
+        program['normal'] = gloo.VertexBuffer(normals)
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
-        self.floor_indices = IndexBuffer(I)
+        indices = gloo.IndexBuffer(I)
         O = [0,1, 1,2, 2,3, 3,0,
              4,7, 7,6, 6,5, 5,4,
              0,5, 1,6, 2,7, 3,4 ]
-        self.floor_outline = IndexBuffer(O)
+        outlines = gloo.IndexBuffer(O)
+        self.objects.append(SceneObject(program, 
+                                        (0,0,0),
+                                        (0.5,0.5,0.5,1),
+                                        indices,
+                                        outlines))
 
-    def makeCube(self):
+    def makeCube(self, position, color):
         """ docstring """
-        self.cube = Program(
-            VertexShader("shaders/vertex.shader"), 
-            FragmentShader("shaders/fragment.shader"))
-        self.cube['color'] = (0.5, 0.5, 0.5, 1)
-        # self.cube['position'] = [(-1,0,-1), (-1,0,1), (-1,0,1), (1,0,-1)]
-        self.cube['position'] =  [[ 2, 0, 2], [-2, 0, 2], [-2, 5, 2], [ 2,5, 2],
-                 [ 2,5,-2], [ 2, 0,-2], [-2, 0,-2], [-2,5,-2]]
-        I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
-             1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
-        self.cube_indices = IndexBuffer(I)
-        O = [0,1, 1,2, 2,3, 3,0,
-             4,7, 7,6, 6,5, 5,4,
-             0,5, 1,6, 2,7, 3,4 ]
-        self.cube_outline = IndexBuffer(O)
+        V, F, O = create_cube()
+        vertices = gloo.VertexBuffer(V)
+        indices = gloo.IndexBuffer(F)
+        outlines = gloo.IndexBuffer(O)
+
+        program = gloo.Program(self.vertexshader, self.fragmentshader)
+        program.bind(vertices)
+        self.objects.append(SceneObject(program,
+                                        position,
+                                        color,
+                                        indices,
+                                        outlines))
+
+    def makeSphere(self, position, color):
+        sphere = create_sphere(36,36)
+        V = sphere.vertices()
+        N = sphere.vertex_normals()
+        F = sphere.faces()
+        vertices = gloo.VertexBuffer(V)
+        normals = gloo.VertexBuffer(N)
+        indices = gloo.IndexBuffer(F)
+
+        program = gloo.Program(self.vertexshader, self.fragmentshader)
+        program['position'] = vertices
+        program['normal'] = normals
+        self.objects.append(SceneObject(program,
+                                        position,
+                                        color,
+                                        indices))
 
     def loadObjects(self):
-        """ docstring """
-        self.objects = []
         for obj in self._objectNames:
-            newObj = Program(self.vertexshader, self.fragmentshader)
             parser = ObjParser(obj[0])
-            newObj['position'] = parser.getVertices()
-            newObj['texcoord'] = parser.getTextureCoords()
-            newObj['u_texture'] = Texture2D(imread(parser.getMtl().getTexture()))
-            self.objects.append((newObj, obj[1], IndexBuffer(parser.getIndices())))
+            position = obj[1]
+            color = (0.5,0.5,0.8,1)
+            face = parser.getFaces()
+            indices = gloo.IndexBuffer(face.astype(numpy.uint16))
+            program = gloo.Program(self.vertexshader, self.fragmentshader)
+            program['position'] = gloo.VertexBuffer(parser.getVertices())
+            program['normal'] = gloo.VertexBuffer(parser.getNormals().astype(numpy.float32))
+            #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
+            self.objects.append(SceneObject(program,
+                                            position,
+                                            color,
+                                            indices))
  
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-        # paint objects
-        self._light.renderLight()
+        gloo.clear(color=True, depth=True)
 
         # set frustum
-        self.view = np.eye(4, dtype=np.float32)
-        translate(self.view, 0, -1, self.zoom)
-        self.projection = ortho(1*self.zoom, -1*self.zoom, 1*self.zoom, -1*self.zoom, 1, 100)
+        self.view = numpy.eye(4, dtype=numpy.float32)
+        translate(self.view, 0, -4, self._camera.getZoom())
+        self.projection = perspective(60, 4.0/3.0, 0.1, 100)
 
-        # apply rotation
-        self.model = np.eye(4, dtype=np.float32)
-        rotate(self.model, self._camera.getX(), 1, 0, 0)
-        rotate(self.model, self._camera.getY(), 0, 1, 0)
-        rotate(self.model, self._camera.getZ(), 0, 0, 1)
-
-        self.paintFloor()
-        self.paintCube()
-
-    # Paint scene objects methods
-    def paintFloor(self):
-        """ docstring """
-        self.floor['model'] = self.model
-        self.floor['view'] = self.view
-        self.floor['projection'] = self.projection
-        self.floor['color'] = (0.5,0.5,0.5,1)
-        self.floor.draw(gl.GL_TRIANGLE_STRIP, self.floor_indices)
-        self.floor['color'] = (0,0,0,1)
-        self.floor.draw(gl.GL_LINES, self.floor_outline)
-
-    # Paint scene objects methods
-    def paintCube(self):
-        """ docstring """
-        self.cube['model'] = self.model
-        self.cube['view'] = self.view
-        self.cube['projection'] = self.projection
-        self.cube['color'] = (0.5,0.5,0.5,1)
-        self.cube.draw(gl.GL_TRIANGLE_STRIP, self.cube_indices)
-        self.cube['color'] = (0,0,0,1)
-        self.cube.draw(gl.GL_LINES, self.cube_outline)
+        self.paintObjects()
 
     def paintObjects(self):
-        """ docstring """
         for obj in self.objects:
-            view = self.view
-            translate(view, *obj[1])
-            obj[0]['model'] = self.model
-            obj[0]['view'] = view
-            obj[0]['projection'] = self.projection
-            obj[0].draw(GL.GL_TRIANGLE_STRIP)
+            # apply rotation and translation
+            model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *obj.position)
+            rotate(model, self._camera.getX(), 1, 0, 0)
+            rotate(model, self._camera.getY(), 0, 1, 0)
+            rotate(model, self._camera.getZ(), 0, 0, 1)
+            normal = numpy.array(numpy.matrix(numpy.dot(self.view, model)).I.T)
+            obj.program['u_normal'] = normal
+            obj.program['u_light_position'] = self._light.getPosition()
+            obj.program['u_light_intensity'] = self._light.getIntensity()
+            obj.program['u_model'] = model
+            obj.program['u_view'] = self.view
+            obj.program['u_projection'] = self.projection
+            if (obj.visible):
+                obj.program['u_color'] = obj.color
+                obj.program.draw('triangles', obj.indices)
+                if (obj.outline):
+                    obj.program['u_color'] = (0,0,0,1)
+                    obj.program.draw('lines', obj.outline)
 
  
     # Called when window is resized
@@ -234,8 +221,5 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         # set openGL in the center of the widget
         GL.glViewport(0, 0, width, height)
-        # #from tuto
-        #projection = perspective( 45.0, width/float(height), 2.0, 10.0 )
-        #program['projection'] = projection
  
  

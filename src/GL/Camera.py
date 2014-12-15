@@ -1,11 +1,19 @@
+#!/usr/bin/python2
+# -*- coding: utf8 -*-
+
+import threading
+
 class Camera(object):
-    """docstring for Camera"""
+    """The Camera of the main OpenGl view
+    It's nearly thread-safe"""
     def __init__(self):
         """ Constructeur de la classe Camera"""
-        self._x = 20
-        self._xInterval = [20,60]
+        self._x = 7
+        self._xInterval = [7,45]
         self._y = 352
         self._z = 6
+        self._zoom = -10.0
+        self.lock = threading.Lock()
 
     def getX(self):
         return self._x
@@ -16,38 +24,66 @@ class Camera(object):
     def getZ(self):
         return self._z
 
+    def getZoom(self):
+        return self._zoom
+
     def setX(self,x):
-        """ """
-        x = self.normalizeAngle(x)
+        """ set the X value after having normalized it"""
+        self.lock.acquire()
+        res = False
         if x < self._xInterval[0]:
             x = self._xInterval[0]
         elif x > self._xInterval[1]:
             x = self._xInterval[1]
+        x = self._normalizeAngle(x)
         if x != self._x:
             self._x = x
-            return True
-        return False
+            res = True
+        self.lock.release()
+        return res
 
     def setY(self,y):
-        """ """
-        y = self.normalizeAngle(y)
+        """ set the Y value after having normalized it"""
+        self.lock.acquire()
+        res = False
+        y = self._normalizeAngle(y)
         if y != self._y:
             self._y = y
-            return True
-        return False
+            res = True
+        self.lock.release()
+        return res
 
     def setZ(self,z):
-        """ """
-        z = self.normalizeAngle(z)
+        """ set the Z value after having normalized it"""
+        self.lock.acquire()
+        res = False
+        z = self._normalizeAngle(z)
         if z != self._z:
             self._z = z
-            return True
-        return False
+            res = True
+        self.lock.release()
+        return res
 
-    def normalizeAngle(self, angle):
-        """ Keep angle between 0 and 360"""
+    def zoomIn(self):
+        self._zoom += 0.1
+
+    def zoomOut(self):
+        self._zoom -= 0.1
+
+    def _normalizeAngle(self, angle):
+        """ Keep the angle between 0 and 360"""
         while angle < 0:
             angle += 360
         while angle > 360:
             angle -= 360
         return angle
+
+
+    def incrementeY(self,plus):
+        """ Increment Y value by plus, for rotation of the plane"""
+        self.lock.acquire()
+        y = self.getY() + plus
+        y = self._normalizeAngle(y)
+        self._y = y
+        self.lock.release()
+        
