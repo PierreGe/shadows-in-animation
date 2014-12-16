@@ -69,6 +69,7 @@ class Controller(object):
             self._replaceRightWidget(self._glWidget)
         else:
             print("[WARNING] Unable to reload : no OpenGLWidget loaded!")
+            QtGui.QMessageBox.error(self, "Erreur", "Unable to reload this OpenGl")
 
         self._setStatusReady()
 
