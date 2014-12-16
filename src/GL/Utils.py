@@ -35,3 +35,6 @@ def normalize(v):
     if norm==0: 
        return v
     return v/norm
+
+def translateMesh(vertices, position):
+    return [[vertex[i]+position[i] for i in range(3)] for vertex in vertices]
