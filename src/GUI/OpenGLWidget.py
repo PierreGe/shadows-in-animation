@@ -16,14 +16,20 @@ from SceneObject import SceneObject
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
     """ docstring """
-    def __init__(self, objectNames = [], parent=None):
+    def __init__(self, objectNames, algo, controller,  parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
         self._objectNames = objectNames
+        self._chosenAlgo = algo
+        self._controller = controller
 
     def getObjectNames(self):
         """ Reload openGLWidget """
         return self._objectNames
+
+    def getChosenAlgo(self):
+        """ """
+        return self._chosenAlgo
 
     def setObjects(self, objectNames):
         """ docstring """

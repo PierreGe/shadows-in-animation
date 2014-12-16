@@ -44,7 +44,7 @@ class Controller(object):
         scene = str(item.parent().text(0))
         algo = str(item.text(0))
         # TODO set algo
-        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"])
+        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"],algo,self)
         self._replaceRightWidget(self._glWidget)
 
         self._setStatusReady()
@@ -64,7 +64,8 @@ class Controller(object):
 
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
-            self._glWidget = OpenGLWidget.OpenGLWidget(obj)
+            algo = self._glWidget.getChosenAlgo()
+            self._glWidget = OpenGLWidget.OpenGLWidget(obj,algo,self)
             self._replaceRightWidget(self._glWidget)
         else:
             print("[WARNING] Unable to reload : no OpenGLWidget loaded!")
