@@ -11,7 +11,9 @@ import numpy
 from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light   
-from SceneObject import SceneObject    
+from SceneObject import SceneObject 
+from Utils import * 
+from Algorithms import *  
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -91,9 +93,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
-        self.vertexshader = gloo.VertexShader("shaders/vertex.shader")
-        self.fragmentshader = gloo.FragmentShader("shaders/fragment.shader")
-
         gloo.set_state(clear_color=(0.30, 0.30, 0.35, 1.00), depth_test=True,
                        polygon_offset=(1, 1),
                        blend_func=('src_alpha', 'one_minus_src_alpha'),
@@ -104,6 +103,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self.positions = []
         self.indices = []
+        self.normals = []
 
         # create floor and load .obj objects
         self.objects = []
@@ -113,71 +113,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # self.makeSphere((0,3,0),(1,1,1,1))
         self.loadObjects()
 
-        self.shadowMap = gloo.Program("""
-            attribute vec3 position;
-             
-            uniform mat4 u_projection;
-            uniform mat4 u_model;
-            uniform mat4 u_view;
-             
-            void main(){
-                gl_Position =  u_projection * u_view * u_model * vec4(position,1);
-            }
-            """,
-            """
-            // should we trust openGL to do that ?
-            //out float fragmentdepth;
-             
-            void main(){
-                // Not really needed, OpenGL does it anyway
-                //fragmentdepth = gl_FragCoord.z;
-                gl_FragColor = vec4(gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z);
-            }
-            """)
-        self.shadowMap['position'] = gloo.VertexBuffer(self.positions)
-        self.indices = gloo.IndexBuffer(numpy.array(self.indices))
-
-        shape = 1024,1024
-        self.renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
-        self.fbo = gloo.FrameBuffer(self.renderTexture)
-
-
-    # maybe define that function else where ?
-    def lookAt(self, eye, center, up):
-        ret = numpy.eye(4, dtype=numpy.float32)
-
-        Z = numpy.array(eye, numpy.float32) - numpy.array(center, numpy.float32)
-        Z = self.normalize(Z)
-        Y = numpy.array(up, numpy.float32)
-        X = numpy.cross(Y, Z)
-        Y = numpy.cross(Z, X)
-
-        X = self.normalize(X)
-        Y = self.normalize(Y)
-
-        ret[0][0] = X[0]
-        ret[1][0] = X[1]
-        ret[2][0] = X[2]
-        ret[3][0] = -numpy.dot(X, eye)
-        ret[0][1] = Y[0]
-        ret[1][1] = Y[1]
-        ret[2][1] = Y[2]
-        ret[3][1] = -numpy.dot(Y, eye)
-        ret[0][2] = Z[0]
-        ret[1][2] = Z[1]
-        ret[2][2] = Z[2]
-        ret[3][2] = -numpy.dot(Z, eye)
-        ret[0][3] = 0
-        ret[1][3] = 0
-        ret[2][3] = 0
-        ret[3][3] = 1.0
-        return ret
-
-    def normalize(self, v):
-        norm=numpy.linalg.norm(v)
-        if norm==0: 
-           return v
-        return v/norm
+        # create algo. TODO
+        self._algo = ShadowMapAlgorithm(self.positions, self.indices, self.normals, self._camera, self._light)
 
     # Objects construction methods
     def makeFloor(self):
@@ -246,85 +183,18 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
             position = obj[1]
-            color = (0.5,0.5,0.8,1)
-            face = parser.getFaces()
-            indices = gloo.IndexBuffer(face.astype(numpy.uint16))
-            vertices = gloo.VertexBuffer(parser.getVertices())
-            program = gloo.Program(self.vertexshader, self.fragmentshader)
-            program['position'] = vertices
-            program['normal'] = gloo.VertexBuffer(parser.getNormals().astype(numpy.float32))
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            self.objects.append(SceneObject(program,
-                                            position,
-                                            color,
-                                            indices))
             self.positions.extend(parser.getVertices().tolist())
             # should add maximum of previous list to item
             # max_index = max(self.indices)+1
-            self.indices.extend([item for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
+            self.indices.extend([item for sublist in parser.getFaces().astype(numpy.uint16).tolist() for item in sublist])
+            self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
 
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
         gloo.clear(color=True, depth=True)
-
-        # set frustum
-        self.view = numpy.eye(4, dtype=numpy.float32)
-        translate(self.view, 0, -4, self._camera.getZoom())
-        self.projection = perspective(60, 4.0/3.0, 0.1, 100)
-
-        self.paintObjects()
-
-    def paintObjects(self):
-        shadow_model = numpy.eye(4, dtype=numpy.float32)
-        # rotate(shadow_model, self._light.getPosition()[0], 1, 0, 0)
-        # rotate(shadow_model, self._light.getPosition()[1], 0, 1, 0)
-        # rotate(shadow_model, self._light.getPosition()[2], 0, 0, 1)
-        # create shadow map
-        light = (0.5,2,2)
-        with self.fbo:
-            self.shadow_projection = ortho(-20,20,-20,30,0,100)
-            shadow_view = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
-            self.shadowMap['u_projection'] = self.shadow_projection
-            self.shadowMap['u_model'] = shadow_model
-            self.shadowMap['u_view'] = shadow_view
-            self.shadowMap.draw('triangles', self.indices)
-
-        for index, obj in enumerate(self.objects):
-            # apply rotation and translation
-            model = numpy.eye(4, dtype=numpy.float32)
-            # translate(model, *obj.position)
-            rotate(model, self._camera.getX(), 1, 0, 0)
-            rotate(model, self._camera.getY(), 0, 1, 0)
-            rotate(model, self._camera.getZ(), 0, 0, 1)
-
-            # draw object
-            biasMatrix = numpy.matrix([[0.5, 0.0, 0.0, 0.0],
-                                    [0.0, 0.5, 0.0, 0.0],
-                                    [0.0, 0.0, 0.5, 0.0],
-                                    [0.5, 0.5, 0.5, 1.0]])
-            normal = numpy.array(numpy.matrix(numpy.dot(self.view, model)).I.T)
-            obj.program['u_normal'] = normal
-            obj.program['u_light_position'] = self._light.getPosition()
-            obj.program['u_light_intensity'] = self._light.getIntensity()
-            obj.program['u_model'] = model
-            obj.program['u_view'] = self.view
-            obj.program['u_projection'] = self.projection
-            obj.program['u_bias_matrix'] = biasMatrix
-            obj.program['u_depth_model'] = shadow_model
-            obj.program['u_depth_view'] = shadow_view
-            obj.program['u_depth_projection'] = self.shadow_projection
-            obj.program['u_shadow_map'] = self.renderTexture
-            if (obj.visible):
-                obj.program['u_color'] = obj.color
-                obj.program.draw('triangles', obj.indices)
-                if (obj.outline):
-                    obj.program['u_color'] = (0,0,0,1)
-                    obj.program.draw('lines', obj.outline)
-
-        GL.glViewport(0,0,256,256)
-        self.shadowMap.draw('triangles', self.indices)
-        GL.glViewport(0,0,1024,1024)
+        self._algo.update()
 
     # Called when window is resized
     def resizeGL(self, width, height):

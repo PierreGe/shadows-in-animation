@@ -1,0 +1,8 @@
+// should we trust openGL to do that ?
+//out float fragmentdepth;
+ 
+void main(){
+    // Not really needed, OpenGL does it anyway
+    //fragmentdepth = gl_FragCoord.z;
+    gl_FragColor = vec4(gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z);
+}
