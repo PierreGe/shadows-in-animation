@@ -322,7 +322,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         GL.glViewport(0,0,256,256)
         self.shadowMap.draw('triangles', self.indices)
-        GL.glViewport(0,0,1366,768)
+        GL.glViewport(0,0,1024,1024)
 
     # Called when window is resized
     def resizeGL(self, width, height):
