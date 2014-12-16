@@ -34,6 +34,7 @@ class HelpWidget(QtGui.QWidget):
         self.textWidget.setText(self._getStringHelp())
         self.textWidget.setStyleSheet(self._getStyleSheet())
 
+
         self.textWidget.show()
 
         hbox.addWidget(self.textWidget)
@@ -42,6 +43,9 @@ class HelpWidget(QtGui.QWidget):
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create('Cleanlooks'))
         
         self.show()
+
+    def resizeEvent(self, event):
+        #print("Resized")
 
     def _getStyleSheet(self):
         """ Retourne la feuille de style du QLabel"""

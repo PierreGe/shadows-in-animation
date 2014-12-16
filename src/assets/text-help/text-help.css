@@ -3,4 +3,5 @@ QLabel {
     color : black;
     padding: 5;
     margin: 5;
+    width: 270px;
 }
