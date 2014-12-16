@@ -89,3 +89,44 @@ class ShadowMapAlgorithm:
         self._normals = []
         self._camera = None
         self._light = None
+
+class RayTracingAlgorithm:
+    def __init__(self, positions, indices, normals, camera, light):
+
+        self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
+
+        self.init(positions, indices, normals, camera, light)
+
+    def init(self, positions, indices, normals, camera, light):
+        self._positions = gloo.VertexBuffer(positions)
+        self._indices = gloo.IndexBuffer(numpy.array(indices))
+        self._normals = gloo.VertexBuffer(normals)
+        self._camera = camera
+        self._light = light
+        self.program['a_position'] = [(-1., -1.), (-1., +1.),
+                                      (+1., -1.), (+1., +1.)]
+
+        self.program['plane_position'] = (0., -.5, 0.)
+        self.program['plane_normal'] = (0., 1., 0.)
+
+        self.program['light_intensity'] = 1.
+        self.program['light_specular'] = (1., 50.)
+        self.program['light_position'] = (5., 5., -10.)
+        self.program['light_color'] = (1., 1., 1.)
+        self.program['ambient'] = .05
+        self.program['O'] = (0., 0., -1.)
+        self.active = True
+
+    def update(self):
+        if self.active:
+            pass
+
+    def terminate(self):
+        self.active = False
+        self._positions = []
+        self._indices = []
+        self._normals = []
+        self._camera = None
+        self._light = None
+
+
