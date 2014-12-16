@@ -157,7 +157,7 @@ Nous allons implémenter cet algorithme mais allons cependant  nous concentrer s
 L'algorithme de \textit{Shadow Volume} a été introduit par Crow \cite{crow1977shadow}. Il a ensuite été implémenté grâce à l'accélération  matérielle\cite{fuchs1986fast} mais n'a été que peu utilisé jusqu'à la proposition de Tim Heidmann d'accélérer matériellement cet algorithme sur du matériel accessible au grand public. Cette logique a donné naissance à l'algorithme de \textit{z-pass}\cite{heidmann1991real}. 
 \\
 
-La méthode de \textit{z-pass} consiste à premièrement initialiser un \textit{stencil buffer} à zéro et un \textit{depth buffer} avec les valeurs de profondeurs des objets visibles pour ensuite rastérisater les côtés des \textit{shadow volumes}. Pour chaque partie de \textit{shadow volume}, il s'agit ensuite d'incrémenter le pixel du \textit{stencil buffer} correspondant si la face à une normale dans le sens inverse (on rentre alors dans le \textit{shadow volume}) et décrémenté lorsque l'on en ressort. Le \textit{shadow count} représentera alors le niveau d'ombre dans lequel est plongé le point fixé et l'absence d'ombre si celui-ci est égal à 0.\cite{surveyofshadowalgorithms} Ce comptage peut être théoriquement réaliser jusqu'à une distance infinie, grâce à une méthode appelée \textit{z-fail} ou \textit{Depth fail}\cite{bilodeau1999real, carmack2000z}.
+La méthode de \textit{z-pass} consiste à premièrement initialiser un \textit{stencil buffer} à zéro et un \textit{depth buffer} avec les valeurs de profondeurs des objets visibles pour ensuite rastérisater les côtés des \textit{shadow volumes}. Pour chaque partie de \textit{shadow volume}, il s'agit ensuite d'incrémenter le pixel du \textit{stencil buffer} correspondant si la face à une normale dans le sens inverse (on rentre alors dans le \textit{shadow volume}) et décrémenté lorsque l'on en ressort. Le \textit{shadow count} représentera alors le niveau d'ombre dans lequel est plongé le point fixé et l'absence d'ombre si celui-ci est égal à 0.\cite{surveyofshadowalgorithms} Ce comptage peut être théoriquement réalisé jusqu'à une distance infinie, grâce à une méthode appelée \textit{z-fail} ou \textit{Depth fail}\cite{bilodeau1999real, carmack2000z}.
 \\
 
 Les algorithmes de \textit{z-pass} ont néanmoins un défaut dans le cas où l'on place l'observateur dans l'ombre (dans un ou plusieurs shadow volumes). Ce problème a été en partie résolu par HORNUS et autres\cite{hornus2005zp+}, qui vont proposer d'aligner la vue de la source lumineuse avec celle de l'observateur. Cette technique a été développée en comparant l'algorithme de z-pass, dont ils s'inspirent et qu'ils ont amélioré, avec celui de z-fail. Cette solution n'est pas encore optimale mais à ce jour, aucune autre alternative n'a été proposée.
@@ -221,7 +221,7 @@ Dans cette section, nous allons présenter rapidement les langages de programmat
 
 \section{Algorithmes retenus}
 
-Après avoir passé en revue les différents articles et exploré les connaissances en matière d'algorithmes d'ombres, nous avons décidé de nous orienté vers 3 types d'implémentations : 
+Après avoir passé en revue les différents articles et exploré les connaissances en matière d'algorithmes d'ombres, nous avons décidé de nous orienter vers 3 types d'implémentations : 
 
 \subsection{Shadow volume}
 
@@ -230,6 +230,12 @@ L'avantage de ces algorithmes est leur précision et leur réalisme mais ils peu
 \subsection{Shadow mapping}
 
 Ces algorithmes permettent de ne générer les ombres que du point de vue de la caméra et donc de s'épargner un grand nombre de calculs inutiles, ce qui améliore les performances mais leur réalisme dépend fortement de la résolution de la \textit{shadow map}. Les implémentations les plus récentes de ce type d'algorithmes sont pour le moment les plus réalistes et les plus précises.
+
+\subsection{Ray tracing}
+
+Le \textit{ray tracing} est la première catégorie d'algorithme à avoir été inventée. Ils présentent de manière générale une moins grande précision et une moins grande performance mais sont intéressants pour deux raisons.
+Premièrement, ils sont faciles à implémenter et l'algorithme utilise une manière de penser proche de la vie réelle en \"traçant\" les rayons de lumière.
+Deuxièmement, ils nous permettront d'évaluer et de comparer les performances et le réalisme de nos algorithmes.
 
 \bibliographystyle{apalike}
 
