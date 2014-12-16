@@ -131,4 +131,58 @@ class RayTracingAlgorithm:
         self._camera = None
         self._light = None
 
+class NoShadowAlgorithm:
+    def __init__(self):
+        self.program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
+        self.init()
+
+    def init(self):
+        self._positions = gloo.VertexBuffer(positions)
+        self._indices = gloo.IndexBuffer(numpy.array(indices))
+        self._normals = gloo.VertexBuffer(normals)
+        self._camera = camera
+        self._light = light
+
+        self.program['light_intensity'] = 1.
+        self.program['light_specular'] = (1., 50.)
+        self.program['light_position'] = (5., 5., -10.)
+        self.program['light_color'] = (1., 1., 1.)
+        self._program.draw('triangles', self._indices)
+        self.active = True
+
+    def update(self):
+
+        if self.active:
+            # create render matrices
+            view = numpy.eye(4, dtype=numpy.float32)
+            translate(view, 0, -4, self._camera.getZoom())
+            model = numpy.eye(4, dtype=numpy.float32)
+            rotate(model, self._camera.getX(), 1, 0, 0)
+            rotate(model, self._camera.getY(), 0, 1, 0)
+            rotate(model, self._camera.getZ(), 0, 0, 1)
+            # create shadow map
+            with self._fbo:
+                self._shadowMap['u_projection'] = self._shadow_projection
+                self._shadowMap['u_model'] = shadow_model
+                self._shadowMap['u_view'] = shadow_view
+                self._shadowMap.draw('triangles', self._indices)
+
+            # draw scene
+            self._program['u_light_position'] = self._light.getPosition()
+            self._program['u_light_intensity'] = self._light.getIntensity()
+            self._program['u_model'] = model
+            self._program['u_view'] = view
+            self._program['u_projection'] = self._projection
+            self._program['u_color'] = (0.5, 0.5, 0.8, 1) # TODO remove hardcoded value
+            self._program.draw('triangles', self._indices)
+
+    def terminate(self):
+        self.active = False
+        self._positions = []
+        self._indices = []
+        self._normals = []
+        self._camera = None
+        self._light = None
+
+
 
