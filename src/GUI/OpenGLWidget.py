@@ -11,7 +11,8 @@ import numpy
 from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light   
-from SceneObject import SceneObject    
+from SceneObject import SceneObject 
+from Utils import *   
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -141,44 +142,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
         self.fbo = gloo.FrameBuffer(self.renderTexture)
 
-
-    # maybe define that function else where ?
-    def lookAt(self, eye, center, up):
-        ret = numpy.eye(4, dtype=numpy.float32)
-
-        Z = numpy.array(eye, numpy.float32) - numpy.array(center, numpy.float32)
-        Z = self.normalize(Z)
-        Y = numpy.array(up, numpy.float32)
-        X = numpy.cross(Y, Z)
-        Y = numpy.cross(Z, X)
-
-        X = self.normalize(X)
-        Y = self.normalize(Y)
-
-        ret[0][0] = X[0]
-        ret[1][0] = X[1]
-        ret[2][0] = X[2]
-        ret[3][0] = -numpy.dot(X, eye)
-        ret[0][1] = Y[0]
-        ret[1][1] = Y[1]
-        ret[2][1] = Y[2]
-        ret[3][1] = -numpy.dot(Y, eye)
-        ret[0][2] = Z[0]
-        ret[1][2] = Z[1]
-        ret[2][2] = Z[2]
-        ret[3][2] = -numpy.dot(Z, eye)
-        ret[0][3] = 0
-        ret[1][3] = 0
-        ret[2][3] = 0
-        ret[3][3] = 1.0
-        return ret
-
-    def normalize(self, v):
-        norm=numpy.linalg.norm(v)
-        if norm==0: 
-           return v
-        return v/norm
-
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
@@ -277,14 +240,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def paintObjects(self):
         shadow_model = numpy.eye(4, dtype=numpy.float32)
-        # rotate(shadow_model, self._light.getPosition()[0], 1, 0, 0)
-        # rotate(shadow_model, self._light.getPosition()[1], 0, 1, 0)
-        # rotate(shadow_model, self._light.getPosition()[2], 0, 0, 1)
         # create shadow map
         light = (0.5,2,2)
         with self.fbo:
             self.shadow_projection = ortho(-20,20,-20,30,0,100)
-            shadow_view = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+            shadow_view = lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
             self.shadowMap['u_projection'] = self.shadow_projection
             self.shadowMap['u_model'] = shadow_model
             self.shadowMap['u_view'] = shadow_view
