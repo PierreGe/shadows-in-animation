@@ -39,8 +39,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         if (algo in self._algorithms):
             self._chosenAlgo = self._algorithms[algo]
         else:
-            raise ValueError("Algorithm " + algo + " does not exist")
-
+            QtGui.QMessageBox.warning(self, "Erreur", "L'algo {0} n'existe pas pour cette scene".format(algo))
+            controller.showHelp()
     # ---------- Partie : Qt ------------
  
     def minimumSizeHint(self):
