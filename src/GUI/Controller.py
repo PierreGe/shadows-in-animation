@@ -61,7 +61,7 @@ class Controller(object):
     def reload(self):
         """ """
         self._setStatusComputing()
-
+        
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
             algo = self._glWidget.getChosenAlgo()

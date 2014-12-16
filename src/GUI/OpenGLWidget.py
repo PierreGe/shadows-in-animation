@@ -22,7 +22,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
         self._controller = controller
-        self.setObjects(objectNames, algo)
+        self._algorithms = {
+            "Shadow Mapping": ShadowMapAlgorithm()
+        }
+        self.setObjects(objectNames)
+        self.setAlgo(algo)
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -32,14 +36,16 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ """
         return self._chosenAlgo
 
-    def setObjects(self, objectNames, algo):
+    def setObjects(self, objectNames):
         """ docstring """
         self._objectNames = objectNames
-        self.initializeGL()
+
+    def setAlgo(self, algo):
         if (algo in self._algorithms):
             self._chosenAlgo = self._algorithms[algo]
         else:
             raise ValueError("Algorithm " + algo + " does not exist")
+
 
     # ---------- Partie : Qt ------------
  
@@ -116,10 +122,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # self.makeSphere((0,3,0),(1,1,1,1))
         self.loadObjects()
 
-        # create algo. TODO
-        self._algorithms = {
-            "Shadow Mapping": ShadowMapAlgorithm(self.positions, self.indices, self.normals, self._camera, self._light)
-        }
+        self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
 
     # Objects construction methods
     def makeFloor(self):
