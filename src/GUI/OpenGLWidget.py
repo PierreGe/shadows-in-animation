@@ -96,6 +96,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._camera = Camera()
         self._light = Light()
 
+        self.positions = []
+        self.indices = []
+
+        # create floor and load .obj objects
+        self.objects = []
+        self.makeFloor()
+        # examples : should be removed or used for empty scenes
+        # self.makeCube((0,1.1,0),(0,1,0,1))
+        # self.makeSphere((0,3,0),(1,1,1,1))
+        self.loadObjects()
+
         self.shadowMap = gloo.Program("""
             attribute vec3 position;
              
@@ -118,18 +129,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 gl_FragColor = vec4(gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z);
             }
             """)
-        self.shadowMap['u_projection'] = ortho(-5,5,-5,5,-10,100)
-
-        self.positions = []
-        self.indices = []
-
-        # create floor and load .obj objects
-        self.objects = []
-        self.makeFloor()
-        # examples : should be removed or used for empty scenes
-        # self.makeCube((0,1.1,0),(0,1,0,1))
-        # self.makeSphere((0,3,0),(1,1,1,1))
-        self.loadObjects()
+        self.shadow_projection = ortho(-5,5,-5,5,-10,100)
+        self.shadowMap['u_projection'] = self.shadow_projection
 
         self.shadowMap['position'] = gloo.VertexBuffer(self.positions)
         self.indices = gloo.IndexBuffer(numpy.array(self.indices))
@@ -275,8 +276,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintObjects(self):
         # create shadow map
         with self.fbo:
+            shadow_view = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
             self.shadowMap['u_model'] = numpy.eye(4, dtype=numpy.float32)
-            self.shadowMap['u_view'] = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+            self.shadowMap['u_view'] = shadow_view
             self.shadowMap.draw('triangles', self.indices)
 
         for index, obj in enumerate(self.objects):
@@ -299,7 +301,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj.program['u_model'] = model
             obj.program['u_view'] = self.view
             obj.program['u_projection'] = self.projection
-            obj.program['u_bias_matrix'] = biasMatrix
+            obj.program['u_bias_matrix'] = biasMatrix * self.shadow_projection * shadow_view
             obj.program['u_shadow_map'] = self.renderTexture
             if (obj.visible):
                 obj.program['u_color'] = obj.color

@@ -16,7 +16,7 @@ varying vec4 v_shadow_coord;
 void main()
 {
     gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
-    v_shadow_coord = u_bias_matrix * u_projection * u_view * u_model * vec4(position, 1.0);
+    v_shadow_coord = u_bias_matrix * vec4(position, 1.0);
     v_position = position;
     v_normal = normal;
     v_color = u_color;
