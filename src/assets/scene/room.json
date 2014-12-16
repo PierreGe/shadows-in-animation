@@ -1,0 +1,8 @@
+{
+  "name": "tutoriel shadow map",
+  "description": "ca devrait marcher",
+  "algo-compatible": ["Algo A","Algo B","Algo C"],
+  "obj-liste": [
+      ["assets/obj/shadow-map-tuto/room_thickwalls.obj",[0,0,0]]
+  ]
+}
