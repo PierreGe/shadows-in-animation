@@ -1,7 +1,7 @@
 {
   "name": "Lightmap by Blender",
   "description": "Il avait un long nez",
-  "algo-compatible": ["Algo A"],
+  "algo-compatible": ["Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
       ["assets/obj/lightmap/lightmap.obj",[2,2,0]]
   ]

@@ -1,7 +1,7 @@
 {
   "name": "Le petit bonhomme en bois",
   "description": "Il avait un long nez",
-  "algo-compatible": ["Algo A","Algo B","Algo C"],
+  "algo-compatible": ["Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
       ["assets/obj/bonhomme-bois/dummy_obj2.obj",[0,0.5,0]]
   ]
