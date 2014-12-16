@@ -1,7 +1,7 @@
 {
-  "name": "tutoriel shadow map",
-  "description": "ca devrait marcher",
-  "algo-compatible": ["Ray Tracing","Shadow Mapping","Shadow Volume"],
+  "name": "Piece",
+  "description": "Cette piece contient un cylindre et un rond",
+  "algo-compatible": ["Aucune Ombre", "Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
       ["assets/obj/shadow-map-tuto/room_thickwalls.obj",[0,0,0]]
   ]
