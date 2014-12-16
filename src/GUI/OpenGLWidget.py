@@ -125,13 +125,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             void main(){
                 // Not really needed, OpenGL does it anyway
                 //fragmentdepth = gl_FragCoord.z;
-                gl_FragDepth = gl_FragCoord.z;
                 gl_FragColor = vec4(gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z);
             }
             """)
-        self.shadow_projection = ortho(-20,20,-20,20,-10,100)
-        self.shadowMap['u_projection'] = self.shadow_projection
-
         self.shadowMap['position'] = gloo.VertexBuffer(self.positions)
         self.indices = gloo.IndexBuffer(numpy.array(self.indices))
 
@@ -274,10 +270,16 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.paintObjects()
 
     def paintObjects(self):
+        shadow_model = numpy.eye(4, dtype=numpy.float32)
+        # rotate(shadow_model, self._light.getPosition()[0], 1, 0, 0)
+        # rotate(shadow_model, self._light.getPosition()[1], 0, 1, 0)
+        # rotate(shadow_model, self._light.getPosition()[2], 0, 0, 1)
         # create shadow map
         with self.fbo:
-            shadow_view = self.lookAt((self._light.getPosition()), (0,0,0), (0,1,0))
-            self.shadowMap['u_model'] = numpy.eye(4, dtype=numpy.float32)
+            self.shadow_projection = ortho(-10,10,-10,10,-10,100)
+            self.shadowMap['u_projection'] = self.shadow_projection
+            shadow_view = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+            self.shadowMap['u_model'] = shadow_model
             self.shadowMap['u_view'] = shadow_view
             self.shadowMap.draw('triangles', self.indices)
 
@@ -301,14 +303,16 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             obj.program['u_model'] = model
             obj.program['u_view'] = self.view
             obj.program['u_projection'] = self.projection
-            obj.program['u_bias_matrix'] = biasMatrix * self.shadow_projection * shadow_view
+            obj.program['u_bias_matrix'] = biasMatrix * self.shadow_projection * shadow_view * shadow_model
             obj.program['u_shadow_map'] = self.renderTexture
+            print self.shadow_projection * shadow_view * shadow_model
             if (obj.visible):
                 obj.program['u_color'] = obj.color
                 obj.program.draw('triangles', obj.indices)
                 if (obj.outline):
                     obj.program['u_color'] = (0,0,0,1)
                     obj.program.draw('lines', obj.outline)
+
         GL.glViewport(0,0,256,256)
         self.shadowMap.draw('triangles', self.indices)
         GL.glViewport(0,0,1366,768)

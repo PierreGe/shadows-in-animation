@@ -32,7 +32,7 @@ void main()
     // 2. The color/intensities of the light: light.intensities
     // 3. The texture and texture coord: texture(tex, fragTexCoord)
 
-    vec4 visibility = texture2DProj( u_shadow_map, v_shadow_coord );
+    vec4 visibility = texture2D( u_shadow_map, v_shadow_coord.xy );
 
     gl_FragColor = v_color * visibility * vec4(u_light_intensity, 1);
 }
