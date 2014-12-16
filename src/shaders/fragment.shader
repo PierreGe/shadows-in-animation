@@ -1,6 +1,9 @@
 uniform mat4 u_model;
 uniform mat4 u_view;
 uniform mat4 u_normal;
+uniform mat4 u_depth_model;
+uniform mat4 u_depth_view;
+uniform mat4 u_depth_projection;
 
 uniform vec3 u_light_intensity;
 uniform vec3 u_light_position;
@@ -33,9 +36,12 @@ void main()
     // 3. The texture and texture coord: texture(tex, fragTexCoord)
 
     float visibility = 1.0;
-    if ( texture2D( u_shadow_map, v_shadow_coord.xy ).z  <  v_shadow_coord.z){
+    if ( texture2D( u_shadow_map, v_shadow_coord.xy ).y  <  (v_shadow_coord.z -0.005)){
         visibility = 0.5;
     }
+
+    // float visibility = texture2D( u_shadow_map, v_shadow_coord.xy).x;
+    
     gl_FragColor = v_color * visibility;
     // gl_FragColor = vec4(texture2D( u_shadow_map, v_shadow_coord.xy ).z,texture2D( u_shadow_map, v_shadow_coord.xy ).z,texture2D( u_shadow_map, v_shadow_coord.xy ).z,texture2D( u_shadow_map, v_shadow_coord.xy ).z);
     // gl_FragColor = vec4(v_shadow_coord.z,v_shadow_coord.z,v_shadow_coord.z,v_shadow_coord.z);

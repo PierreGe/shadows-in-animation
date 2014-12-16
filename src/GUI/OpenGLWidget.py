@@ -277,12 +277,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # create shadow map
         light = (0.5,2,2)
         with self.fbo:
-            self.shadow_projection = ortho(-5,5,-5,5,-10,100)
+            self.shadow_projection = ortho(-20,20,-20,30,0,100)
             shadow_view = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
-            print "------------------"
-            print shadow_view
-            print self.shadow_projection
-            print self.shadow_projection * shadow_view
             self.shadowMap['u_projection'] = self.shadow_projection
             self.shadowMap['u_model'] = shadow_model
             self.shadowMap['u_view'] = shadow_view
@@ -291,7 +287,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for index, obj in enumerate(self.objects):
             # apply rotation and translation
             model = numpy.eye(4, dtype=numpy.float32)
-            translate(model, *obj.position)
+            # translate(model, *obj.position)
             rotate(model, self._camera.getX(), 1, 0, 0)
             rotate(model, self._camera.getY(), 0, 1, 0)
             rotate(model, self._camera.getZ(), 0, 0, 1)
