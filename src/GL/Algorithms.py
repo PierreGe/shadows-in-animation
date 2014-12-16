@@ -23,7 +23,6 @@ class ShadowMapAlgorithm:
         self._camera = camera
         self._light = light
         self._program['position'] = self._positions
-        self._program['normal'] = self._normals
         self._shadowMap['position'] = self._positions
         self.active = True
         
@@ -34,7 +33,12 @@ class ShadowMapAlgorithm:
 
         # matrices
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
-        self._shadow_projection = ortho(-20,20,-20,30,0,100)
+        self._shadow_projection = ortho(self._light._xInterval[0]-20,
+                                        self._light._xInterval[1]+20,
+                                        self._light._yInterval[0]-20,
+                                        self._light._yInterval[1]+20,
+                                        self._light._zInterval[0]-20,
+                                        self._light._zInterval[1]+50)
 
     def update(self):
         """ Method to call on each OpenGL update """
@@ -62,9 +66,6 @@ class ShadowMapAlgorithm:
                                     [0.0, 0.0, 0.5, 0.0],
                                     [0.5, 0.5, 0.5, 1.0]])
             normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
-            self._program['u_normal'] = normal
-            self._program['u_light_position'] = self._light.getPosition()
-            self._program['u_light_intensity'] = self._light.getIntensity()
             self._program['u_model'] = model
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
@@ -74,6 +75,7 @@ class ShadowMapAlgorithm:
             self._program['u_depth_projection'] = self._shadow_projection
             self._program['u_shadow_map'] = self._renderTexture
             self._program['u_color'] = (0.5, 0.5, 0.8, 1) # TODO remove hardcoded value
+            self._program['u_light_intensity'] = self._light.getIntensity()
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap
