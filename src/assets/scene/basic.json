@@ -1,7 +1,7 @@
 {
   "name": "Scene basique",
-  "description": "This scene is the most basic one",
-  "algo-compatible": ["Ray Tracing","Shadow Mapping","Shadow Volume"],
+  "description": "Cette scene est basique",
+  "algo-compatible": ["Aucune Ombre", "Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
       ["assets/obj/bonhomme/Stick_Figure_by_Swp2.OBJ",[-4,1.5,0]],
       ["assets/obj/bonhomme-bois/dummy_obj2.obj",[4,0.5,0]],
