@@ -24,7 +24,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._controller = controller
         self._algorithms = {
             "Shadow Mapping": ShadowMapAlgorithm(),
-            "No Shadow Algorithm": NoShadowAlgorithm()
+            "Aucune Ombre": NoShadowAlgorithm()
         }
         self.setObjects(objectNames)
         self.setAlgo(algo)

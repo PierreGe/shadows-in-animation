@@ -1,7 +1,7 @@
 {
   "name": "Arbre",
   "description": "This scene is a tree",
-  "algo-compatible": ["Ray Tracing","Shadow Mapping","Shadow Volume"],
+  "algo-compatible": ["Aucune Ombre", "Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
       ["assets/obj/tree-palmier/FR01z.obj",[0,0,0]]
   ]
