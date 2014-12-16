@@ -21,9 +21,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def __init__(self, objectNames, algo, controller,  parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
-        self._objectNames = objectNames
-        self._chosenAlgo = algo
         self._controller = controller
+        self.setObjects(objectNames, algo)
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -33,10 +32,14 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ """
         return self._chosenAlgo
 
-    def setObjects(self, objectNames):
+    def setObjects(self, objectNames, algo):
         """ docstring """
         self._objectNames = objectNames
         self.initializeGL()
+        if (algo in self._algorithms):
+            self._chosenAlgo = self._algorithms[algo]
+        else:
+            raise ValueError("Algorithm " + algo + " does not exist")
 
     # ---------- Partie : Qt ------------
  
@@ -114,7 +117,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.loadObjects()
 
         # create algo. TODO
-        self._algo = ShadowMapAlgorithm(self.positions, self.indices, self.normals, self._camera, self._light)
+        self._algorithms = {
+            "Shadow Mapping": ShadowMapAlgorithm(self.positions, self.indices, self.normals, self._camera, self._light)
+        }
 
     # Objects construction methods
     def makeFloor(self):
@@ -194,7 +199,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintGL(self):
         """ docstring """
         gloo.clear(color=True, depth=True)
-        self._algo.update()
+        self._chosenAlgo.update()
 
     # Called when window is resized
     def resizeGL(self, width, height):
