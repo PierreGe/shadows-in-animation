@@ -114,9 +114,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.indices = []
         self.normals = []
 
-        # create floor and load .obj objects
-        self.objects = []
-        # self.makeFloor()
+        self.makeFloor()
         # examples : should be removed or used for empty scenes
         # self.makeCube((0,1.1,0),(0,1,0,1))
         # self.makeSphere((0,3,0),(1,1,1,1))
@@ -127,10 +125,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Objects construction methods
     def makeFloor(self):
         """ docstring """
-        program = gloo.Program(self.vertexshader, self.fragmentshader)
         vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10],
                     [ 10, -0.1, 10], [10, -0.1, -10], [-10, -0.1, -10], [-10, -0.1, 10]]
-        program['position'] =  gloo.VertexBuffer(vertices)
         normals = []
         for index in range(len(vertices)):
             prev = vertices[index-1]
@@ -139,21 +135,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             diff1 = numpy.subtract(prev, curr)
             diff2 = numpy.subtract(next, curr)
             normals.append(numpy.cross(diff2, diff1))
-        program['normal'] = gloo.VertexBuffer(normals)
         I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
              1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
-        indices = gloo.IndexBuffer(I)
-        O = [0,1, 1,2, 2,3, 3,0,
-             4,7, 7,6, 6,5, 5,4,
-             0,5, 1,6, 2,7, 3,4 ]
-        outlines = gloo.IndexBuffer(O)
-        self.objects.append(SceneObject(program, 
-                                        (0,0,0),
-                                        (0.5,0.5,0.5,1),
-                                        indices,
-                                        outlines))
-        self.positions = vertices
-        self.indices = I
+        # O = [0,1, 1,2, 2,3, 3,0,
+        #      4,7, 7,6, 6,5, 5,4,
+        #      0,5, 1,6, 2,7, 3,4 ]
+
+        self.positions.extend(vertices)
+        self.indices.extend(I)
+        self.normals.extend(normals)
 # 
     def makeCube(self, position, color):
         """ docstring """
@@ -194,8 +184,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
             self.positions.extend(parser.getVertices().tolist())
             # should add maximum of previous list to item
-            # max_index = max(self.indices)+1
-            self.indices.extend([item for sublist in parser.getFaces().astype(numpy.uint16).tolist() for item in sublist])
+            max_index = max(self.indices)+1
+            self.indices.extend([item+max_index for sublist in parser.getFaces().astype(numpy.uint16).tolist() for item in sublist])
             self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
 
     # Called on each update/frame
