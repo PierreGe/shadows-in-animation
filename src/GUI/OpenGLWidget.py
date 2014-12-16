@@ -181,10 +181,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def loadObjects(self):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
-            position = obj[1]
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            self.positions.extend(parser.getVertices().tolist())
-            # should add maximum of previous list to item
+            # move to position
+            self.positions.extend([[p[i]+obj[1][i] for i in range(3)] for p in parser.getVertices().tolist()])
+            
+            # add index so mesh reference only their vertices
             max_index = max(self.indices)+1
             self.indices.extend([item+max_index for sublist in parser.getFaces().astype(numpy.uint16).tolist() for item in sublist])
             self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
