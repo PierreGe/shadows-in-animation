@@ -61,7 +61,7 @@ class Controller(object):
     def reload(self):
         """ """
         self._setStatusComputing()
-
+        
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
             algo = self._glWidget.getChosenAlgo()
@@ -69,6 +69,7 @@ class Controller(object):
             self._replaceRightWidget(self._glWidget)
         else:
             print("[WARNING] Unable to reload : no OpenGLWidget loaded!")
+            QtGui.QMessageBox.error(self, "Erreur", "Unable to reload this OpenGl")
 
         self._setStatusReady()
 

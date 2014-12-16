@@ -8,23 +8,12 @@ from Light import Light
 from Utils import *
 
 class ShadowMapAlgorithm:
-    def __init__(self, positions, indices, normals, camera, light):
+    def __init__(self):
         # assign members that never change
         self._program = gloo.Program("shaders/shadowmapalgo.vertexshader",
                                     "shaders/shadowmapalgo.fragmentshader")
         self._shadowMap = gloo.Program("shaders/shadowmap.vertexshader",
                                         "shaders/shadowmap.fragmentshader")
-        # assign members that change when changing scene
-        self.init(positions, indices, normals, camera, light)
-
-        # Shadow map
-        shape = 1024,1024
-        self._renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
-        self._fbo = gloo.FrameBuffer(self._renderTexture)
-
-        # matrices
-        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
-        self._shadow_projection = ortho(-20,20,-20,30,0,100)
 
     def init(self, positions, indices, normals, camera, light):
         """ Method that initialize the algorithm """
@@ -37,6 +26,15 @@ class ShadowMapAlgorithm:
         self._program['normal'] = self._normals
         self._shadowMap['position'] = self._positions
         self.active = True
+        
+        # Shadow map
+        shape = 1024,1024
+        self._renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+        self._fbo = gloo.FrameBuffer(self._renderTexture)
+
+        # matrices
+        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
+        self._shadow_projection = ortho(-20,20,-20,30,0,100)
 
     def update(self):
         """ Method to call on each OpenGL update """
