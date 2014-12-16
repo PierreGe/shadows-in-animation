@@ -101,7 +101,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         # create floor and load .obj objects
         self.objects = []
-        self.makeFloor()
+        # self.makeFloor()
         # examples : should be removed or used for empty scenes
         # self.makeCube((0,1.1,0),(0,1,0,1))
         # self.makeSphere((0,3,0),(1,1,1,1))
@@ -129,7 +129,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 gl_FragColor = vec4(gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z,gl_FragCoord.z);
             }
             """)
-        self.shadow_projection = ortho(-5,5,-5,5,-10,100)
+        self.shadow_projection = ortho(-20,20,-20,20,-10,100)
         self.shadowMap['u_projection'] = self.shadow_projection
 
         self.shadowMap['position'] = gloo.VertexBuffer(self.positions)
@@ -258,8 +258,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                                             indices))
             self.positions.extend(parser.getVertices().tolist())
             # should add maximum of previous list to item
-            max_index = max(self.indices)+1
-            self.indices.extend([item+max_index for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
+            # max_index = max(self.indices)+1
+            self.indices.extend([item for sublist in face.astype(numpy.uint16).tolist() for item in sublist])
 
     # Called on each update/frame
     def paintGL(self):
@@ -276,7 +276,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintObjects(self):
         # create shadow map
         with self.fbo:
-            shadow_view = self.lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+            shadow_view = self.lookAt((self._light.getPosition()), (0,0,0), (0,1,0))
             self.shadowMap['u_model'] = numpy.eye(4, dtype=numpy.float32)
             self.shadowMap['u_view'] = shadow_view
             self.shadowMap.draw('triangles', self.indices)
@@ -309,6 +309,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 if (obj.outline):
                     obj.program['u_color'] = (0,0,0,1)
                     obj.program.draw('lines', obj.outline)
+        GL.glViewport(0,0,256,256)
+        self.shadowMap.draw('triangles', self.indices)
+        GL.glViewport(0,0,1366,768)
 
     # Called when window is resized
     def resizeGL(self, width, height):
