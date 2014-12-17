@@ -3,6 +3,6 @@
   "description": "This scene is a tree",
   "algo-compatible": ["Aucune Ombre", "Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
-      ["assets/obj/tree-palmier/FR01e.obj",[0,0,0]]
+      ["assets/obj/tree-palmier/FR01b.obj",[0,0,0]]
   ]
 }
