@@ -27,7 +27,7 @@ class ShadowMapAlgorithm:
         self.active = True
         
         # Shadow map
-        shape = 1024,1024
+        shape = 768,1366
         self._renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
         self._fbo = gloo.FrameBuffer(self._renderTexture)
 
@@ -81,7 +81,7 @@ class ShadowMapAlgorithm:
             # draw shadowmap as minimap
             GL.glViewport(0,0,256,256)
             self._shadowMap.draw('triangles', self._indices)
-            GL.glViewport(0,0,1024,1024)
+            GL.glViewport(0,0,1366,768)
 
     def terminate(self):
         """ Method to stop algorithm """
