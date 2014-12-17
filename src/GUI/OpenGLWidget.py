@@ -3,16 +3,12 @@
 
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
-import vispy.gloo as gloo
-from vispy.util.transforms import *
 from vispy.geometry import *
 import numpy
 
 from ObjParser import ObjParser
 from Camera import Camera
-from Light import Light   
-from SceneObject import SceneObject 
-from Utils import * 
+from Light import Light
 from Algorithms import *  
 
 
@@ -115,19 +111,19 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.indices = []
         self.normals = []
 
-        self.makeFloor()
+        self.makePlane((0,0,0), 20, 20)
         # examples : should be removed or used for empty scenes
-        # self.makeCube((0,1.1,0),(0,1,0,1))
-        # self.makeSphere((0,3,0),(1,1,1,1))
+        # self.makeCube((0,1.1,0))
+        # self.makeSphere((0,3,0))
         self.loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
 
     # Objects construction methods
-    def makeFloor(self):
+    def makePlane(self, position, width, height):
         """ docstring """
-        vertices = [[ 10, 0, 10], [10, 0, -10], [-10, 0, -10], [-10,0, 10],
-                    [ 10, -0.1, 10], [10, -0.1, -10], [-10, -0.1, -10], [-10, -0.1, 10]]
+        vertices = [[ (width/2), 0, (height/2)], [(width/2), 0, -(height/2)], [-(width/2), 0, -(height/2)], [-(width/2),0, (height/2)],
+                    [ (width/2), -0.1, (height/2)], [(width/2), -0.1, -(height/2)], [-(width/2), -0.1, -(height/2)], [-(width/2), -0.1, (height/2)]]
         normals = []
         for index in range(len(vertices)):
             prev = vertices[index-1]
@@ -142,53 +138,46 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         #      4,7, 7,6, 6,5, 5,4,
         #      0,5, 1,6, 2,7, 3,4 ]
 
-        self.positions.extend(vertices)
-        self.indices.extend(I)
+        self.addPositions(vertices, position)
+        self.addIndices(I)
         self.normals.extend(normals)
 # 
-    def makeCube(self, position, color):
+    def makeCube(self, position):
         """ docstring """
         V, F, O = create_cube()
-        vertices = gloo.VertexBuffer(V)
-        indices = gloo.IndexBuffer(F)
-        outlines = gloo.IndexBuffer(O)
+        positions = [x[0] for x in V]
+        normals = [x[2] for x in V]
+        self.addPositions(positions, position)
+        self.addIndices(F.tolist())
+        self.normals.extend(normals)
 
-        program = gloo.Program(self.vertexshader, self.fragmentshader)
-        program.bind(vertices)
-        self.objects.append(SceneObject(program,
-                                        position,
-                                        color,
-                                        indices,
-                                        outlines))
-
-    def makeSphere(self, position, color):
+    def makeSphere(self, position):
         sphere = create_sphere(36,36)
-        V = sphere.vertices()
-        N = sphere.vertex_normals()
-        F = sphere.faces()
-        vertices = gloo.VertexBuffer(V)
-        normals = gloo.VertexBuffer(N)
-        indices = gloo.IndexBuffer(F)
-
-        program = gloo.Program(self.vertexshader, self.fragmentshader)
-        program['position'] = vertices
-        program['normal'] = normals
-        self.objects.append(SceneObject(program,
-                                        position,
-                                        color,
-                                        indices))
+        self.addPositions(sphere.vertices().tolist(), position)
+        self.addIndices(sphere.faces().tolist())
+        self.normals.extend(sphere.vertex_normals().tolist())
 
     def loadObjects(self):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            # move to position
-            self.positions.extend([[p[i]+obj[1][i] for i in range(3)] for p in parser.getVertices().tolist()])
-            
-            # add index so mesh reference only their vertices
-            max_index = max(self.indices)+1
-            self.indices.extend([item+max_index for sublist in parser.getFaces().astype(numpy.uint16).tolist() for item in sublist])
+            self.addPositions(parser.getVertices().tolist(), obj[1])
+            self.addIndices(parser.getFaces().astype(numpy.uint16).tolist())
             self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
+
+    def addPositions(self, vertices, position):
+        self.positions.extend([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
+
+    # add index so mesh reference only their vertices
+    def addIndices(self, indices):
+        if (len(self.indices) > 0):
+            max_index = max(self.indices)+1
+        else:
+            max_index = 0
+        try:
+            self.indices.extend([item+max_index for sublist in indices for item in sublist])
+        except:
+            self.indices.extend([item+max_index for item in indices])
 
     # Called on each update/frame
     def paintGL(self):
