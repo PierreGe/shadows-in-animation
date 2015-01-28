@@ -32,13 +32,8 @@ class ShadowMapAlgorithm:
         self._fbo = gloo.FrameBuffer(self._renderTexture)
 
         # matrices
-        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
-        self._shadow_projection = ortho(self._light._xInterval[0]-20,
-                                        self._light._xInterval[1]+20,
-                                        self._light._yInterval[0]-20,
-                                        self._light._yInterval[1]+20,
-                                        self._light._zInterval[0]-20,
-                                        self._light._zInterval[1]+50)
+        self._projection = perspective(60, 16.0/9.0, 0.1, 100)
+        self._shadow_projection = ortho(-20, +20, -20, +20, -20, +50)
 
     def update(self):
         """ Method to call on each OpenGL update """
