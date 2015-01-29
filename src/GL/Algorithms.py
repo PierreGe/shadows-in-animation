@@ -33,7 +33,7 @@ class ShadowMapAlgorithm:
 
         # matrices
         self._projection = perspective(60, 16.0/9.0, 0.1, 20)
-        self._shadow_projection = ortho(-5, +5, -5, +5, 20, 50)
+        self._shadow_projection = ortho(-4, +4, -2.25, +2.25, 30, 50)
 
     def update(self):
         """ Method to call on each OpenGL update """
@@ -47,7 +47,7 @@ class ShadowMapAlgorithm:
             rotate(model, self._camera.getZ(), 0, 0, 1)
             # create shadow map matrices
             shadow_model = numpy.eye(4, dtype=numpy.float32)
-            shadow_view = lookAt(self._light.getPosition(), (0,0,0), (0,1,0))
+            shadow_view = lookAt(self._light.getPosition(), (0,2,0), (0,1,0))
             # create shadow map
             with self._fbo:
                 self._shadowMap['u_projection'] = self._shadow_projection
