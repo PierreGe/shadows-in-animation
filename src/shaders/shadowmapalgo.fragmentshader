@@ -6,15 +6,15 @@ varying vec4 v_shadow_coord;
 
 void main()
 {
-	float bias = 0.001;
+	float bias = 0.002;
     float visibility = 1.0;
-    if ( texture2D( u_shadow_map, v_shadow_coord.xy ).y  <  (v_shadow_coord.z - bias)){
+    if ( texture2D( u_shadow_map, v_shadow_coord.xy ).z  <  (v_shadow_coord.z-bias)){
         visibility = 0.5;
     }
 
     // float visibility = texture2D( u_shadow_map, v_shadow_coord.xy).x;
-    
+    // 
     gl_FragColor = v_color * visibility * vec4(u_light_intensity, 1);
-    // gl_FragColor = vec4(texture2D( u_shadow_map, v_shadow_coord.xy ).z,texture2D( u_shadow_map, v_shadow_coord.xy ).z,texture2D( u_shadow_map, v_shadow_coord.xy ).z,texture2D( u_shadow_map, v_shadow_coord.xy ).z);
+    // gl_FragColor = vec4(visibility, visibility, visibility, visibility);
     // gl_FragColor = vec4(v_shadow_coord.z,v_shadow_coord.z,v_shadow_coord.z,v_shadow_coord.z);
 }

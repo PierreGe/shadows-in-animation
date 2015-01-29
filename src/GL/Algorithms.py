@@ -32,8 +32,8 @@ class ShadowMapAlgorithm:
         self._fbo = gloo.FrameBuffer(self._renderTexture)
 
         # matrices
-        self._projection = perspective(60, 16.0/9.0, 0.1, 100)
-        self._shadow_projection = ortho(-20, +20, -20, +20, -20, +50)
+        self._projection = perspective(60, 16.0/9.0, 0.1, 20)
+        self._shadow_projection = ortho(-5, +5, -5, +5, 20, 50)
 
     def update(self):
         """ Method to call on each OpenGL update """
@@ -60,7 +60,7 @@ class ShadowMapAlgorithm:
                                     [0.0, 0.5, 0.0, 0.0],
                                     [0.0, 0.0, 0.5, 0.0],
                                     [0.5, 0.5, 0.5, 1.0]])
-            normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
+            # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             self._program['u_model'] = model
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
@@ -74,7 +74,7 @@ class ShadowMapAlgorithm:
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap
-            GL.glViewport(0,0,256,256)
+            GL.glViewport(0,0,456,256)
             self._shadowMap.draw('triangles', self._indices)
             GL.glViewport(0,0,1366,768)
 
