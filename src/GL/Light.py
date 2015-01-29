@@ -4,7 +4,7 @@ class Light(object):
     """docstring for Light"""
     def __init__(self):
         self._xInterval = [-20,20]
-        self._yInterval = [0,30]
+        self._yInterval = [2,30]
         self._zInterval = [-20,20]
         xInit = (self._xInterval[1])
         yInit = (self._yInterval[1])
