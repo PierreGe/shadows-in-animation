@@ -111,16 +111,28 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.indices = []
         self.normals = []
 
-        self.makePlane((0,0,0), 20, 20)
+        self._makePlane((0,0,0), 20, 20)
         # examples : should be removed or used for empty scenes
-        # self.makeCube((0,1.1,0))
-        # self.makeSphere((0,3,0))
-        self.loadObjects()
+        # self._makeCube((0,1.1,0))
+        # self._makeSphere((0,3,0))
+        self._loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
 
+    # Called on each update/frame
+    def paintGL(self):
+        """ docstring """
+        gloo.clear(color=True, depth=True)
+        self._chosenAlgo.update()
+
+    # Called when window is resized
+    def resizeGL(self, width, height):
+        """ docstring """
+        # set openGL in the center of the widget
+        GL.glViewport(0, 0, width, height)
+
     # Objects construction methods
-    def makePlane(self, position, width, height):
+    def _makePlane(self, position, width, height):
         """ docstring """
         vertices = [[ (width/2), 0, (height/2)], [(width/2), 0, -(height/2)], [-(width/2), 0, -(height/2)], [-(width/2),0, (height/2)],
                     [ (width/2), -0.1, (height/2)], [(width/2), -0.1, -(height/2)], [-(width/2), -0.1, -(height/2)], [-(width/2), -0.1, (height/2)]]
@@ -138,38 +150,38 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         #      4,7, 7,6, 6,5, 5,4,
         #      0,5, 1,6, 2,7, 3,4 ]
 
-        self.addPositions(vertices, position)
-        self.addIndices(I)
+        self._addPositions(vertices, position)
+        self._addIndices(I)
         self.normals.extend(normals)
 # 
-    def makeCube(self, position):
+    def _makeCube(self, position):
         """ docstring """
         V, F, O = create_cube()
         positions = [x[0] for x in V]
         normals = [x[2] for x in V]
-        self.addPositions(positions, position)
-        self.addIndices(F.tolist())
+        self._addPositions(positions, position)
+        self._addIndices(F.tolist())
         self.normals.extend(normals)
 
-    def makeSphere(self, position):
+    def _makeSphere(self, position):
         sphere = create_sphere(36,36)
-        self.addPositions(sphere.vertices().tolist(), position)
-        self.addIndices(sphere.faces().tolist())
+        self._addPositions(sphere.vertices().tolist(), position)
+        self._addIndices(sphere.faces().tolist())
         self.normals.extend(sphere.vertex_normals().tolist())
 
-    def loadObjects(self):
+    def _loadObjects(self):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            self.addPositions(parser.getVertices().tolist(), obj[1])
-            self.addIndices(parser.getFaces().astype(numpy.uint16).tolist())
+            self._addPositions(parser.getVertices().tolist(), obj[1])
+            self._addIndices(parser.getFaces().astype(numpy.uint16).tolist())
             self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
 
-    def addPositions(self, vertices, position):
+    def _addPositions(self, vertices, position):
         self.positions.extend([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
 
     # add index so mesh reference only their vertices
-    def addIndices(self, indices):
+    def _addIndices(self, indices):
         if (len(self.indices) > 0):
             max_index = max(self.indices)+1
         else:
@@ -179,16 +191,5 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         except:
             self.indices.extend([item+max_index for item in indices])
 
-    # Called on each update/frame
-    def paintGL(self):
-        """ docstring """
-        gloo.clear(color=True, depth=True)
-        self._chosenAlgo.update()
-
-    # Called when window is resized
-    def resizeGL(self, width, height):
-        """ docstring """
-        # set openGL in the center of the widget
-        GL.glViewport(0, 0, width, height)
  
  
