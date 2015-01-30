@@ -23,6 +23,7 @@ class ShadowMapAlgorithm:
         self._camera = camera
         self._light = light
         self._program['position'] = self._positions
+        self._program['normal'] = self._normals
         self._shadowMap['position'] = self._positions
         self.active = True
         
@@ -33,7 +34,7 @@ class ShadowMapAlgorithm:
 
         # matrices
         self._projection = perspective(60, 16.0/9.0, 0.1, 20)
-        self._shadow_projection = ortho(-4, +4, -2.25, +2.25, 30, 50)
+        self._shadow_projection = ortho(-5, +5, -5, +5, 10, 50)
 
     def update(self):
         """ Method to call on each OpenGL update """
@@ -71,6 +72,7 @@ class ShadowMapAlgorithm:
             self._program['u_shadow_map'] = self._renderTexture
             self._program['u_color'] = (0.5, 0.5, 0.8, 1) # TODO remove hardcoded value
             self._program['u_light_intensity'] = self._light.getIntensity()
+            self._program['u_light_position'] = self._light.getPosition()
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap

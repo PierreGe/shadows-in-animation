@@ -3,12 +3,27 @@ uniform sampler2D u_shadow_map;
 
 varying vec4 v_color;
 varying vec4 v_shadow_coord;
+varying vec3 v_position_worldspace;
+varying vec3 v_eyedirection_cameraspace;
+varying vec3 v_lightdirection_cameraspace;
+varying vec3 v_normal_cameraspace;
 
 void main()
 {
-	float bias = 0.01;
+	// Normal of the computed fragment, in camera space
+	vec3 n = normalize( v_normal_cameraspace );
+	// Direction of the light (from the fragment to the light)
+	vec3 l = normalize( v_lightdirection_cameraspace );
+	// Cosine of the angle between the normal and the light direction, 
+	// clamped above 0
+	//  - light is at the vertical of the triangle -> 1
+	//  - light is perpendiular to the triangle -> 0
+	//  - light is behind the triangle -> 0
+	float cosTheta = clamp( dot( n,l ), 0,1 );
+	float bias = 0.005*tan(acos(cosTheta));
+	// bias = clamp(bias, 0,0.01);
     float visibility = 1.0;
-    if ( texture2D( u_shadow_map, v_shadow_coord.xy ).z  <  (v_shadow_coord.z)){
+    if ( texture2D( u_shadow_map, v_shadow_coord.xy ).z  <  (v_shadow_coord.z-bias)){
         visibility = 0.5;
     }
 

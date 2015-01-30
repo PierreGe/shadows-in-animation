@@ -6,15 +6,35 @@ uniform mat4 u_depth_view;
 uniform mat4 u_depth_projection;
 uniform mat4 u_bias_matrix;
 uniform vec4 u_color;
+uniform vec3 u_light_position;
 
 attribute vec3 position;
+attribute vec3 normal;
 
 varying vec4 v_color;
 varying vec4 v_shadow_coord;
+varying vec3 v_position_worldspace;
+varying vec3 v_eyedirection_cameraspace;
+varying vec3 v_lightdirection_cameraspace;
+varying vec3 v_normal_cameraspace;
 
 void main()
 {
     gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
     v_shadow_coord = u_bias_matrix * u_depth_projection * u_depth_view * u_depth_model * vec4(position, 1.0);
     v_color = u_color;
+
+	// Position of the vertex, in worldspace : M * position
+	v_position_worldspace = (u_model * vec4(position,1)).xyz;
+	
+	// Vector that goes from the vertex to the camera, in camera space.
+	// In camera space, the camera is at the origin (0,0,0).
+	v_eyedirection_cameraspace = vec3(0,0,0) - ( u_view * u_model * vec4(position,1)).xyz;
+
+	// Vector that goes from the vertex to the light, in camera space
+	v_lightdirection_cameraspace = (u_view*u_model*vec4(u_light_position,1)).xyz - (u_view * u_model * vec4(position,1)).xyz;
+	
+	// Normal of the the vertex, in camera space
+	v_normal_cameraspace = ( u_view * u_model * vec4(normal,0)).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
+	
 }
