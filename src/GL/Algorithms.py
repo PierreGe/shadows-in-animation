@@ -83,9 +83,9 @@ class ShadowMapAlgorithm:
     def terminate(self):
         """ Method to stop algorithm """
         self.active = False
-        self._positions = None
-        self._indices = None
-        self._normals = None
+        self._positions = []
+        self._indices = []
+        self._normals = []
         self._camera = None
         self._light = None
 
