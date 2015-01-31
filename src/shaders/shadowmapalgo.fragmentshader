@@ -41,17 +41,18 @@ void main()
 	//  - light is perpendiular to the triangle -> 0
 	//  - light is behind the triangle -> 0
 	float cosTheta = clamp( dot( n,l ), 0,1 );
-	float bias = 0.009*tan(acos(cosTheta));
+	float bias = 0.01*tan(acos(cosTheta));
 	// bias = clamp(bias, 0,0.01);
     float visibility = 1.0;
     float aliasing_level = 4.0;
     float shadow_precision = 1.0/(aliasing_level+1.0);
-    float spreading = 100.0;
+    float spreading = 700.0;
 
     for (int i = 0; i < aliasing_level; ++i)
     {
-	       visibility -= shadow_precision*abs(texture2D( u_shadow_map, v_shadow_coord.xy).z  -  (v_shadow_coord.z-bias));
+	    if ( texture2D( u_shadow_map, v_shadow_coord.xy).z  <=  (v_shadow_coord.z-bias)){
+	        visibility -= shadow_precision;
+	    }
     }
-
     gl_FragColor = v_color * visibility * vec4(u_light_intensity, 1);
 }

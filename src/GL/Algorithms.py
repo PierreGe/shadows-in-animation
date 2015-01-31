@@ -57,10 +57,10 @@ class ShadowMapAlgorithm:
                 self._shadowMap.draw('triangles', self._indices)
 
             # draw scene
-            biasMatrix = numpy.matrix([[0.5, 0.0, 0.0, 0.0],
-                                    [0.0, 0.5, 0.0, 0.0],
-                                    [0.0, 0.0, 0.5, 0.0],
-                                    [0.5, 0.5, 0.5, 1.0]])
+            biasMatrix = numpy.matrix( [[0.5, 0.0, 0.0, 0.0],
+                                        [0.0, 0.5, 0.0, 0.0],
+                                        [0.0, 0.0, 0.5, 0.0],
+                                        [0.5, 0.5, 0.5, 1.0]])
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             self._program['u_model'] = model
             self._program['u_view'] = view
@@ -76,16 +76,16 @@ class ShadowMapAlgorithm:
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap
-            GL.glViewport(0,0,456,256)
+            GL.glViewport(0,0,455,256)
             self._shadowMap.draw('triangles', self._indices)
             GL.glViewport(0,0,1366,768)
 
     def terminate(self):
         """ Method to stop algorithm """
         self.active = False
-        self._positions = []
-        self._indices = []
-        self._normals = []
+        self._positions = None
+        self._indices = None
+        self._normals = None
         self._camera = None
         self._light = None
 
