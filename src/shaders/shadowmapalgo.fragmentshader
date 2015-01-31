@@ -41,18 +41,30 @@ void main()
 	//  - light is perpendiular to the triangle -> 0
 	//  - light is behind the triangle -> 0
 	float cosTheta = clamp( dot( n,l ), 0,1 );
-	float bias = 0.01*tan(acos(cosTheta));
+	float bias = 0.005*tan(acos(cosTheta));
 	// bias = clamp(bias, 0,0.01);
     float visibility = 1.0;
-    float aliasing_level = 4.0;
-    float shadow_precision = 1.0/(aliasing_level+1.0);
+    float antialiasing_level = 4.0;
+    float shadow_precision = 1.0/(antialiasing_level+1.0);
     float spreading = 700.0;
 
-    for (int i = 0; i < aliasing_level; ++i)
+    for (int i = 0; i < antialiasing_level; ++i)
     {
-	    if ( texture2D( u_shadow_map, v_shadow_coord.xy).z  <=  (v_shadow_coord.z-bias)){
+	    if ( texture2D( u_shadow_map, v_shadow_coord.xy + poissonDisk[i]/spreading).z  <=  (v_shadow_coord.z-bias)){
 	        visibility -= shadow_precision;
 	    }
     }
-    gl_FragColor = v_color * visibility * vec4(u_light_intensity, 1);
+	
+	// Eye vector (towards the camera)
+	vec3 E = normalize(v_normal_cameraspace);
+	// Direction in which the triangle reflects the light
+	vec3 R = reflect(-l,n);
+	// Cosine of the angle between the Eye vector and the Reflect vector,
+	// clamped to 0
+	//  - Looking into the reflection -> 1
+	//  - Looking elsewhere -> < 1
+	float cosAlpha = clamp( dot( E,R ), 0,1 );
+
+    gl_FragColor = v_color * visibility * cosTheta * vec4(u_light_intensity, 1) + 
+    v_color * visibility * pow(cosAlpha, 5) * vec4(u_light_intensity, 1);
 }
