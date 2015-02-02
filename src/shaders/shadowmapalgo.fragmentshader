@@ -61,7 +61,7 @@ void main()
     {
 	    if ( texture2D( u_shadow_map, v_shadow_coord.xy + poissonDisk[i]/spreading).z  <  (v_shadow_coord.z-bias)){
 	        visibility -= shadow_precision;
-	   0 }
+	    }
     }
 
     gl_FragColor = visibility * v_color * cosTheta * vec4(u_light_intensity, 1) + 
