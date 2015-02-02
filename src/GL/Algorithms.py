@@ -33,7 +33,7 @@ class ShadowMapAlgorithm:
         self._fbo = gloo.FrameBuffer(self._renderTexture)
 
         # matrices
-        self._projection = perspective(60, 16.0/9.0, 0.1, 20)
+        self._projection = perspective(60, 16.0/9.0, 0.1, 50)
         self._shadow_projection = ortho(-5, +5, -5, +5, 10, 50)
 
     def update(self):
