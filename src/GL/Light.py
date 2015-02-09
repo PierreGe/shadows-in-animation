@@ -2,6 +2,7 @@ from OpenGL.GL import *
 
 class Light(object):
     """docstring for Light"""
+    
     def __init__(self):
         self._xInterval = [-20,20]
         self._yInterval = [2,30]
@@ -11,6 +12,8 @@ class Light(object):
         zInit = (self._zInterval[1])
         self.setPosition([xInit, yInit, zInit])
         self._intensity = [1,1,1]
+        self._color = ""
+        self._type = ""
 
     def resetLight(self):
         """ """

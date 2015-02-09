@@ -9,6 +9,8 @@ from PyQt4 import QtGui, QtCore
 import SplitPane
 import Controller
 
+import LightPanel
+
 
 class MainWindow(QtGui.QMainWindow):
     """ This class is the GUI's main class """
@@ -76,21 +78,35 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         self._controller.reload()
 
+    def addALight(self):
+        """ """
+        LightPanel.LightPanel()
+
+
     def initToolsBar(self):
         """ This method will initate the toolsBar"""
         toolbar = self.addToolBar("Tool Bar")
 
+        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/application-exit.png"), "Exit", self)
+        exitAction.setShortcut("Ctrl+Q")
+        exitAction.setStatusTip("Quitter l'application")
+        exitAction.triggered.connect(self.close)
+        toolbar.addAction(exitAction)
+
         reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)
         reloadAction.setShortcut("Ctrl+R")
-        reloadAction.setStatusTip("Reload application")
+        reloadAction.setStatusTip("Recharge l'application")
         reloadAction.triggered.connect(self.reloadOpenGl)
         toolbar.addAction(reloadAction)
 
-        exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/application-exit.png"), "Exit", self)
-        exitAction.setShortcut("Ctrl+Q")
-        exitAction.setStatusTip("Exit application")
-        exitAction.triggered.connect(self.close)
-        toolbar.addAction(exitAction)
+        toolbar.addSeparator()
+
+        reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBuble.png"), "Light", self)
+        reloadAction.setShortcut("Ctrl+L")
+        reloadAction.setStatusTip("Ajoute une lampe")
+        reloadAction.triggered.connect(self.addALight)
+        toolbar.addAction(reloadAction)
+
 
         toolbar.addSeparator()
 
