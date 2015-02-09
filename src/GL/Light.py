@@ -11,8 +11,7 @@ class Light(object):
         yInit = (self._yInterval[1])
         zInit = (self._zInterval[1])
         self.setPosition([xInit, yInit, zInit])
-        self._intensity = [1,1,1]
-        self._color = ""
+        self._color = [1,1,1]
         self._type = ""
 
     def resetLight(self):
@@ -24,7 +23,7 @@ class Light(object):
 
     def getIntensity(self):
         """ """
-        return self._intensity
+        return self._color
 
     def setPosition(self, position):
         "light with a custom position"
@@ -33,7 +32,7 @@ class Light(object):
 
     def setIntensity(self, intensity):
         """ """
-        self._intensity = intensity
+        self._color = intensity
 
 
     def setLightsRatio(self,positionPercent):

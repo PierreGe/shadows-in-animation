@@ -11,6 +11,7 @@ from os.path import isfile, join
 
 import HelpWidget
 import OpenGLWidget
+import LightCollection
 
 class Controller(object):
     """Controller will controll :

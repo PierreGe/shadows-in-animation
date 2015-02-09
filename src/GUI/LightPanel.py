@@ -15,8 +15,12 @@ COLOR_POSSIBILITY = ["Blanc", "Rouge", "Jaune", "Bleu"]
 
 class LightPanel(QtGui.QWidget):
 
-    def __init__(self, parent=None):
-        super(LightPanel, self).__init__(parent)
+    def __init__(self):
+        QtGui.QWidget.__init__(self)
+        self.initGui()
+
+    def initGui(self):
+        """ """
         self.resize(640,480)
         self.layout = QtGui.QVBoxLayout(self)
         self.setWindowTitle("Ajouter une lampe")
@@ -116,7 +120,9 @@ class LightPanel(QtGui.QWidget):
 
         btn = QtGui.QPushButton("Ajouter!", self)
         btn.clicked.connect(self.buttonClicked)
-        self.layout.addWidget(btn)      
+        self.layout.addWidget(btn) 
+
+        self.show()    
 
     def onTypeSelection(self, text):
         self._choiceType = text
@@ -156,7 +162,7 @@ class LightPanel(QtGui.QWidget):
 
 if __name__ == "__main__":
     app = QtGui.QApplication([])
-    w = AddLightPanel()
+    w = LightPanel()
     w.show()
-    w.raise_()
+    #w.raise_()
     app.exec_()

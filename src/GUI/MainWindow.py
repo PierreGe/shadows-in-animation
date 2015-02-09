@@ -10,6 +10,7 @@ import SplitPane
 import Controller
 
 import LightPanel
+import HelpWidget
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -80,7 +81,8 @@ class MainWindow(QtGui.QMainWindow):
 
     def addALight(self):
         """ """
-        LightPanel.LightPanel()
+        self.l = LightPanel.LightPanel()
+        l = LightPanel.LightPanel()
 
 
     def initToolsBar(self):
