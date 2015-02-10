@@ -1,18 +1,29 @@
 from OpenGL.GL import *
 
+
+## ---- ###
+LIGHT_POSSIBILITY = ["Point", "Directionnel", "Spot", "Ligne", "Rond"]
+LIGHT_WITH_DIRECTION = ["Directionnel","Ligne","Spot"]
+COLOR_POSSIBILITY = ["Blanc", "Rouge", "Jaune", "Bleu"]
+
+
+
 class Light(object):
     """docstring for Light"""
     
     def __init__(self):
+        # interval pour eviter d'envoyer la lampe au perou
         self._xInterval = [-20,20]
         self._yInterval = [2,30]
         self._zInterval = [-20,20]
+
         xInit = (self._xInterval[1])
         yInit = (self._yInterval[1])
         zInit = (self._zInterval[1])
+
         self.setPosition([xInit, yInit, zInit])
         self._color = [1,1,1]
-        self._type = ""
+        self._type = "Point"
 
     def resetLight(self):
         """ """
@@ -33,6 +44,14 @@ class Light(object):
     def setIntensity(self, intensity):
         """ """
         self._color = intensity
+
+    def getColor(self):
+        """ """
+        return self._color
+
+    def setColor(self, color):
+        """ """
+        self._color = color
 
 
     def setLightsRatio(self,positionPercent):

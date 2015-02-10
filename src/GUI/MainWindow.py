@@ -81,8 +81,16 @@ class MainWindow(QtGui.QMainWindow):
 
     def addALight(self):
         """ """
-        self.l = LightPanel.LightPanel()
-        l = LightPanel.LightPanel()
+        self.l = LightPanel.AddLightPanel(self._controller)
+
+    def removeALight(self):
+        """ """
+        self.l = LightPanel.LightPanel(self._controller)
+
+
+    def animate(self):
+        """ """
+        #self.l = LightPanel.LightPanel(self._controller)
 
 
     def initToolsBar(self):
@@ -103,49 +111,63 @@ class MainWindow(QtGui.QMainWindow):
 
         toolbar.addSeparator()
 
-        reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBuble.png"), "Light", self)
-        reloadAction.setShortcut("Ctrl+L")
-        reloadAction.setStatusTip("Ajoute une lampe")
-        reloadAction.triggered.connect(self.addALight)
-        toolbar.addAction(reloadAction)
+        addLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBublePlus.png"), "Light+", self)
+        addLightAction.setShortcut("Ctrl+L")
+        addLightAction.setStatusTip("Ajouter une lampe")
+        addLightAction.triggered.connect(self.addALight)
+        toolbar.addAction(addLightAction)
+
+
+        removeLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBubleMinus.png"), "Light-", self)
+        #removeLightAction.setShortcut("Ctrl+L")
+        removeLightAction.setStatusTip("Retirer une lampe")
+        removeLightAction.triggered.connect(self.removeALight)
+        toolbar.addAction(removeLightAction)
 
 
         toolbar.addSeparator()
 
-        textWidget = QtGui.QLabel(self)
-        textWidget.setText("Position lumière :  X ".decode("utf8"))
-        toolbar.addWidget(textWidget)
+
+        animationAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator.png"), "Animation", self)
+        animationAction.setShortcut("Ctrl+A")
+        animationAction.setStatusTip("Animation")
+        animationAction.triggered.connect(self.addALight)
+        toolbar.addAction(animationAction)
+
+        # textWidget = QtGui.QLabel(self)
+        # textWidget.setText("Position lumière :  X ".decode("utf8"))
+        # toolbar.addWidget(textWidget)
 
 
-        sliderX = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        sliderX.valueChanged.connect(self._controller.lightPercentX)
-        sliderX.setSliderPosition(99)
-        toolbar.addWidget(sliderX)
+        # sliderX = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        # sliderX.valueChanged.connect(self._controller.lightPercentX)
+        # sliderX.setSliderPosition(99)
+        # toolbar.addWidget(sliderX)
 
 
-        textWidget = QtGui.QLabel(self)
-        textWidget.setText("  Z ")
-        toolbar.addWidget(textWidget)
+        # textWidget = QtGui.QLabel(self)
+        # textWidget.setText("  Z ")
+        # toolbar.addWidget(textWidget)
 
-        sliderZ = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        sliderZ.valueChanged.connect(self._controller.lightPercentZ)
-        sliderZ.setSliderPosition(99)
-        toolbar.addWidget(sliderZ)
+        # sliderZ = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        # sliderZ.valueChanged.connect(self._controller.lightPercentZ)
+        # sliderZ.setSliderPosition(99)
+        # toolbar.addWidget(sliderZ)
 
 
-        textWidget = QtGui.QLabel(self)
-        textWidget.setText("  Hauteur ")
-        toolbar.addWidget(textWidget)
+        # textWidget = QtGui.QLabel(self)
+        # textWidget.setText("  Hauteur ")
+        # toolbar.addWidget(textWidget)
 
-        sliderY = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        sliderY.valueChanged.connect(self._controller.lightPercentY)
-        sliderY.setSliderPosition(99)
-        toolbar.addWidget(sliderY)
+        # sliderY = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        # sliderY.valueChanged.connect(self._controller.lightPercentY)
+        # sliderY.setSliderPosition(99)
+        # toolbar.addWidget(sliderY)
 
-        # un espace blanc
-        textWidget = QtGui.QLabel(self)
-        textWidget.setText(" "* 100)
-        toolbar.addWidget(textWidget)
+        # # un espace blanc
+        # textWidget = QtGui.QLabel(self)
+        # textWidget.setText(" "* 100)
+        # toolbar.addWidget(textWidget)
 
 
 

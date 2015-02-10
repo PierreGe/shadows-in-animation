@@ -7,16 +7,14 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import * 
 from PyQt4.QtCore import * 
 
-LIGHT_POSSIBILITY = ["Point", "Directionnel", "Spot", "Ligne", "Rond"]
-LIGHT_WITH_DIRECTION = ["Directionnel","Ligne","Spot"]
-
-COLOR_POSSIBILITY = ["Blanc", "Rouge", "Jaune", "Bleu"]
+import Light
 
 
-class LightPanel(QtGui.QWidget):
+class AddLightPanel(QtGui.QWidget):
 
-    def __init__(self):
+    def __init__(self, controller):
         QtGui.QWidget.__init__(self)
+        self._controller = controller
         self.initGui()
 
     def initGui(self):
@@ -27,9 +25,9 @@ class LightPanel(QtGui.QWidget):
 
         choiceLabel = QtGui.QLabel("Choississez un type de lampe :", self)
         self.layout.addWidget(choiceLabel)
-        self._choiceType = LIGHT_POSSIBILITY[0]
+        self._choiceType = Light.LIGHT_POSSIBILITY[0]
         combo = QtGui.QComboBox(self)
-        for possibility in LIGHT_POSSIBILITY:
+        for possibility in Light.LIGHT_POSSIBILITY:
             combo.addItem(possibility)
         combo.activated[str].connect(self.onTypeSelection)
         self.layout.addWidget(combo)
@@ -37,9 +35,9 @@ class LightPanel(QtGui.QWidget):
 
         choiceLabel = QtGui.QLabel("Choississez une couleur de lampe :", self)
         self.layout.addWidget(choiceLabel)
-        self._choiceType = COLOR_POSSIBILITY[0]
+        self._choiceColor = Light.COLOR_POSSIBILITY[0]
         combo = QtGui.QComboBox(self)
-        for possibility in COLOR_POSSIBILITY:
+        for possibility in Light.COLOR_POSSIBILITY:
             combo.addItem(possibility)
         combo.activated[str].connect(self.onColorSelection)
         self.layout.addWidget(combo)
@@ -54,7 +52,7 @@ class LightPanel(QtGui.QWidget):
         self.layout.addWidget(textWidget)
         sliderI = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         sliderI.valueChanged.connect(self.lightIntensityPercent)
-        sliderI.setSliderPosition(75)
+        sliderI.setSliderPosition(85)
         self.layout.addWidget(sliderI)
 
 
@@ -72,21 +70,21 @@ class LightPanel(QtGui.QWidget):
         self.layout.addWidget(textWidget)
         sliderX = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         sliderX.valueChanged.connect(self.lightPositionPercentX)
-        sliderX.setSliderPosition(99)
+        sliderX.setSliderPosition(90)
         self.layout.addWidget(sliderX)
         textWidget = QtGui.QLabel(self)
         textWidget.setText("Z".decode("utf8"))
         self.layout.addWidget(textWidget)
         sliderZ = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         sliderZ.valueChanged.connect(self.lightPositionPercentZ)
-        sliderZ.setSliderPosition(99)
+        sliderZ.setSliderPosition(70)
         self.layout.addWidget(sliderZ)
         textWidget = QtGui.QLabel(self)
         textWidget.setText("Hauteur".decode("utf8"))
         self.layout.addWidget(textWidget)
         sliderY = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         sliderY.valueChanged.connect(self.lightPositionPercentY)
-        sliderY.setSliderPosition(99)
+        sliderY.setSliderPosition(90)
         self.layout.addWidget(sliderY)
 
 
@@ -157,7 +155,30 @@ class LightPanel(QtGui.QWidget):
 
     def buttonClicked(self):
         """ """
-        print("Clicked!")
+        newLight = Light.Light()
+
+        intensity = self._lightIntensity/100
+        color = [1,1,1]
+        colorRed = [1,0,0]
+        colorYellow = [1,1,0]
+        colorBlue = [0,0,1]
+        if self._choiceColor == "Rouge":
+            color = colorRed
+        if self._choiceColor == "Jaune":
+            color = colorYellow
+        if self._choiceColor == "Bleu":
+            color = colorBlue
+        color[0] = color[0] * intensity
+        color[1] = color[1] * intensity
+        color[2] = color[2] * intensity
+
+        newLight.setColor(color)
+
+        # direction
+
+        self._controller.addLight(newLight)
+
+        self.hide()
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ from Algorithms import *
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
     """ docstring """
-    def __init__(self, objectNames, algo, controller,  parent=None):
+    def __init__(self, objectNames, algoName, controller,  parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
         self._controller = controller
@@ -23,7 +23,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             "Aucune Ombre": NoShadowAlgorithm()
         }
         self.setObjects(objectNames)
-        self.setAlgo(algo)
+        self.setAlgo(algoName)
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -33,13 +33,18 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ """
         return self._chosenAlgo
 
+    def getChosenAlgoName(self):
+        """ """
+        return self._chosenAlgoName
+
     def setObjects(self, objectNames):
         """ docstring """
         self._objectNames = objectNames
 
-    def setAlgo(self, algo):
-        if (algo in self._algorithms):
-            self._chosenAlgo = self._algorithms[algo]
+    def setAlgo(self, algoName):
+        if (algoName in self._algorithms):
+            self._chosenAlgo = self._algorithms[algoName]
+            self._chosenAlgoName = algoName
         else:
             QtGui.QMessageBox.warning(self, "Erreur", "Cet algo n'existe pas pour cette scene")
             self._controller.showHelp()

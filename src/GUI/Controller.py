@@ -23,6 +23,8 @@ class Controller(object):
         self._splitPane = None
         self._scene = {} # nom : obj-liste  (from assets/scene/)
         self._parseAllScene() #
+        self._lightCollection = LightCollection.LightCollection()
+
         self._lightPosition = [0,0,0]
         self._glWidget = None
         self._helpWidget = HelpWidget.HelpWidget()
@@ -65,7 +67,7 @@ class Controller(object):
         
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
-            algo = self._glWidget.getChosenAlgo()
+            algo = self._glWidget.getChosenAlgoName()
             self._glWidget = OpenGLWidget.OpenGLWidget(obj,algo,self)
             self._replaceRightWidget(self._glWidget)
         else:
@@ -73,6 +75,10 @@ class Controller(object):
             QtGui.QMessageBox.error(self, "Erreur", "Unable to reload this OpenGl")
 
         self._setStatusReady()
+
+    def addLight(self,light):
+        """ """
+        self._lightCollection.addLight(light)
 
     def getAllScene(self):
         """ get the scene dictionnary"""
