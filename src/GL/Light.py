@@ -1,5 +1,6 @@
 from OpenGL.GL import *
 
+import math
 
 ## ---- ###
 LIGHT_POSSIBILITY = ["Point", "Directionnel", "Spot", "Ligne", "Rond"]
@@ -41,7 +42,6 @@ class Light(object):
 
     def setPosition(self, position):
         "light with a custom position"
-        
         self._position = list(position)
 
     def setIntensity(self, intensity):
@@ -68,15 +68,17 @@ class Light(object):
         """ """
         return self._verticalAngle 
 
-
     def setHorizontalAngle(self,angle):
         """ """
         self._horizontalAngle = angle
 
-
     def getHorizontalAngle(self):
         """ """
         return self._horizontalAngle 
+
+    def getDirectionAsVec3f(self):
+        """ """
+        return (math.cos(self._horizontalAngle), math.sin(self._verticalAngle ), 1)
 
     def setLightsRatio(self,positionPercent):
         "light with a custom position"

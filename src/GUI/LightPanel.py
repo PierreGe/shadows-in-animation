@@ -173,6 +173,7 @@ class AddLightPanel(QtGui.QWidget):
         color[2] = color[2] * intensity
 
         newLight.setColor(color)
+        newLight.setLightsRatio(self._lightPosition)
 
         newLight.setVerticalAngle(int(self._lightDirection[1]*1.8))
         newLight.setHorizontalAngle(int(self._lightDirection[0]*3.6))
