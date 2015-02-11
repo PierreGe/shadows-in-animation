@@ -76,9 +76,17 @@ class Controller(object):
 
         self._setStatusReady()
 
-    def addLight(self,light):
+    def addLight(self, light):
         """ """
         self._lightCollection.addLight(light)
+
+    def deleteLight(self, light):
+        """ """
+        self._lightCollection.deleteLight(light)
+
+    def getLightCollection(self):
+        """ """
+        return self._lightCollection
 
     def getAllScene(self):
         """ get the scene dictionnary"""

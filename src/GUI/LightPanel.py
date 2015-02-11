@@ -181,9 +181,53 @@ class AddLightPanel(QtGui.QWidget):
         self.hide()
 
 
-if __name__ == "__main__":
-    app = QtGui.QApplication([])
-    w = LightPanel()
-    w.show()
-    #w.raise_()
-    app.exec_()
+
+
+
+
+
+
+
+
+class RemoveLightPanel(QtGui.QWidget):
+
+    def __init__(self, controller):
+        QtGui.QWidget.__init__(self)
+        self._controller = controller
+        self.initGui()
+
+    def initGui(self):
+        """ """
+        self.resize(300,150)
+        self.layout = QtGui.QVBoxLayout(self)
+        self.setWindowTitle("Supprimer une lampe")
+
+        lightCollection = self._controller.getLightCollection()
+        if len(lightCollection) > 0:
+            choiceLabel = QtGui.QLabel("Choississez un type de lampe :", self)
+            self.layout.addWidget(choiceLabel)
+            lightCollection = self._controller.getLightCollection()
+            self._choiceType = lightCollection[0]
+            combo = QtGui.QComboBox(self)
+            for lightIndex in range(len(lightCollection)):
+                string = str(lightIndex) + " " + lightCollection[lightIndex].getType() + " " +str(lightCollection[lightIndex].getColor())
+                combo.addItem(string)
+            combo.activated[str].connect(self.onTypeSelection)
+            self.layout.addWidget(combo)
+
+            btn = QtGui.QPushButton("Supprimer", self)
+            btn.clicked.connect(self.buttonClicked)
+            self.layout.addWidget(btn) 
+
+            self.show() 
+        else:
+            QtGui.QMessageBox.information(self, "Erreur", "Aucune lampe")   
+
+    def onTypeSelection(self, text):
+        self._choiceType = text
+
+    def buttonClicked(self):
+        """ """
+        self._controller.deleteLight(self._choiceType)
+
+        self.hide()

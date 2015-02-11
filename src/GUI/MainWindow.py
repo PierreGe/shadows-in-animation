@@ -85,12 +85,12 @@ class MainWindow(QtGui.QMainWindow):
 
     def removeALight(self):
         """ """
-        self.l = LightPanel.LightPanel(self._controller)
+        self.l = LightPanel.RemoveLightPanel(self._controller)
 
 
     def animate(self):
         """ """
-        #self.l = LightPanel.LightPanel(self._controller)
+        # create a animation
 
 
     def initToolsBar(self):
@@ -131,7 +131,7 @@ class MainWindow(QtGui.QMainWindow):
         animationAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator.png"), "Animation", self)
         animationAction.setShortcut("Ctrl+A")
         animationAction.setStatusTip("Animation")
-        animationAction.triggered.connect(self.addALight)
+        animationAction.triggered.connect(self.animate)
         toolbar.addAction(animationAction)
 
         # textWidget = QtGui.QLabel(self)

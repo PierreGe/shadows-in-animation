@@ -53,6 +53,10 @@ class Light(object):
         """ """
         self._color = color
 
+    def getType(self):
+        """ """
+        return self._type
+
 
     def setLightsRatio(self,positionPercent):
         "light with a custom position"
