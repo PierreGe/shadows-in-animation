@@ -157,7 +157,7 @@ class AddLightPanel(QtGui.QWidget):
         """ """
         newLight = Light.Light()
 
-        intensity = self._lightIntensity/100
+        intensity = float(self._lightIntensity) / 100
         color = [1,1,1]
         colorRed = [1,0,0]
         colorYellow = [1,1,0]
@@ -168,9 +168,12 @@ class AddLightPanel(QtGui.QWidget):
             color = colorYellow
         if self._choiceColor == "Bleu":
             color = colorBlue
+
         color[0] = color[0] * intensity
         color[1] = color[1] * intensity
         color[2] = color[2] * intensity
+        
+        newLight.setType(str(self._choiceType))
 
         newLight.setColor(color)
         newLight.setLightsRatio(self._lightPosition)
@@ -214,7 +217,23 @@ class RemoveLightPanel(QtGui.QWidget):
             self._choiceType = "0 Default"
             combo = QtGui.QComboBox(self)
             for lightIndex in range(len(lightCollection)):
-                string = str(lightIndex) + " " + lightCollection[lightIndex].getType() + " " +str(lightCollection[lightIndex].getColor())
+                string = str(lightIndex) + " " + lightCollection[lightIndex].getType()
+                string += " "
+                if lightCollection[lightIndex].getColor()[1] == 0 and lightCollection[lightIndex].getColor()[2] == 0:
+                    string += "Rouge"
+                elif lightCollection[lightIndex].getColor()[2] == 0 :
+                    string += "Jaune"
+                elif lightCollection[lightIndex].getColor()[0] == 0 and lightCollection[lightIndex].getColor()[1] == 0:
+                    string += "Bleu"
+                else :
+                    string += "Blanc"
+                string += " "
+                string += "X=" + str(lightCollection[lightIndex].getPosition()[0])
+                string += " "
+                string += "Z=" + str(lightCollection[lightIndex].getPosition()[1])
+                string += " "
+                string += "Hauteur=" + str(lightCollection[lightIndex].getPosition()[2])
+                
                 combo.addItem(string)
             combo.activated[str].connect(self.onTypeSelection)
             self.layout.addWidget(combo)
@@ -232,11 +251,8 @@ class RemoveLightPanel(QtGui.QWidget):
 
     def buttonClicked(self):
         """ """
-        print(self._choiceType)
-        print("----")
         index = str(self._choiceType).split()[0]
         index = int(index)
-        print("----")
         self._controller.deleteLight(index)
 
         self.hide()

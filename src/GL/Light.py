@@ -60,6 +60,10 @@ class Light(object):
         """ """
         return self._type
 
+    def setType(self, typed):
+        """ """
+        self._type = typed
+
     def setVerticalAngle(self,angle):
         """ """
         self._verticalAngle = angle
