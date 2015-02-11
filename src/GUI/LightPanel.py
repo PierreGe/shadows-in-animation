@@ -174,6 +174,9 @@ class AddLightPanel(QtGui.QWidget):
 
         newLight.setColor(color)
 
+        newLight.setVerticalAngle(int(self._lightDirection[1]*1.8))
+        newLight.setHorizontalAngle(int(self._lightDirection[0]*3.6))
+
         # direction
 
         self._controller.addLight(newLight)
@@ -207,7 +210,7 @@ class RemoveLightPanel(QtGui.QWidget):
             choiceLabel = QtGui.QLabel("Choississez un type de lampe :", self)
             self.layout.addWidget(choiceLabel)
             lightCollection = self._controller.getLightCollection()
-            self._choiceType = lightCollection[0]
+            self._choiceType = "0 Default"
             combo = QtGui.QComboBox(self)
             for lightIndex in range(len(lightCollection)):
                 string = str(lightIndex) + " " + lightCollection[lightIndex].getType() + " " +str(lightCollection[lightIndex].getColor())
@@ -228,6 +231,11 @@ class RemoveLightPanel(QtGui.QWidget):
 
     def buttonClicked(self):
         """ """
-        self._controller.deleteLight(self._choiceType)
+        print(self._choiceType)
+        print("----")
+        index = str(self._choiceType).split()[0]
+        index = int(index)
+        print("----")
+        self._controller.deleteLight(index)
 
         self.hide()

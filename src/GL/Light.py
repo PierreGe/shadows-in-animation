@@ -25,6 +25,9 @@ class Light(object):
         self._color = [1,1,1]
         self._type = "Point"
 
+        self._verticalAngle = 45  # 0 vers le bas, 180 vers le plafond
+        self._horizontalAngle = 0 # tourne sur lui meme
+
     def resetLight(self):
         """ """
         self.__init__()
@@ -57,6 +60,23 @@ class Light(object):
         """ """
         return self._type
 
+    def setVerticalAngle(self,angle):
+        """ """
+        self._verticalAngle = angle
+
+    def getVerticalAngle(self):
+        """ """
+        return self._verticalAngle 
+
+
+    def setHorizontalAngle(self,angle):
+        """ """
+        self._horizontalAngle = angle
+
+
+    def getHorizontalAngle(self):
+        """ """
+        return self._horizontalAngle 
 
     def setLightsRatio(self,positionPercent):
         "light with a custom position"

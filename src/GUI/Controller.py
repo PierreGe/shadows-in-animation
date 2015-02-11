@@ -80,9 +80,9 @@ class Controller(object):
         """ """
         self._lightCollection.addLight(light)
 
-    def deleteLight(self, light):
+    def deleteLight(self, lightIndex):
         """ """
-        self._lightCollection.deleteLight(light)
+        self._lightCollection.deleteLight(lightIndex)
 
     def getLightCollection(self):
         """ """

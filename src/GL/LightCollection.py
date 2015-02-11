@@ -17,9 +17,9 @@ class LightCollection(object):
         """ """
         return self.lightList
 
-    def deleteLight(self, light):
+    def deleteLight(self, lightIndex):
         """ """
-        self.lightList.remove(light)
+        del self.lightList[lightIndex]
 
     def  __getitem__(self,index):
         """ """
