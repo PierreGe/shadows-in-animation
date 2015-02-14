@@ -94,8 +94,6 @@ class RayTracingAlgorithm:
 
         self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
 
-        self.init(positions, indices, normals, camera, light)
-
     def init(self, positions, indices, normals, camera, light):
         self._positions = gloo.VertexBuffer(positions)
         self._indices = gloo.IndexBuffer(numpy.array(indices))

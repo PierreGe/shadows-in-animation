@@ -28,7 +28,7 @@ class AutoRotate(object):
             self.lock.acquire()
             alive = self._alive
             self.lock.release()
-            #updateGL
+            #updateGL()
 
 
     def start(self):

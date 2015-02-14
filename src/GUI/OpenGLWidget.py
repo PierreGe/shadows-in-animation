@@ -5,11 +5,13 @@ from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from vispy.geometry import *
 import numpy
+from threading import Thread, Lock
 
 from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light
 from Algorithms import *  
+import AutoRotate
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -24,6 +26,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         }
         self.setObjects(objectNames)
         self.setAlgo(algoName)
+        self._mutex = Lock()
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -101,6 +104,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called at startup
     def initializeGL(self):
         """ docstring """
+        self._mutex.acquire()
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
@@ -123,18 +127,25 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
+        self._rotation = AutoRotate.AutoRotate(self._camera)
+        self._rotation.start()
+        self._mutex.release()
 
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
+        self._mutex.acquire()
         gloo.clear(color=True, depth=True)
         self._chosenAlgo.update()
+        self._mutex.release()
 
     # Called when window is resized
     def resizeGL(self, width, height):
         """ docstring """
         # set openGL in the center of the widget
+        self._mutex.acquire()
         GL.glViewport(0, 0, width, height)
+        self._mutex.release()
 
     # Objects construction methods
     def _makePlane(self, position, width, height):
