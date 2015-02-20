@@ -13,17 +13,22 @@ def concatPositions(verticesList):
 
 # add index so mesh reference only their vertices
 def concatIndices(indicesList):
-    newIndices = []
-    for indices in indicesList:
-        if (len(newIndices) > 0):
-            max_index = max(newIndices)+1
-        else:
-            max_index = 0
+    def addIndices(newIndices, indices):
+        max_index = max(newIndices)+1 if len(newIndices) > 0 else 0
+        # curr = indices
+        # prev = None
+        # # reduce from n dimensions to 1
+        # while (type(curr) != int):
+        #     prev = curr
+        #     print (type(curr))
+        #     print type(prev)
+        #     curr = reduce(lambda x,y: x+y, prev)
         try:
             newIndices.extend([item+max_index for sublist in indices for item in sublist])
         except:
             newIndices.extend([item+max_index for item in indices])
-    return newIndices
+        return newIndices
+    return reduce(addIndices, indicesList, [])
 
 def concatNormals(normalsList):
     return reduce(add, normalsList, [])
