@@ -45,3 +45,10 @@ class AutoRotate(object):
         self.lock.acquire()
         self._alive = False
         self.lock.release()
+
+    def getAlive(self):
+        """ """
+        self.lock.acquire()
+        alive = self._alive
+        self.lock.release()
+        return alive

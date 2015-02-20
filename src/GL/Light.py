@@ -15,7 +15,7 @@ class Light(object):
     def __init__(self):
         # interval pour eviter d'envoyer la lampe au perou
         self._xInterval = [-20,20]
-        self._yInterval = [2,30]
+        self._yInterval = [2,15]
         self._zInterval = [-20,20]
 
         xInit = (self._xInterval[1])

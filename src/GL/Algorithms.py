@@ -7,6 +7,9 @@ from Camera import Camera
 from Light import Light
 from Utils import *
 
+
+DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
+
 class ShadowMapAlgorithm:
     def __init__(self):
         # assign members that never change
@@ -70,13 +73,13 @@ class ShadowMapAlgorithm:
             self._program['u_depth_view'] = shadow_view
             self._program['u_depth_projection'] = self._shadow_projection
             self._program['u_shadow_map'] = self._renderTexture
-            self._program['u_color'] = (0.5, 0.5, 0.8, 1) # TODO remove hardcoded value
+            self._program['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
             self._program['u_light_intensity'] = self._light.getIntensity()
             self._program['u_light_position'] = self._light.getPosition()
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap
-            GL.glViewport(0,0,455,256)
+            GL.glViewport(0,0,228,128)
             self._shadowMap.draw('triangles', self._indices)
             GL.glViewport(0,0,1366,768)
 
@@ -163,7 +166,7 @@ class NoShadowAlgorithm:
             self._program['u_model'] = model
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
-            self._program['u_color'] = (0.5, 0.5, 0.8, 1) 
+            self._program['u_color'] = DEFAULT_COLOR 
             self._program.draw('triangles', self._indices)
 
     def terminate(self):

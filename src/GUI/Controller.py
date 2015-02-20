@@ -139,3 +139,8 @@ class Controller(object):
     def _setStatusComputing(self):
         """ set the status bar to computing"""
         self._statusBar.showMessage("Computing ....")
+
+    def switchAnimation(self):
+        """ """
+        if self._glWidget:
+            self._glWidget.switchAnimation()

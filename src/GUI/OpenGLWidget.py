@@ -28,6 +28,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.setAlgo(algoName)
         self._mutex = Lock()
 
+        self.timer = QtCore.QTimer(self)
+        self.timer.setSingleShot(False)
+        self.timer.timeout.connect(self.timerUpdate)
+        fps = 24
+        self.timer.start(int(1000/fps))
+        self._rotation = None
+
+    def timerUpdate(self):
+        """ """
+        self.updateGL()
+
     def getObjectNames(self):
         """ Reload openGLWidget """
         return self._objectNames
@@ -129,7 +140,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
         self._rotation = AutoRotate.AutoRotate(self._camera)
-        self._rotation.start()
+
         self._mutex.release()
 
     # Called on each update/frame
@@ -207,6 +218,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self.indices.extend([item+max_index for sublist in indices for item in sublist])
         except:
             self.indices.extend([item+max_index for item in indices])
+
+    def switchAnimation(self):
+        """ """
+        if self._rotation:
+            if self._rotation.getAlive():
+                self._rotation.stop()
+            else:
+                self._rotation.start()
+
 
  
  
