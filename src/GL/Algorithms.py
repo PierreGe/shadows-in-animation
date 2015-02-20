@@ -2,10 +2,31 @@ from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *
 import numpy
+from operator import add
 
 from Camera import Camera
 from Light import Light
 from Utils import *
+
+def concatPositions(verticesList):
+    return reduce(add, verticesList, [])
+
+# add index so mesh reference only their vertices
+def concatIndices(indicesList):
+    newIndices = []
+    for indices in indicesList:
+        if (len(newIndices) > 0):
+            max_index = max(newIndices)+1
+        else:
+            max_index = 0
+        try:
+            newIndices.extend([item+max_index for sublist in indices for item in sublist])
+        except:
+            newIndices.extend([item+max_index for item in indices])
+    return newIndices
+
+def concatNormals(normalsList):
+    return reduce(add, normalsList, [])
 
 class ShadowMapAlgorithm:
     def __init__(self):
@@ -17,9 +38,9 @@ class ShadowMapAlgorithm:
 
     def init(self, positions, indices, normals, camera, light):
         """ Method that initialize the algorithm """
-        self._positions = gloo.VertexBuffer(positions)
-        self._indices = gloo.IndexBuffer(numpy.array(indices))
-        self._normals = gloo.VertexBuffer(normals)
+        self._positions = gloo.VertexBuffer(concatPositions(positions))
+        self._indices = gloo.IndexBuffer(numpy.array(concatIndices(indices)))
+        self._normals = gloo.VertexBuffer(concatNormals(normals))
         self._camera = camera
         self._light = light
         self._program['position'] = self._positions
@@ -133,9 +154,9 @@ class NoShadowAlgorithm:
         self._program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
 
     def init(self, positions, indices, normals, camera, light):
-        self._positions = gloo.VertexBuffer(positions)
-        self._indices = gloo.IndexBuffer(numpy.array(indices))
-        self._normals = gloo.VertexBuffer(normals)
+        self._positions = gloo.VertexBuffer(concatPositions(positions))
+        self._indices = gloo.IndexBuffer(numpy.array(concatIndices(indices)))
+        self._normals = gloo.VertexBuffer(concatNormals(normals))
         self._camera = camera
         self._light = light
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
@@ -190,6 +211,14 @@ class ShadowVolumeAlgorithm:
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
         self._program['normal'] = self._normals
         self._program['position'] = self._positions
+
+        # shape=(1366,768)
+        # self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
+        # self._depth_buffer = gloo.DepthBuffer(shape=(shape + (4,)))
+        # self._stencil_buffer = gloo.StencilBuffer(shape=(shape + (4,)))
+        # self._frame_buffer = gloo.FrameBuffer(self._color_buffer,
+                                                # self._depth_buffer,
+                                                # self._stencil_buffer)
         self.active = True
 
     def update(self):
@@ -209,8 +238,43 @@ class ShadowVolumeAlgorithm:
             self._program['u_model'] = model
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
-            self._program['u_color'] = (0.5, 0.5, 0.8) 
-            self._program.draw('triangles', self._indices)
+            self._program['u_color'] = (0.5, 0.5, 0.8)
+            # # shadow volumes creation
+            # # http://archive.gamedev.net/archive/reference/articles/article1990.html
+            # with self._frame_buffer:
+            #     # step 1 : render scene with lights turned off
+            #     self._color_buffer.activate()
+            #     self._depth_buffer.activate()
+            #     self._program['u_light_color'] = (0,0,0)
+            #     self._program.draw('triangles', self._indices)
+            #     self._program['u_light_color'] = self._light.getColor()
+            #     # step 2 : turn off color and depth buffers
+            #     self._color_buffer.deactivate()
+            #     self._depth_buffer.deactivate()
+            #     self._stencil_buffer.activate()
+            #     gloo.set_state(None, cull_face=True)
+            #     gloo.set_state(None, stencil_test=True)
+            #     # step 3 : draw front faces, depth test and stencil buffer increment
+            #     gloo.set_stencil_func('always', 0, 0)
+            #     gloo.set_stencil_op('keep', 'incr', 'keep')
+            #     gloo.set_cull_face('front')
+            #     self._program.draw('triangles', self._indices) # SHOULD DRAW SHADOW VOLUMES
+            #     # step 4 : draw back faces, depth test and stencil buffer decrement
+            #     gloo.set_stencil_op('keep', 'decr', 'keep')
+            #     gloo.set_cull_face('back')
+            #     self._program.draw('triangles', self._indices) # SHOULD DRAW SHADOW VOLUMES
+            # self._color_buffer.activate()
+            # self._depth_buffer.activate()
+            # # step 5 : turn on color and depth buffers
+            # gloo.set_depth_func('equal')
+            # gloo.set_state(None, stencil_test=True)
+            # gloo.set_stencil_func('equal', 0, 0)
+            # gloo.set_stencil_op('keep', 'keep', 'keep')
+            # # step 6 : draw scene with lights turned on where stencil buffer is 0
+
+
+            # # draw scene
+            # self._program.draw('triangles', self._indices)
 
     def terminate(self):
         self.active = False

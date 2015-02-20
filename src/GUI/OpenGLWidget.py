@@ -158,7 +158,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self._addPositions(vertices, position)
         self._addIndices(I)
-        self.normals.extend(normals)
+        self._addNormals(normals)
 # 
     def _makeCube(self, position):
         """ docstring """
@@ -167,13 +167,13 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         normals = [x[2] for x in V]
         self._addPositions(positions, position)
         self._addIndices(F.tolist())
-        self.normals.extend(normals)
+        self._addNormals(normals)
 
     def _makeSphere(self, position):
         sphere = create_sphere(36,36)
         self._addPositions(sphere.vertices().tolist(), position)
         self._addIndices(sphere.faces().tolist())
-        self.normals.extend(sphere.vertex_normals().tolist())
+        self._addNormals(sphere.vertex_normals().tolist())
 
     def _loadObjects(self):
         for obj in self._objectNames:
@@ -181,21 +181,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
             self._addPositions(parser.getVertices().tolist(), obj[1])
             self._addIndices(parser.getFaces().astype(numpy.uint16).tolist())
-            self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
+            self._addNormals(parser.getNormals().astype(numpy.float32).tolist())
 
     def _addPositions(self, vertices, position):
-        self.positions.extend([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
+        self.positions.append([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
 
-    # add index so mesh reference only their vertices
     def _addIndices(self, indices):
-        if (len(self.indices) > 0):
-            max_index = max(self.indices)+1
-        else:
-            max_index = 0
-        try:
-            self.indices.extend([item+max_index for sublist in indices for item in sublist])
-        except:
-            self.indices.extend([item+max_index for item in indices])
+        self.indices.append(indices)
 
+    def _addNormals(self, normals):
+        self.normals.append(normals)
  
  
