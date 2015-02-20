@@ -103,6 +103,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     # Called at startup
     def initializeGL(self):
+        print "GLSL Version : " + GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
         """ docstring """
         self._mutex.acquire()
         # save mouse cursor position for smooth rotation
