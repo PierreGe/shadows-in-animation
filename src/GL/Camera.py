@@ -9,10 +9,11 @@ class Camera(object):
     def __init__(self):
         """ Constructeur de la classe Camera"""
         self._x = 7
-        self._xInterval = [7,45]
-        self._y = 352
+        self._xInterval = [2,45]
+        self._y = 0
         self._z = 6
         self._zoom = -20.0
+        self._zoomAmplitude = 0.15
         self.lock = threading.Lock()
 
     def getX(self):
@@ -65,10 +66,10 @@ class Camera(object):
         return res
 
     def zoomIn(self):
-        self._zoom += 0.1
+        self._zoom += self._zoomAmplitude
 
     def zoomOut(self):
-        self._zoom -= 0.1
+        self._zoom -= self._zoomAmplitude
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""

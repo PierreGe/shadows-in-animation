@@ -16,7 +16,7 @@ import AutoRotateCamera
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
-    """ docstring """
+    """ The main openGL widget """
     def __init__(self, objectNames, algoName, controller,  parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)

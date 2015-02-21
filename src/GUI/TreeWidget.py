@@ -26,7 +26,9 @@ class TreeWidget(QtGui.QWidget):
         """ """
         column = 0
         sceneDictionnary = self._controller.getAllScene()
-        for scene in sceneDictionnary:
+        iterable = sceneDictionnary.keys()
+        iterable.sort()
+        for scene in iterable:
             name = sceneDictionnary[scene]["name"]
             description = sceneDictionnary[scene]["description"]
             algosCompatible = sceneDictionnary[scene]["algo-compatible"]
