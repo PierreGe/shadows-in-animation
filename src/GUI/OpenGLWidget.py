@@ -238,6 +238,14 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             else:
                 self._cameraRotation.start()
 
+    def killThreads(self):
+        """ """
+        if self._lightRotation:
+            self._lightRotation.stop()
+        if self._cameraRotation:
+            self._cameraRotation.stop()
+
+
 
  
  

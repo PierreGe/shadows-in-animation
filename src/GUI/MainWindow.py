@@ -47,6 +47,13 @@ class MainWindow(QtGui.QMainWindow):
    
         self.showMaximized()
 
+    def closeApp(self):
+        """ """
+        self.close()
+        self._controller.killThreads()
+        exit()
+        #os.system("kill -9 " + os.getpid()) # hihi
+
     def displayHelp(self):
         """ """
         QtGui.QMessageBox.information(self, "Aide", "Printemps des sciences 2015")
@@ -64,7 +71,7 @@ class MainWindow(QtGui.QMainWindow):
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(self.close)
+        exitAction.triggered.connect(self.closeApp)
         fileMenu.addAction(exitAction)
 
         aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/help-browser.png"), "Aide", self)
@@ -119,7 +126,7 @@ class MainWindow(QtGui.QMainWindow):
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/application-exit.png"), "Exit", self)
         exitAction.setShortcut("Ctrl+Q")
         exitAction.setStatusTip("Quitter l'application")
-        exitAction.triggered.connect(self.close)
+        exitAction.triggered.connect(self.closeApp)
         toolbar.addAction(exitAction)
 
         reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)

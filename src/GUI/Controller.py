@@ -159,3 +159,10 @@ class Controller(object):
     def getOpenGlVersionHelper(self):
         """ """
         return self._openGlVersionHelper
+
+    def killThreads(self):
+        """ """
+        if self._glWidget:
+            self._glWidget.killThreads()
+        else:
+            print("Warning killThread : openGl not running")
