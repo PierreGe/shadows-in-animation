@@ -10,12 +10,13 @@ class OpenGlVersionHelper(object):
     def __init__(self):
         # init GL
         glutInit([])
-        window = glutCreateWindow("hello")
-        del window
+        window = glutCreateWindow("version")
+        glutHideWindow()
         self._vendor = GL.glGetString(GL.GL_VENDOR)
         self._renderer = GL.glGetString(GL.GL_RENDERER)
         self._shadingVersion = GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
         self._openglVersion = GL.glGetString(GL.GL_VERSION)
+        glutDestroyWindow(window)
 
     def getVendor(self):
         """ """
