@@ -181,4 +181,52 @@ class NoShadowAlgorithm:
         self._light = None
 
 
+class SelfShadowAlgorithm:
+    def __init__(self):
+        self._program = gloo.Program("shaders/selfshadowalgo.vertexshader", "shaders/selfshadowalgo.fragmentshader")
+
+    def init(self, positions, indices, normals, camera, light):
+        self._positions = gloo.VertexBuffer(positions)
+        self._indices = gloo.IndexBuffer(numpy.array(indices))
+        self._normals = gloo.VertexBuffer(normals)
+        self._camera = camera
+        self._light = light
+        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
+
+        self.active = True
+
+        self._program['u_light_intensity'] = self._light.getIntensity()
+        self._program['u_light_position'] = self._light.getPosition()
+        self._program['normal'] = self._normals
+        self._program['position'] = self._positions
+        self._program.draw('triangles', self._indices)
+
+    def update(self):
+        if self.active:
+            # create render matrices
+            view = numpy.eye(4, dtype=numpy.float32)
+            translate(view, 0, -4, self._camera.getZoom())
+            model = numpy.eye(4, dtype=numpy.float32)
+            rotate(model, self._camera.getX(), 1, 0, 0)
+            rotate(model, self._camera.getY(), 0, 1, 0)
+            rotate(model, self._camera.getZ(), 0, 0, 1)
+            # draw scene
+            normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
+            self._program['u_normal'] = normal
+            self._program['u_light_position'] = self._light.getPosition()
+            self._program['u_light_intensity'] = self._light.getIntensity()
+            self._program['u_model'] = model
+            self._program['u_view'] = view
+            self._program['u_projection'] = self._projection
+            self._program['u_color'] = DEFAULT_COLOR 
+            self._program.draw('triangles', self._indices)
+
+    def terminate(self):
+        self.active = False
+        self._positions = []
+        self._indices = []
+        self._normals = []
+        self._camera = None
+        self._light = None
+
 

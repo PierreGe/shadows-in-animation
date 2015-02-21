@@ -5,12 +5,10 @@ import sys
 import os
 
 from PyQt4 import QtGui, QtCore
-
 from OpenGL import GL
 
 import SplitPane
 import Controller
-
 import LightPanel
 import HelpWidget
 
@@ -60,7 +58,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def displayAbout(self):
         """ Display some info"""
-        QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015")
+        QtGui.QMessageBox.information(self, "A propos", "- Pierre Gerard, Bruno Rocha Pereira, Antoine Carpentier" + "\n" + "- Dans ce projet nous examinons le domaine des algorithmes de rendu d'ombre et nous en comparerons quelques-uns dans un environnement de simulation 3D comme le OpenGL. Le but est de tester leurs aspects positifs et négatifs et de voir les conditions dans lesquelles ils donnent le meilleur rendu.")
 
     def initMenu(self):
         """ This method will initate the menu """
@@ -76,7 +74,7 @@ class MainWindow(QtGui.QMainWindow):
 
         aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/help-browser.png"), "Aide", self)
         aboutAction.setStatusTip("Aide pour cette application")
-        aboutAction.triggered.connect(self.displayAbout)
+        aboutAction.triggered.connect(self.displayHelp)
         helpMenu.addAction(aboutAction)
 
         aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/dialog-information.png"), "A propos", self)
