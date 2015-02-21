@@ -11,7 +11,8 @@ from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light
 from Algorithms import *  
-import AutoRotate
+import AutoRotateLight
+import AutoRotateCamera
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -33,7 +34,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.timer.timeout.connect(self.timerUpdate)
         fps = 24
         self.timer.start(int(1000/fps))
-        self._rotation = None
+        self._lightRotation = None
+        self._cameraRotation = None
 
     def timerUpdate(self):
         """ """
@@ -114,8 +116,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     # Called at startup
     def initializeGL(self):
-        print "GLSL Version : " + GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
         """ docstring """
+        print "GLSL Version : " + GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
         self._mutex.acquire()
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
@@ -139,7 +141,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
-        self._rotation = AutoRotate.AutoRotate(self._camera)
+        self._lightRotation = AutoRotateLight.AutoRotateLight(self._light)
+        self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera)
 
         self._mutex.release()
 
@@ -219,13 +222,21 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         except:
             self.indices.extend([item+max_index for item in indices])
 
-    def switchAnimation(self):
+    def switchLightAnimation(self):
         """ """
-        if self._rotation:
-            if self._rotation.getAlive():
-                self._rotation.stop()
+        if self._lightRotation:
+            if self._lightRotation.getAlive():
+                self._lightRotation.stop()
             else:
-                self._rotation.start()
+                self._lightRotation.start()
+
+    def switchCameraAnimation(self):
+        """ """
+        if self._cameraRotation:
+            if self._cameraRotation.getAlive():
+                self._cameraRotation.stop()
+            else:
+                self._cameraRotation.start()
 
 
  

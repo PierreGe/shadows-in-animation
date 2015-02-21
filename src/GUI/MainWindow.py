@@ -6,6 +6,8 @@ import os
 
 from PyQt4 import QtGui, QtCore
 
+from OpenGL import GL
+
 import SplitPane
 import Controller
 
@@ -88,9 +90,26 @@ class MainWindow(QtGui.QMainWindow):
         self.l = LightPanel.RemoveLightPanel(self._controller)
 
 
-    def animate(self):
+    def animateLight(self):
         """ """
-        self._controller.switchAnimation()
+        self._controller.switchLightAnimation()
+
+    def animateCamera(self):
+        """ """
+        self._controller.switchCameraAnimation()
+
+
+    def showHardwareVersion(self):
+        """ Display opengl and shading version"""
+        helper = self._controller.getOpenGlVersionHelper()
+        vendor = helper.getVendor()
+        renderer = helper.getRenderer()
+        shadingVersion = helper.getShadingVersion()
+        openglVersion = helper.getOpenGlVersion()
+        if isinstance(shadingVersion, str) and isinstance(openglVersion, str):
+            QtGui.QMessageBox.information(self,"Materiel graphique","Vendeur : " + vendor + "\n" + "Renderer : " + renderer + "\n" + "OpenGL : " + openglVersion + "\n" + "GLSL : " + shadingVersion)
+        else:
+            print("GL not initialized")
 
 
     def initToolsBar(self):
@@ -128,11 +147,30 @@ class MainWindow(QtGui.QMainWindow):
         toolbar.addSeparator()
 
 
-        animationAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator.png"), "Animation", self)
-        animationAction.setShortcut("Ctrl+A")
-        animationAction.setStatusTip("Animation")
-        animationAction.triggered.connect(self.animate)
-        toolbar.addAction(animationAction)
+        animationActionCamera = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-camera.png"), "Animation de la camera", self)
+        animationActionCamera.setStatusTip("Animation de la camera")
+        animationActionCamera.triggered.connect(self.animateCamera)
+        toolbar.addAction(animationActionCamera)
+
+
+        animationActionLight = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-light.png"), "Animation des lampes", self)
+        animationActionLight.setStatusTip("Animation des lampes")
+        animationActionLight.triggered.connect(self.animateLight)
+        toolbar.addAction(animationActionLight)
+
+
+        toolbar.addSeparator()
+
+        hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
+        hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
+        hardwareHelpAction.triggered.connect(self.showHardwareVersion)
+        toolbar.addAction(hardwareHelpAction)
+
+
+
+        toolbar.addSeparator()
+
+
 
         textWidget = QtGui.QLabel(self)
         textWidget.setText("Position lumière :  X ".decode("utf8"))

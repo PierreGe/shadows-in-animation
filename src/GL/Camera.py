@@ -79,7 +79,7 @@ class Camera(object):
         return angle
 
 
-    def incrementeY(self,plus):
+    def incrementeRotate(self,plus):
         """ Increment Y value by plus, for rotation of the plane"""
         self.lock.acquire()
         y = self.getY() + plus
