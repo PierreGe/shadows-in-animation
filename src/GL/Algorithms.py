@@ -208,14 +208,14 @@ class ShadowVolumeAlgorithm:
             "shaders/shadowvolume.fragmentshader")
 
     def init(self, positions, indices, normals, camera, light):
-        self._positions = gloo.VertexBuffer(positions)
-        self._indices = gloo.IndexBuffer(numpy.array(indices))
-        self._normals = gloo.VertexBuffer(normals)
+        self._positions = positions
+        self._indices = indices
+        self._normals = normals
         self._camera = camera
         self._light = light
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
-        self._program['normal'] = self._normals
-        self._program['position'] = self._positions
+        # self._program['normal'] = self._normals
+        # self._program['position'] = self._positions
 
         # shape=(1366,768)
         # self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
@@ -226,24 +226,61 @@ class ShadowVolumeAlgorithm:
                                                 # self._stencil_buffer)
         self.active = True
 
+    # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
+    def drawVolumes(self):
+        # for each object
+        for i in range(len(self._positions)):
+            contour_edges = self.findContourEdges(i)
+
+    def findContourEdges(self, index):
+        positions = self._positions[index]
+        indices = self._indices[index]
+        normals = self._normals[index]
+        ret = []
+        lightPosition = numpy.multiply(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
+        for i in range(0,len(indices), 3):
+            a = indices[i]
+            b = indices[i+1]
+            c = indices[i+2]
+            triangle = [positions[a], positions[b], positions[c]]
+            averageTrianglePos = [sum([x[0] for x in triangle])/3,
+                                  sum([x[1] for x in triangle])/3,
+                                  sum([x[2] for x in triangle])/3]
+            lightDir = (averageTrianglePos+[0]) - lightPosition
+            triangleNormal = normals[a] + (averageTrianglePos-positions[a])
+            if numpy.dot(lightDir, triangleNormal) >= 0:
+                for edge in [[positions[a], positions[b]],
+                            [positions[a], positions[c]],
+                            [positions[b], positions[c]]]:
+                    if edge in ret or [edge[1], edge[0]] in ret:
+                        ret.remove(edge)
+                        ret.remove([edge[1], edge[0]])
+                    else:
+                        ret.add(edge)
+        return ret
+
     def update(self):
         if self.active:
             # create render matrices
-            view = numpy.eye(4, dtype=numpy.float32)
-            translate(view, 0, -4, self._camera.getZoom())
-            model = numpy.eye(4, dtype=numpy.float32)
-            rotate(model, self._camera.getX(), 1, 0, 0)
-            rotate(model, self._camera.getY(), 0, 1, 0)
-            rotate(model, self._camera.getZ(), 0, 0, 1)
+            self._view = numpy.eye(4, dtype=numpy.float32)
+            translate(self._view, 0, -4, self._camera.getZoom())
+            self._model = numpy.eye(4, dtype=numpy.float32)
+            rotate(self._model, self._camera.getX(), 1, 0, 0)
+            rotate(self._model, self._camera.getY(), 0, 1, 0)
+            rotate(self._model, self._camera.getZ(), 0, 0, 1)
+
+            #create shadow volumes
+            self._volumes = self.drawVolumes()
+
             # draw scene
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             # self._program['u_normal'] = normal
-            self._program['u_light_position'] = self._light.getPosition()
-            self._program['u_light_color'] = self._light.getColor()
-            self._program['u_model'] = model
-            self._program['u_view'] = view
-            self._program['u_projection'] = self._projection
-            self._program['u_color'] = (0.5, 0.5, 0.8)
+            # self._program['u_light_position'] = self._light.getPosition()
+            # self._program['u_light_color'] = self._light.getColor()
+            # self._program['u_model'] = self._model
+            # self._program['u_view'] = self._view
+            # self._program['u_projection'] = self._projection
+            # self._program['u_color'] = (0.5, 0.5, 0.8)
             # # shadow volumes creation
             # # http://archive.gamedev.net/archive/reference/articles/article1990.html
             # with self._frame_buffer:
