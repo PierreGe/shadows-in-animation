@@ -187,7 +187,13 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.positions.append([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
 
     def _addIndices(self, indices):
-        self.indices.append(indices)
+        try:
+            newIndices = []
+            for item in indices:
+                newIndices.extend(item)
+            self.indices.append(newIndices)
+        except:
+            self.indices.append(indices)
 
     def _addNormals(self, normals):
         self.normals.append(normals)
