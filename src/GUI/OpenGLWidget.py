@@ -22,7 +22,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._controller = controller
         self._algorithms = {
             "Shadow Mapping": ShadowMapAlgorithm(),
-            "Aucune Ombre": NoShadowAlgorithm()
+            "Aucune Ombre": NoShadowAlgorithm(),
+            "Ray Tracing": RayTracingAlgorithm()
         }
         self.setObjects(objectNames)
         self.setAlgo(algoName)
@@ -227,6 +228,3 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             else:
                 self._rotation.start()
 
-
- 
- 

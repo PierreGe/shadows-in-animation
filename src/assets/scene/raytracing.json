@@ -1,0 +1,7 @@
+{
+  "name": "Ray Tracing",
+  "description": "This scene is done for the Ray Tracing",
+  "algo-compatible": ["Ray Tracing"],
+  "obj-liste": [
+  ]
+}
