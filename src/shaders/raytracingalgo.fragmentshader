@@ -1,3 +1,5 @@
+#version 120
+
 const float M_PI = 3.14159265358979323846;
 const float INFINITY = 1000000000.;
 const int PLANE = 1;
@@ -76,22 +78,22 @@ vec3 run(float x, float y) {
     vec3 col = vec3(0.0, 0.0, 0.0);
     vec3 col_ray;
     float reflection = 1.;
-
+    
     int object_index;
     vec3 object_color;
     vec3 object_normal;
     float object_reflection;
     vec3 M;
     vec3 N, toL, toO;
-
+    
     while (depth < 5) {
-
+        
         /* start trace_ray */
-
+        
         t_plane = intersect_plane(rayO, rayD, plane_position, plane_normal);
         t0 = intersect_sphere(rayO, rayD, sphere_position_0, sphere_radius_0);
         t1 = intersect_sphere(rayO, rayD, sphere_position_1, sphere_radius_1);
-
+        
         if (t_plane < min(t0, t1)) {
             // Plane.
             M = rayO + rayD * t_plane;
@@ -125,37 +127,37 @@ vec3 run(float x, float y) {
         else {
             break;
         }
-
+        
         N = object_normal;
         toL = normalize(light_position - M);
         toO = normalize(O - M);
-
+        
         // Shadow of the spheres on the plane.
         if (object_index == PLANE) {
-            t0 = intersect_sphere(M + N * .0001, toL,
+            t0 = intersect_sphere(M + N * .0001, toL, 
                                   sphere_position_0, sphere_radius_0);
-            t1 = intersect_sphere(M + N * .0001, toL,
+            t1 = intersect_sphere(M + N * .0001, toL, 
                                   sphere_position_1, sphere_radius_1);
             if (min(t0, t1) < INFINITY) {
                 break;
             }
         }
-
+        
         col_ray = vec3(ambient, ambient, ambient);
         col_ray += light_intensity * max(dot(N, toL), 0.) * object_color;
-        col_ray += light_specular.x * light_color *
+        col_ray += light_specular.x * light_color * 
             pow(max(dot(N, normalize(toL + toO)), 0.), light_specular.y);
-
+        
         /* end trace_ray */
-
+        
         rayO = M + N * .0001;
         rayD = normalize(rayD - 2. * dot(rayD, N) * N);
         col += reflection * col_ray;
         reflection *= object_reflection;
-
+        
         depth++;
     }
-
+    
     return clamp(col, 0., 1.);
 }
 
