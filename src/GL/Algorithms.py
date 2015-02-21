@@ -47,11 +47,10 @@ class ShadowMapAlgorithm:
         if self.active:
             # create render matrices
             view = numpy.eye(4, dtype=numpy.float32)
-            translate(view, 0, -4, self._camera.getZoom())
+            translate(view, -self._camera.getX(), -self._camera.getY(), -self._camera.getZ())
             model = numpy.eye(4, dtype=numpy.float32)
-            rotate(model, self._camera.getX(), 1, 0, 0)
-            rotate(model, self._camera.getY(), 0, 1, 0)
-            rotate(model, self._camera.getZ(), 0, 0, 1)
+            rotate(model, self._camera.getDirectionX(), 1, 0, 0)
+            rotate(model, self._camera.getDirectionY(), 0, 1, 0)
             # create shadow map matrices
             shadow_model = numpy.eye(4, dtype=numpy.float32)
             shadow_view = lookAt(self._light.getPosition(), (0,2,0), (0,1,0))

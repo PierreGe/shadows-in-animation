@@ -2,74 +2,56 @@
 # -*- coding: utf8 -*-
 
 import threading
+import math
+import numpy
 
 class Camera(object):
+    RATIO_DEGRE_RAD = 57.2957
     """The Camera of the main OpenGl view
     It's nearly thread-safe"""
     def __init__(self):
         """ Constructeur de la classe Camera"""
-        self._x = 7
-        self._xInterval = [2,45]
-        self._y = 0
-        self._z = 6
-        self._zoom = -20.0
-        self._zoomAmplitude = 0.15
+        self._position = (0,10,-20)
+        self._direction = (0,0) # first is rotation around x => vertical
         self.lock = threading.Lock()
 
     def getX(self):
-        return self._x
+        return self._position[0]
 
     def getY(self):
-        return self._y
+        return self._position[1]
 
     def getZ(self):
-        return self._z
+        return self._position[2]
 
-    def getZoom(self):
-        return self._zoom
+    def getDirectionX(self):
+        return self._direction[0]
 
-    def setX(self,x):
-        """ set the X value after having normalized it"""
-        self.lock.acquire()
-        res = False
-        if x < self._xInterval[0]:
-            x = self._xInterval[0]
-        elif x > self._xInterval[1]:
-            x = self._xInterval[1]
-        x = self._normalizeAngle(x)
-        if x != self._x:
-            self._x = x
-            res = True
-        self.lock.release()
-        return res
+    def getDirectionY(self):
+        return self._direction[1]
 
-    def setY(self,y):
-        """ set the Y value after having normalized it"""
-        self.lock.acquire()
-        res = False
-        y = self._normalizeAngle(y)
-        if y != self._y:
-            self._y = y
-            res = True
-        self.lock.release()
-        return res
+    def rotateHorizontal(self, deltaAngle):
+        self._direction[1] += deltaAngle
 
-    def setZ(self,z):
-        """ set the Z value after having normalized it"""
-        self.lock.acquire()
-        res = False
-        z = self._normalizeAngle(z)
-        if z != self._z:
-            self._z = z
-            res = True
-        self.lock.release()
-        return res
+
+    def rotateVertical(self, deltaAngle):
+        self._direction[0] += deltaAngle
+
+
+    def _directionVectorFromAngle(self):
+        return (math.sin(self._direction[0]/Camera.RATIO_DEGRE_RAD),
+                math.sin(self._direction[1]/Camera.RATIO_DEGRE_RAD),
+                math.cos(self._direction[0]/Camera.RATIO_DEGRE_RAD))
+
+
 
     def zoomIn(self):
-        self._zoom += self._zoomAmplitude
+        self._position = list(numpy.add(self._position, self._directionVectorFromAngle()))
 
     def zoomOut(self):
-        self._zoom -= self._zoomAmplitude
+        self._zoomAmplitude = -self._zoomAmplitude
+        self.zoomIn()
+        self._zoomAmplitude = -self._zoomAmplitude
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""
@@ -88,3 +70,13 @@ class Camera(object):
         self._y = y
         self.lock.release()
         
+
+if __name__ == '__main__':
+    camera = Camera()
+    assert (camera._position == (0,10,-20))
+    assert (camera._direction == (0,0))
+    camera.zoomIn()
+    print camera._directionVectorFromAngle()
+    print camera._position
+    # assert (camera._position == (0.0, 11.0, -19.0))
+
