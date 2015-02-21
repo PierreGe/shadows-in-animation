@@ -125,7 +125,6 @@ class Controller(object):
                 jasonDict = json.loads(open(mypath + singleFile).read())
                 name = jasonDict["name"]
                 dicti = jasonDict
-                print(dicti["obj-liste"])
                 if name in self._scene:
                     print("[WARNING] : Two scenes with same name found : the first one will be overwrited!")
                 self._scene[name] = dicti
@@ -164,5 +163,3 @@ class Controller(object):
         """ """
         if self._glWidget:
             self._glWidget.killThreads()
-        else:
-            print("Warning killThread : openGl not running")

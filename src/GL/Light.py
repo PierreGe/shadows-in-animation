@@ -17,7 +17,7 @@ class Light(object):
         # interval pour eviter d'envoyer la lampe au perou
         self.lock = threading.Lock()
         self._xInterval = [-20,20]
-        self._yInterval = [2,15]
+        self._yInterval = [2,30]
         self._zInterval = [-20,20]
 
         xInit = (self._xInterval[1])
@@ -119,9 +119,6 @@ class Light(object):
             theta = math.asin(self._position[2]/self._rayon) * 57.2957795
 
         self._theta = theta
-        print(theta)
-        print(self._position[0], self._rayon * math.cos(self._theta/57.2957795))
-        print(self._position[2], self._rayon * math.sin(self._theta/57.2957795))
 
     def incrementeRotate(self,plus):
         """ Increment Y value by plus, for rotation of the plane"""

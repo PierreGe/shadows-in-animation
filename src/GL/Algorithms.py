@@ -1,3 +1,6 @@
+#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+
 from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *

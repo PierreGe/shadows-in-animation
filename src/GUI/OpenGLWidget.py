@@ -141,8 +141,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
-        self._lightRotation = AutoRotateLight.AutoRotateLight(self._light)
-        self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera)
+        self._lightRotation = AutoRotateLight.AutoRotateLight(self._light,1)
+        self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
 

@@ -24,13 +24,11 @@ class AutoRotateCamera(object):
         alive = self._alive
         self.lock.release()
         while alive:
-            self._camera.incrementeRotate(0.5)
+            self._camera.incrementeRotate(self._incrementation)
             time.sleep(0.04) # set by frame per second
             self.lock.acquire()
             alive = self._alive
             self.lock.release()
-            #updateGL()
-
 
     def start(self):
         """ start the rotation"""
@@ -42,13 +40,13 @@ class AutoRotateCamera(object):
 
 
     def stop(self):
-        """ """
+        """ Stop the thread"""
         self.lock.acquire()
         self._alive = False
         self.lock.release()
 
     def getAlive(self):
-        """ """
+        """ get the state of the thread """
         self.lock.acquire()
         alive = self._alive
         self.lock.release()

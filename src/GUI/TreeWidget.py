@@ -35,8 +35,7 @@ class TreeWidget(QtGui.QWidget):
             scene1 = self._addScene(parent, column, name, description)
             for algo in algosCompatible:
                 self._addAlgorithm(scene1, column, algo, "description ")
-        
-        # TODO : associer les algo
+                
 
     def _addScene(self, parent, column, title, data):
         """ """
