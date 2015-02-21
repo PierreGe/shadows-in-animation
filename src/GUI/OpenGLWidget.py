@@ -112,6 +112,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.setLightsRatio(position)
         self.updateGL()
 
+    def keyPressEvent(self, e):
+        """ """
+        print("Key pressed")
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+
 
     # ---------- Partie : Opengl ------------
  

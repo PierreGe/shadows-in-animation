@@ -146,9 +146,7 @@ class NoShadowAlgorithm:
 
         self.active = True
 
-        self._program['u_light_intensity'] = 1.
-        self._program['u_light_position'] = (5., 5., -10.)
-        self._program['normal'] = self._normals
+
         self._program['position'] = self._positions
         self._program.draw('triangles', self._indices)
 
@@ -162,10 +160,6 @@ class NoShadowAlgorithm:
             rotate(model, self._camera.getY(), 0, 1, 0)
             rotate(model, self._camera.getZ(), 0, 0, 1)
             # draw scene
-            normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
-            self._program['u_normal'] = normal
-            self._program['u_light_position'] = self._light.getPosition()
-            self._program['u_light_intensity'] = self._light.getIntensity()
             self._program['u_model'] = model
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
