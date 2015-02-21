@@ -32,7 +32,7 @@ class Light(object):
         self._horizontalAngle = 0 # tourne sur lui meme
 
         self._theta = 0
-        self._rayon = 20 # warning  self._xInterval
+        self._rayon = math.sqrt(self._xInterval[1]**2 + self._zInterval[1]**2) # warning  self._xInterval
 
     def resetLight(self):
         """ """
@@ -110,10 +110,18 @@ class Light(object):
 
     def setThetaAngle(self):
         """ """
-        print(self._position[0], self._rayon)
-        theta = math.acos(self._position[0]/self._rayon)
-        theta *= 57.2957795
+        if self._position[0] < 0 and self._position[2] < 0:
+            theta = math.atan(self._position[2]/self._position[0]) * 57.2957795
+            theta += 180
+        elif self._position[2] > 0:
+            theta = math.acos(self._position[0]/self._rayon) * 57.2957795
+        else:
+            theta = math.asin(self._position[2]/self._rayon) * 57.2957795
+
         self._theta = theta
+        print(theta)
+        print(self._position[0], self._rayon * math.cos(self._theta/57.2957795))
+        print(self._position[2], self._rayon * math.sin(self._theta/57.2957795))
 
     def incrementeRotate(self,plus):
         """ Increment Y value by plus, for rotation of the plane"""

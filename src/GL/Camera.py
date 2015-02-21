@@ -12,7 +12,7 @@ class Camera(object):
         self._xInterval = [7,45]
         self._y = 352
         self._z = 6
-        self._zoom = -10.0
+        self._zoom = -20.0
         self.lock = threading.Lock()
 
     def getX(self):
