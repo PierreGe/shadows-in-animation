@@ -142,7 +142,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.indices = []
         self.normals = []
 
-        self._makePlane((0,0,0), 20, 20)
+        # self._makePlane((0,0,0), 20, 20)
         # examples : should be removed or used for empty scenes
         # self._makeCube((0,1.1,0))
         # self._makeSphere((0,3,0))

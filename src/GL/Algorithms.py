@@ -170,7 +170,6 @@ class NoShadowAlgorithm:
         self._light = light
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
 
-        print normals[0]
         self.active = True
 
 
@@ -279,6 +278,7 @@ class ShadowVolumeAlgorithm:
         # for each object
         for i in range(len(self._positions)):
             contour_edges = self.findContourEdges(i)
+            shadow_triangles = self.drawShadowTriangles(contour_edges)
 
     def findContourEdges(self, index):
         positions = self._positions[index]
@@ -308,6 +308,30 @@ class ShadowVolumeAlgorithm:
                     else:
                         ret.append(edge)
         return ret
+
+    def drawShadowTriangles(self, contour_edges):
+        lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
+        extrudeMagnitude = 20
+        shadow_triangles = []
+        for edge in contour_edges:
+            a = edge[0]
+            b = edge[1]
+            c = numpy.add(numpy.append(edge[1], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[1], [0]), lightPosition)).tolist()
+            d = numpy.add(numpy.append(edge[0], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[0], [0]), lightPosition)).tolist()
+            shadow_triangles.append([a, b, c])
+            shadow_triangles.append([a, c, d])
+        vertices = []
+        for triangle in shadow_triangles:
+            for vertex in triangle:
+                vertices.append([vertex[0], vertex[1], vertex[2]])
+        program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
+        program['position'] = gloo.VertexBuffer(vertices)
+        program['u_model'] = self._model
+        program['u_view'] = self._view
+        program['u_projection'] = self._projection
+        program['u_color'] = DEFAULT_COLOR
+        program.draw('triangles')
+
 
     def update(self):
         if self.active:
@@ -400,4 +424,4 @@ if __name__ == '__main__':
     shadowvolumealgo = ShadowVolumeAlgorithm()
     shadowvolumealgo.init([cube_positions], [cube_indices], [cube_normals], camera, light)
     shadowvolumealgo.update()
-    print shadowvolumealgo.findContourEdges(0)
+    # print shadowvolumealgo.findContourEdges(0)
