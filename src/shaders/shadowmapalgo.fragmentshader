@@ -40,7 +40,7 @@ void main()
   float shadow_precision = 1.0 / antialiasing_level_float / u_light_number;
   float spreading = 700.0;
   // LIGHT 1
-  float visibility_1 = 1.0;
+  float visibility_1 = 0.5;
   // Normal of the computed fragment, in camera space
   vec3 n = normalize( v_normal_cameraspace );
   // Direction of the light (from the fragment to the light)
@@ -69,7 +69,7 @@ void main()
         visibility_1 -= shadow_precision;
     }
   }
-  float visibility_2 = 1.0;
+  float visibility_2 = 0.5;
   float cosTheta_2;
   float cosAlpha_2;
   if (u_light_number >= 2.0) {
