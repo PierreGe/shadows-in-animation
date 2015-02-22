@@ -8,26 +8,17 @@ from vispy import app
 import math
 
 class RayTracingWidget(QtGui.QWidget):
-
+    """ The QT widget of ray tracing"""
     def __init__(self):
         QtGui.QWidget.__init__(self, None)
-
         self.setMinimumSize(600, 400)
-
-
-        # Create a canvas
         self.canvas = Canvas(parent=self)
-
-        # Layout
         hlayout = QtGui.QHBoxLayout(self)
         self.setLayout(hlayout)
-        vlayout = QtGui.QVBoxLayout()
-        hlayout.addLayout(vlayout, 1)
         hlayout.addWidget(self.canvas.native, 1)
 
-
     def killThreads(self):
-        """ """
+        """ In case of thread"""
         pass # do NOT delete method
 
 class Canvas(app.Canvas):
@@ -35,7 +26,7 @@ class Canvas(app.Canvas):
         app.Canvas.__init__(self, **kwargs)
         self.geometry = 0, 0, 400, 400
 
-        self.program = gloo.Program("../shaders/raytracingalgo.vertexshader", "../shaders/raytracingalgo.fragmentshader")
+        self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
 
         self.program['a_position'] = [(-1., -1.), (-1., +1.),(+1., -1.), (+1., +1.)]
         self.program['sphere_position_0'] = (.75, .1, 1.)
