@@ -21,13 +21,13 @@ class ShadowMapAlgorithm:
         self._shadowMap = gloo.Program("shaders/shadowmap.vertexshader",
                                         "shaders/shadowmap.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, light):
+    def init(self, positions, indices, normals, camera, lightList):
         """ Method that initialize the algorithm """
         self._positions = gloo.VertexBuffer(positions)
         self._indices = gloo.IndexBuffer(numpy.array(indices))
         self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
-        self._light = light
+        self._light = lightList[0]
         self._program['position'] = self._positions
         self._program['normal'] = self._normals
         self._shadowMap['position'] = self._positions
@@ -100,12 +100,12 @@ class RayTracingAlgorithm:
 
         self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, light):
+    def init(self, positions, indices, normals, camera, lightList):
         self._positions = gloo.VertexBuffer(positions)
         self._indices = gloo.IndexBuffer(numpy.array(indices))
         self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
-        self._light = light
+        self._light = lightList[0]
         self.program['a_position'] = [(-1., -1.), (-1., +1.),
                                       (+1., -1.), (+1., +1.)]
 
@@ -136,12 +136,12 @@ class NoShadowAlgorithm:
     def __init__(self):
         self._program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, light):
+    def init(self, positions, indices, normals, camera, lightList):
         self._positions = gloo.VertexBuffer(positions)
         self._indices = gloo.IndexBuffer(numpy.array(indices))
         self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
-        self._light = light
+        self._light = lightList[0]
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
 
         self.active = True
@@ -179,12 +179,12 @@ class SelfShadowAlgorithm:
     def __init__(self):
         self._program = gloo.Program("shaders/selfshadowalgo.vertexshader", "shaders/selfshadowalgo.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, light):
+    def init(self, positions, indices, normals, camera, lightList):
         self._positions = gloo.VertexBuffer(positions)
         self._indices = gloo.IndexBuffer(numpy.array(indices))
         self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
-        self._light = light
+        self._light = lightList[0]
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
 
         self.active = True

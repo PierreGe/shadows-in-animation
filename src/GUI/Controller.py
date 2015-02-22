@@ -26,7 +26,6 @@ class Controller(object):
         self._parseAllScene() #
         self._lightCollection = LightCollection.LightCollection()
 
-        self._lightPosition = [0,0,0]
         self._glWidget = None
         self._helpWidget = HelpWidget.HelpWidget()
         self._openGlVersionHelper = OpenGlVersionHelper.OpenGlVersionHelper()
@@ -93,28 +92,7 @@ class Controller(object):
     def getAllScene(self):
         """ get the scene dictionnary"""
         return self._scene
-
-
-    def lightPercentX(self,x):
-        """ """
-        self._lightPosition[0] = x
-        self._updateLight()
-
-    def lightPercentY(self,y):
-        """ """
-        self._lightPosition[1] = y
-        self._updateLight()
-
-    def lightPercentZ(self,z):
-        """ """
-        self._lightPosition[2] = z
-        self._updateLight()
-
-    def _updateLight(self):
-        """ """
-        if self._glWidget:
-            self._glWidget.updateLights(self._lightPosition)
-
+        
     def _parseAllScene(self):
         """ This method will assets/scene/ and add all the scene to a dictionnary"""
         mypath = "assets/scene/"

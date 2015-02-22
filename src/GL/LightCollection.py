@@ -3,29 +3,21 @@
 
 import Light
 
-class LightCollection(object):
+class LightCollection(list):
     """docstring for LightCollection"""
-    def __init__(self):
-        self.lightList = []
-        self.lightList.append(Light.Light())
+    def __init__(self, *args):
+        list.__init__(self, *args)
+        self.append(Light.Light())
 
     def addLight(self, light):
         """ """
-        self.lightList.append(light)
+        self.append(light)
         print(self.lightList)
     
     def getLightList(self):
         """ """
-        return self.lightList
+        return self
 
     def deleteLight(self, lightIndex):
         """ """
-        del self.lightList[lightIndex]
-
-    def  __getitem__(self,index):
-        """ """
-        return self.lightList[index]
-
-    def __len__(self):
-        """ """
-        return len(self.lightList)
+        del self[lightIndex]
