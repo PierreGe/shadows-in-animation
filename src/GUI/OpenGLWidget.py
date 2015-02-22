@@ -37,6 +37,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.timer.start(int(1000/fps))
         self._lightRotation = None
         self._cameraRotation = None
+        self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
     def timerUpdate(self):
         """ """
@@ -76,6 +77,12 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         return QtCore.QSize(400, 400)
 
+    def focusInEvent(self, event):
+        print('Got focus')
+
+    def focusOutEvent(self, event):
+        print('Lost focus')
+
         # Events
     def mousePressEvent(self, event):
         """ This method is called when there is a click """
@@ -92,11 +99,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         if event.buttons() & QtCore.Qt.LeftButton:
             res |= self._camera.setVerticalAngle(self._camera.getVerticalAngle() + 8 * dy)
             res |= self._camera.setHorizontalAngle(self._camera.getHorizontalAngle() + 8 * dx)
-            #res |= self._camera.setY(self._camera.getY() + 8 * dx)
-        elif event.buttons() & QtCore.Qt.RightButton:
-            pass
-            #res |= self._camera.setHorizontalAngle(self._camera.getHorizontalAngle() + 8 * dy)
-            #res |= self._camera.setZ(self._camera.getZ() + 8 * dx)
         self.lastPos = QtCore.QPoint(event.pos())
         if res:
             self.updateGL()
@@ -114,11 +116,18 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.setLightsRatio(position)
         self.updateGL()
 
-    def keyPressEvent(self, e):
+    def keyPressEvent(self, event):
         """ """
         print("Key pressed")
-        if e.key() == QtCore.Qt.Key_Escape:
-            self.close()
+        if event.key() == QtCore.Qt.Key_Left:
+            self._camera.left()
+        elif event.key() == QtCore.Qt.Key_Right:
+            self._camera.right()
+        elif event.key() == QtCore.Qt.Key_Up:
+             self._camera.up()
+        elif event.key() == QtCore.Qt.Key_Down:
+            self._camera.down()
+        self.updateGL()
 
 
     # ---------- Partie : Opengl ------------

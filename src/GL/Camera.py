@@ -15,6 +15,10 @@ class Camera(object):
         self._direction = [0,0] # first is rotation around x => vertical
         self.lock = threading.Lock()
         self._zoomAmplitude = 1
+        self._limitUp = 60
+        self._limitDown = 0
+        self._limitSide = 40
+        self._keyStep = 1
 
     def getX(self):
         return self._position[0]
@@ -45,10 +49,12 @@ class Camera(object):
         return False
 
     def setHorizontalAngle(self, angle):
-        print("called")
         if angle != self._direction[1]:
             print(self._direction)
+            print(angle)
+            print(self._position)
             self._direction[1] = self._normalizeAngle(angle)
+            print(self._position)
             return True
         return False
 
@@ -65,6 +71,26 @@ class Camera(object):
                 math.sin(self._direction[1]/Camera.RATIO_DEGRE_RAD),
                 math.cos(self._direction[0]/Camera.RATIO_DEGRE_RAD))
 
+
+    def up(self):
+        """ """
+        if self._position[1] + self._keyStep < self._limitUp:
+            self._position[1] += self._keyStep
+
+    def down(self):
+        """ """
+        if self._position[1] - self._keyStep > self._limitDown:
+            self._position[1] -= self._keyStep
+
+    def left(self):
+        """ """
+        if self._position[0] - self._keyStep > self._limitDown:
+            self._position[0] -= self._keyStep
+
+    def right(self):
+        """ """
+        if self._position[0] + self._keyStep < self._limitUp:
+            self._position[0] += self._keyStep
 
 
     def zoomIn(self):
