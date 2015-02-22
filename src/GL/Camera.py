@@ -11,10 +11,10 @@ class Camera(object):
     It's nearly thread-safe"""
     def __init__(self):
         """ Constructeur de la classe Camera"""
-        self._position = [-20,0,-20]
+        self._position = [0,0,30]
         self._direction = [0,0] # first is rotation around x => vertical
         self.lock = threading.Lock()
-        self._zoomAmplitude = 0.15
+        self._zoomAmplitude = 1
 
     def getX(self):
         return self._position[0]
@@ -67,11 +67,19 @@ class Camera(object):
 
     def zoomIn(self):
         self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,self._directionVectorFromAngle())))
+        print("position")
+        print(self._position)
+        print("direction")
+        print(self._direction)
 
     def zoomOut(self):
         self._zoomAmplitude = -self._zoomAmplitude
         self.zoomIn()
         self._zoomAmplitude = -self._zoomAmplitude
+        print("position")
+        print(self._position)
+        print("direction")
+        print(self._direction)
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""
