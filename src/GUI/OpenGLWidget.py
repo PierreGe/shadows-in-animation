@@ -77,12 +77,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         return QtCore.QSize(400, 400)
 
-    def focusInEvent(self, event):
-        print('Got focus')
-
-    def focusOutEvent(self, event):
-        print('Lost focus')
-
         # Events
     def mousePressEvent(self, event):
         """ This method is called when there is a click """
@@ -118,7 +112,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def keyPressEvent(self, event):
         """ """
-        print("Key pressed")
         if event.key() == QtCore.Qt.Key_Left:
             self._camera.left()
         elif event.key() == QtCore.Qt.Key_Right:

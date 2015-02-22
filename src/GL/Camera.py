@@ -43,7 +43,6 @@ class Camera(object):
 
     def setVerticalAngle(self,angle):
         if angle != self._direction[0] and 0 < angle < 90:
-            print(self._direction)
             self._direction[0] = angle
             return True
         return False
