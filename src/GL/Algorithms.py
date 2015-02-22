@@ -23,9 +23,9 @@ class ShadowMapAlgorithm:
 
     def init(self, positions, indices, normals, camera, lightList):
         """ Method that initialize the algorithm """
-        self._positions = gloo.VertexBuffer(positions)
-        self._indices = gloo.IndexBuffer(numpy.array(indices))
-        self._normals = gloo.VertexBuffer(normals)
+        #self._positions = gloo.VertexBuffer(positions)
+        #self._indices = gloo.IndexBuffer(numpy.array(indices))
+        #self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
         self._lights = lightList
         self._program['position'] = self._positions

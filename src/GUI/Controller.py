@@ -8,11 +8,11 @@ from os import listdir
 from os.path import isfile, join
 
 
-
 import HelpWidget
 import OpenGLWidget
 import LightCollection
 import OpenGlVersionHelper
+import RayTracingWidget
 
 class Controller(object):
     """Controller will controll :
@@ -47,8 +47,10 @@ class Controller(object):
 
         scene = str(item.parent().text(0))
         algo = str(item.text(0))
-        # TODO set algo
-        self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"],algo,self)
+        if algo == "Ray Tracing":
+            self._glWidget = RayTracingWidget.RayTracingWidget()
+        else:
+            self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"],algo,self)
         self._replaceRightWidget(self._glWidget)
 
         self._setStatusReady()
