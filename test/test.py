@@ -1,3 +1,39 @@
+# -*- coding: utf-8 -*-
+# vispy: gallery 300
+# -----------------------------------------------------------------------------
+# Copyright (c) 2014, Vispy Development Team. All Rights Reserved.
+# Distributed under the (new) BSD License. See LICENSE.txt for more info.
+# -----------------------------------------------------------------------------
+
+"""
+GPU-based ray tracing example.
+
+GLSL port of the following Python example:
+    https://gist.github.com/rossant/6046463
+    https://pbs.twimg.com/media/BPpbJTiCIAEoEPl.png
+
+TODO:
+    * Once uniform structs are supported, refactor the code to encapsulate
+      objects (spheres, planes, lights) in structures.
+    * Customizable engine with an arbitrary number of objects.
+"""
+
+from math import cos
+from vispy import app, gloo
+
+vertex = """
+#version 120
+
+attribute vec2 a_position;
+varying vec2 v_position;
+void main()
+{
+    gl_Position = vec4(a_position, 0.0, 1.0);
+    v_position = a_position;
+}
+"""
+
+fragment = """
 #version 120
 
 const float M_PI = 3.14159265358979323846;
@@ -165,3 +201,52 @@ void main() {
     vec2 pos = v_position;
     gl_FragColor = vec4(run(pos.x*u_aspect_ratio, pos.y), 1.);
 }
+"""
+
+
+class Canvas(app.Canvas):
+    def __init__(self):
+        app.Canvas.__init__(self, position=(300, 100), 
+                            size=(800, 600), keys='interactive')
+        
+        self.program = gloo.Program(vertex, fragment)
+        self.program['a_position'] = [(-1., -1.), (-1., +1.),
+                                      (+1., -1.), (+1., +1.)]
+        self.program['sphere_position_0'] = (.75, .1, 1.)
+        self.program['sphere_radius_0'] = .6
+        self.program['sphere_color_0'] = (0., 0., 1.)
+        
+        self.program['sphere_position_1'] = (-.75, .1, 2.25)
+        self.program['sphere_radius_1'] = .6
+        self.program['sphere_color_1'] = (.5, .223, .5)
+
+        self.program['plane_position'] = (0., -.5, 0.)
+        self.program['plane_normal'] = (0., 1., 0.)
+        
+        self.program['light_intensity'] = 1.
+        self.program['light_specular'] = (1., 50.)
+        self.program['light_position'] = (5., 5., -10.)
+        self.program['light_color'] = (1., 1., 1.)
+        self.program['ambient'] = .05
+        self.program['O'] = (0., 0., -1.)
+                                      
+        self._timer = app.Timer('auto', connect=self.on_timer, start=True)
+    
+    def on_timer(self, event):
+        t = event.elapsed
+        self.program['sphere_position_0'] = (+.75, .1, 2.0 + 1.0 * cos(4*t))
+        self.program['sphere_position_1'] = (-.75, .1, 2.0 - 1.0 * cos(4*t))
+        self.update()
+
+    def on_resize(self, event):
+        width, height = event.size
+        gloo.set_viewport(0, 0, width, height)
+        self.program['u_aspect_ratio'] = width/float(height)
+
+    def on_draw(self, event):
+        self.program.draw('triangle_strip')
+
+if __name__ == '__main__':
+    canvas = Canvas()
+    canvas.show()
+    app.run()
