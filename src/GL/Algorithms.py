@@ -60,9 +60,9 @@ class ShadowMapAlgorithm:
                 # create shadow map matrices
                 shadow_model = numpy.eye(4, dtype=numpy.float32)
                 shadow_view = lookAt(self._lights[i].getPosition(), (0,2,0), (0,1,0))
-                self._program['u_depth_model_' + str(i+1)] = shadow_model
-                self._program['u_depth_view_' + str(i+1)] = shadow_view
-                self._program['u_depth_projection_' + str(i+1)] = self._shadow_projection
+                self._program['u_depth_model[%d]' % i] = shadow_model
+                self._program['u_depth_view[%d]' % i] = shadow_view
+                self._program['u_depth_projection[%d]' % i] = self._shadow_projection
                 # create shadow map
                 with self._frameBuffers[i]:
                     self._shadowProgram['u_projection'] = self._shadow_projection
@@ -80,23 +80,15 @@ class ShadowMapAlgorithm:
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
             self._program['u_bias_matrix'] = biasMatrix
-            self._program['u_shadow_map_1'] = self._shadowMaps[0]
-            if len(self._lights) >= 2:
-                self._program['u_shadow_map_2'] = self._shadowMaps[1]
-            else:
-                self._program['u_shadow_map_2'] = self._shadowMaps[0]
+            for i in range(len(self._shadowMaps)):
+                self._program['u_shadow_maps[%d]' % i] = self._shadowMaps[i]
             self._program['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
-            self._program['u_light_intensity_1'] = self._lights[0].getIntensity()
-            if len(self._lights) >= 2:
-                self._program['u_light_intensity_2'] = self._lights[1].getIntensity()
-            else:
-                self._program['u_light_intensity_2'] = self._lights[0].getIntensity()
-            self._program['u_light_position_1'] = self._lights[0].getPosition()
-            if len(self._lights) >= 2:
-                self._program['u_light_position_2'] = self._lights[1].getPosition()
-            else:
-                self._program['u_light_position_2'] = self._lights[0].getPosition()
-            self._program['u_light_number'] = float(len(self._lights))
+            for i in range(len(self._lights)):
+                self._program['u_lights_intensity[%d]' % i] = self._lights[i].getIntensity()
+            for i in range(len(self._lights)):
+                self._program['u_lights_position[%d]' % i] = self._lights[i].getPosition()
+            self._program['u_light_number'] = len(self._lights)
+            self._program['u_light_number_float'] = float(len(self._lights))
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap

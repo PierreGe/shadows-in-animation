@@ -1,18 +1,15 @@
 #version 110
 
-uniform vec3 u_light_intensity_1;
-uniform vec3 u_light_intensity_2;
-uniform float u_light_number;
-uniform sampler2D u_shadow_map_1;
-uniform sampler2D u_shadow_map_2;
+uniform vec3 u_lights_intensity[5];
+uniform sampler2D u_shadow_maps[5];
+uniform int u_light_number;
+uniform float u_light_number_float;
 
 varying vec4 v_color;
-varying vec4 v_shadow_coord_1;
-varying vec4 v_shadow_coord_2;
+varying vec4 v_shadow_coords[5];
 varying vec3 v_position_worldspace;
 varying vec3 v_eyedirection_cameraspace;
-varying vec3 v_lightdirection_cameraspace_1;
-varying vec3 v_lightdirection_cameraspace_2;
+varying vec3 v_lightsdirection_cameraspace[5];
 varying vec3 v_normal_cameraspace;
 
 
@@ -37,53 +34,23 @@ void main()
   poissonDisk[15] = vec2( 0.14383161, -0.14100790);
   int antialiasing_level = 4;
   float antialiasing_level_float = 4.0;
-  float shadow_precision = 1.0 / antialiasing_level_float / u_light_number;
+  float shadow_precision = 1.0 / antialiasing_level_float / u_light_number_float;
   float spreading = 700.0;
-  // LIGHT 1
-  float visibility_1 = 0.5;
-  // Normal of the computed fragment, in camera space
-  vec3 n = normalize( v_normal_cameraspace );
-  // Direction of the light (from the fragment to the light)
-  vec3 l = normalize( v_lightdirection_cameraspace_1 );
-  // Cosine of the angle between the normal and the light direction, 
-  // clamped above 0
-  //  - light is at the vertical of the triangle -> 1
-  //  - light is perpendiular to the triangle -> 0
-  //  - light is behind the triangle -> 0
-  float cosTheta_1 = clamp( dot( n,l ), 0,1 );
 
-  // Direction in which the triangle reflects the light
-  vec3 r = reflect(-l,n);
-  // Cosine of the angle between the normal vector and the reflect vector,
-  // clamped to 0
-  //  - Looking into the reflection -> 1
-  //  - Looking elsewhere -> < 1
-  float cosAlpha_1 = clamp( dot( n,r ), 0,1 );
+  float visibility = 1.0;
+  gl_FragColor = vec4(0,0,0,0);
 
-  float bias = 0.05*tan(acos(cosTheta_1));
-  bias = clamp(bias, 0,0.01);
-
-  for (int i = 0; i < antialiasing_level; ++i)
-  {
-    if ( texture2D( u_shadow_map_1, v_shadow_coord_1.xy + poissonDisk[i]/spreading).z  <  (v_shadow_coord_1.z-bias)){
-        visibility_1 -= shadow_precision;
-    }
-  }
-  float visibility_2 = 0.5;
-  float cosTheta_2;
-  float cosAlpha_2;
-  if (u_light_number >= 2.0) {
-    // LIGHT 2
+  for (int i = 0; i < u_light_number; ++i) {
     // Normal of the computed fragment, in camera space
     vec3 n = normalize( v_normal_cameraspace );
     // Direction of the light (from the fragment to the light)
-    vec3 l = normalize( v_lightdirection_cameraspace_2 );
+    vec3 l = normalize( v_lightsdirection_cameraspace[i] );
     // Cosine of the angle between the normal and the light direction, 
     // clamped above 0
     //  - light is at the vertical of the triangle -> 1
     //  - light is perpendiular to the triangle -> 0
     //  - light is behind the triangle -> 0
-    cosTheta_2 = clamp( dot( n,l ), 0,1 );
+    float cosTheta = clamp( dot( n,l ), 0,1 );
 
     // Direction in which the triangle reflects the light
     vec3 r = reflect(-l,n);
@@ -91,25 +58,18 @@ void main()
     // clamped to 0
     //  - Looking into the reflection -> 1
     //  - Looking elsewhere -> < 1
-    cosAlpha_2 = clamp( dot( n,r ), 0,1 );
+    float cosAlpha = clamp( dot( n,r ), 0,1 );
 
-    float bias = 0.05*tan(acos(cosTheta_2));
+    float bias = 0.05*tan(acos(cosTheta));
     bias = clamp(bias, 0,0.01);
 
     for (int i = 0; i < antialiasing_level; ++i)
     {
-      if ( texture2D( u_shadow_map_2, v_shadow_coord_2.xy + poissonDisk[i]/spreading).z  <  (v_shadow_coord_2.z-bias)){
-          visibility_2 -= shadow_precision;
+      if ( texture2D( u_shadow_maps[i], v_shadow_coords[i].xy + poissonDisk[i]/spreading).z  <  (v_shadow_coords[i].z-bias)){
+          visibility -= shadow_precision;
       }
     }
-  }
-
-  gl_FragColor = visibility_1 * v_color * cosTheta_1 * vec4(u_light_intensity_1, 1) + 
-  visibility_1 * v_color * pow(cosAlpha_1, 5) * vec4(u_light_intensity_1, 1);
-
-  if (u_light_number >= 2.0) {
-    gl_FragColor += 
-  visibility_2 * v_color * cosTheta_2 * vec4(u_light_intensity_2, 1) + 
-  visibility_2 * v_color * pow(cosAlpha_2, 5) * vec4(u_light_intensity_2, 1);
+    gl_FragColor += visibility * v_color * cosTheta * vec4(u_lights_intensity[i], 1) / u_light_number_float + 
+    visibility * v_color * pow(cosAlpha, 5) * vec4(u_lights_intensity[i], 1) / u_light_number_float;
   }
 }
