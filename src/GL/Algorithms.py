@@ -3,6 +3,7 @@ from vispy import gloo
 from vispy.util.transforms import *
 import numpy
 from operator import add
+from vispy.geometry import *
 
 from Camera import Camera
 from Light import Light
@@ -166,6 +167,7 @@ class NoShadowAlgorithm:
         self._light = light
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
 
+        print normals[0]
         self.active = True
 
         self._program['u_light_intensity'] = 1.
@@ -237,26 +239,30 @@ class ShadowVolumeAlgorithm:
         indices = self._indices[index]
         normals = self._normals[index]
         ret = []
-        lightPosition = numpy.multiply(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
+        lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
         for i in range(0,len(indices), 3):
             a = indices[i]
             b = indices[i+1]
             c = indices[i+2]
             triangle = [positions[a], positions[b], positions[c]]
-            averageTrianglePos = [sum([x[0] for x in triangle])/3,
-                                  sum([x[1] for x in triangle])/3,
-                                  sum([x[2] for x in triangle])/3]
-            lightDir = (averageTrianglePos+[0]) - lightPosition
-            triangleNormal = normals[a] + (averageTrianglePos-positions[a])
+            print triangle
+            averageTrianglePos = [sum([x[0] for x in triangle])/3.0,
+                                  sum([x[1] for x in triangle])/3.0,
+                                  sum([x[2] for x in triangle])/3.0, 0.0]
+            lightDir = numpy.subtract(averageTrianglePos, lightPosition)
+            # print lightDir
+            triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), [1])
             if numpy.dot(lightDir, triangleNormal) >= 0:
                 for edge in [[positions[a], positions[b]],
                             [positions[a], positions[c]],
                             [positions[b], positions[c]]]:
                     if edge in ret or [edge[1], edge[0]] in ret:
-                        ret.remove(edge)
-                        ret.remove([edge[1], edge[0]])
+                        try:
+                            ret.remove(edge)
+                        except Exception, e:
+                            ret.remove([edge[1], edge[0]])
                     else:
-                        ret.add(edge)
+                        ret.append(edge)
         return ret
 
     def update(self):
@@ -326,3 +332,28 @@ class ShadowVolumeAlgorithm:
         self._camera = None
         self._light = None
 
+
+if __name__ == '__main__':
+    # unit test for shadow volume contour edges
+    cube_positions = [[1,1,1],[1,1,0],[0,1,0],[0,1,1],
+                       [1,0,1],[1,0,0],[0,0,0],[0,0,1]]
+    cube_indices =  [0,1,2, 0,2,3, 0,3,4, 7,4,3, 0,4,5, 0,5,1,
+                      2,1,5, 2,5,6, 7,3,2, 7,2,6, 6,5,4, 6,4,7]
+    cube_normals = []
+    for index in range(len(cube_positions)):
+        prev = cube_positions[index-1]
+        curr = cube_positions[index]
+        next = cube_positions[(index+1)%len(cube_positions)]
+        diff1 = numpy.subtract(prev, curr)
+        diff2 = numpy.subtract(next, curr)
+        cube_normals.append(numpy.cross(diff2, diff1))
+    camera = Camera()
+    camera.setX(2)
+    camera.setY(2)
+    camera.setZ(-2)
+    light = Light()
+    light.setPosition([2,2,-2])
+    shadowvolumealgo = ShadowVolumeAlgorithm()
+    shadowvolumealgo.init([cube_positions], [cube_indices], [cube_normals], camera, light)
+    shadowvolumealgo.update()
+    print shadowvolumealgo.findContourEdges(0)
