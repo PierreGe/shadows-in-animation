@@ -24,7 +24,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._algorithms = {
             "Shadow Mapping": ShadowMapAlgorithm(),
             "Aucune Ombre": NoShadowAlgorithm(),
-            "Ray Tracing": RayTracingAlgorithm()
+            "Ray Tracing": RayTracingAlgorithm(),
             "Auto-Ombre": SelfShadowAlgorithm()
         }
         self.setObjects(objectNames)
