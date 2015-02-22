@@ -83,13 +83,19 @@ class ShadowMapAlgorithm:
             self._program['u_shadow_map_1'] = self._shadowMaps[0]
             if len(self._lights) >= 2:
                 self._program['u_shadow_map_2'] = self._shadowMaps[1]
+            else:
+                self._program['u_shadow_map_2'] = self._shadowMaps[0]
             self._program['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
             self._program['u_light_intensity_1'] = self._lights[0].getIntensity()
             if len(self._lights) >= 2:
                 self._program['u_light_intensity_2'] = self._lights[1].getIntensity()
-            self._program['u_light_position_1'] = self._lights[0].getIntensity()
+            else:
+                self._program['u_light_intensity_2'] = self._lights[0].getIntensity()
+            self._program['u_light_position_1'] = self._lights[0].getPosition()
             if len(self._lights) >= 2:
-                self._program['u_light_position_2'] = self._lights[1].getIntensity()
+                self._program['u_light_position_2'] = self._lights[1].getPosition()
+            else:
+                self._program['u_light_position_2'] = self._lights[0].getPosition()
             self._program['u_light_number'] = float(len(self._lights))
             self._program.draw('triangles', self._indices)
 

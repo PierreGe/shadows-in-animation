@@ -70,6 +70,8 @@ void main()
     }
   }
   float visibility_2 = 1.0;
+  float cosTheta_2;
+  float cosAlpha_2;
   if (u_light_number >= 2.0) {
     // LIGHT 2
     // Normal of the computed fragment, in camera space
@@ -81,7 +83,7 @@ void main()
     //  - light is at the vertical of the triangle -> 1
     //  - light is perpendiular to the triangle -> 0
     //  - light is behind the triangle -> 0
-    float cosTheta_2 = clamp( dot( n,l ), 0,1 );
+    cosTheta_2 = clamp( dot( n,l ), 0,1 );
 
     // Direction in which the triangle reflects the light
     vec3 r = reflect(-l,n);
@@ -89,7 +91,7 @@ void main()
     // clamped to 0
     //  - Looking into the reflection -> 1
     //  - Looking elsewhere -> < 1
-    float cosAlpha_2 = clamp( dot( n,r ), 0,1 );
+    cosAlpha_2 = clamp( dot( n,r ), 0,1 );
 
     float bias = 0.05*tan(acos(cosTheta_2));
     bias = clamp(bias, 0,0.01);
@@ -100,11 +102,14 @@ void main()
           visibility_2 -= shadow_precision;
       }
     }
-    gl_FragColor =  
+  }
+
+  gl_FragColor = visibility_1 * v_color * cosTheta_1 * vec4(u_light_intensity_1, 1) + 
+  visibility_1 * v_color * pow(cosAlpha_1, 5) * vec4(u_light_intensity_1, 1);
+
+  if (u_light_number >= 2.0) {
+    gl_FragColor += 
   visibility_2 * v_color * cosTheta_2 * vec4(u_light_intensity_2, 1) + 
   visibility_2 * v_color * pow(cosAlpha_2, 5) * vec4(u_light_intensity_2, 1);
   }
-
-  gl_FragColor += visibility_1 * v_color * cosTheta_1 * vec4(u_light_intensity_1, 1) + 
-  visibility_1 * v_color * pow(cosAlpha_1, 5) * vec4(u_light_intensity_1, 1);
 }
