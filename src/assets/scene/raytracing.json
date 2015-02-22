@@ -1,6 +1,6 @@
 {
   "name": "Deux billes",
-  "description": "Cette scène contient deux billes",
+  "description": "Cette scène contient deux billes qui tournent",
   "algo-compatible": ["Ray Tracing"],
   "obj-liste": [
   ]
