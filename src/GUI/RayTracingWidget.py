@@ -31,10 +31,10 @@ class Canvas(app.Canvas):
         self.program['a_position'] = [(-1., -1.), (-1., +1.),(+1., -1.), (+1., +1.)]
         self.program['sphere_position_0'] = (.75, .1, 1.)
         self.program['sphere_radius_0'] = .6
-        self.program['sphere_color_0'] = (0., 0., 1.)
+        self.program['sphere_color_0'] = (1., 1., 1.)
         self.program['sphere_position_1'] = (-.75, .1, 2.25)
         self.program['sphere_radius_1'] = .6
-        self.program['sphere_color_1'] = (.5, .223, .5)
+        self.program['sphere_color_1'] = (1., 1., 1.)
         self.program['plane_position'] = (0., -.5, 0.)
         self.program['plane_normal'] = (0., 1., 0.)
         self.program['light_intensity'] = 1.
@@ -55,8 +55,9 @@ class Canvas(app.Canvas):
 
     def on_timer(self, event):
         t = event.elapsed
-        self.program['sphere_position_0'] = (+.75, .1, 2.0 + 1.0 * math.cos(4*t))
-        self.program['sphere_position_1'] = (-.75, .1, 2.0 - 1.0 * math.cos(4*t))
+        angle = t%360
+        self.program['sphere_position_0'] = (+ math.sin(t), .1, 2.0 + 1.0 * math.cos(t))
+        self.program['sphere_position_1'] = (- math.sin(t), .1, 2.0 - 1.0 * math.cos(t))
         self.update()
 
     def on_resize(self, event):
