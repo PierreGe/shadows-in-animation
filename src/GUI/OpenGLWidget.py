@@ -253,6 +253,3 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self._lightRotation.stop()
         if self._cameraRotation:
             self._cameraRotation.stop()
-
- 
- 
