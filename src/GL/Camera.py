@@ -6,7 +6,7 @@ import math
 import numpy
 
 class Camera(object):
-    RATIO_DEGRE_RAD = 57.2957
+    RATIO_DEGREE_RADIAN = 57.2957795
     """The Camera of the main OpenGl view
     It's nearly thread-safe"""
     def __init__(self):
@@ -16,8 +16,8 @@ class Camera(object):
         self.lock = threading.Lock()
         self._zoomAmplitude = 1
         self._limitUp = 60
-        self._limitDown = 0
-        self._limitSide = 40
+        self._limitDown = -10
+        self._limitSide = 60
         self._keyStep = 1
 
     def getX(self):
@@ -50,16 +50,13 @@ class Camera(object):
 
     def setHorizontalAngle(self, angle):
         if angle != self._direction[1]:
-            print(self._direction)
-            print(angle)
-            print(self._position)
             self._direction[1] = self._normalizeAngle(angle)
-            print(self._position)
             return True
         return False
 
     def rotateHorizontal(self, deltaAngle):
         self._direction[1] += deltaAngle
+        self._direction[1] = self._normalizeAngle(self._direction[1])
 
 
     def rotateVertical(self, deltaAngle):
@@ -67,9 +64,9 @@ class Camera(object):
 
 
     def _directionVectorFromAngle(self):
-        return (math.sin(self._direction[0]/Camera.RATIO_DEGRE_RAD),
-                math.sin(self._direction[1]/Camera.RATIO_DEGRE_RAD),
-                math.cos(self._direction[0]/Camera.RATIO_DEGRE_RAD))
+        return (math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN),
+                math.sin(self._direction[1]/Camera.RATIO_DEGREE_RADIAN),
+                math.cos(self._direction[0]/Camera.RATIO_DEGREE_RADIAN))
 
 
     def up(self):
@@ -79,6 +76,7 @@ class Camera(object):
 
     def down(self):
         """ """
+        print(self._position[1])
         if self._position[1] - self._keyStep > self._limitDown:
             self._position[1] -= self._keyStep
 
@@ -95,19 +93,11 @@ class Camera(object):
 
     def zoomIn(self):
         self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,self._directionVectorFromAngle())))
-        print("position")
-        print(self._position)
-        print("direction")
-        print(self._direction)
 
     def zoomOut(self):
         self._zoomAmplitude = -self._zoomAmplitude
         self.zoomIn()
         self._zoomAmplitude = -self._zoomAmplitude
-        print("position")
-        print(self._position)
-        print("direction")
-        print(self._direction)
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""
@@ -118,12 +108,31 @@ class Camera(object):
         return angle
 
 
+    def setThetaAngle(self):
+        """ """
+        self._rayon = math.sqrt(self._position[0]**2 + self._position[2]**2)
+        if self._position[0] < 0 and self._position[2] < 0:
+            theta = math.atan(self._position[2]/self._position[0]) * self.RATIO_DEGREE_RADIAN
+            theta += 180
+        elif self._position[2] > 0:
+            theta = math.acos(self._position[0]/self._rayon) * self.RATIO_DEGREE_RADIAN
+        else:
+            theta = math.asin(self._position[2]/self._rayon) * self.RATIO_DEGREE_RADIAN
+
+        self._theta = theta
+
     def incrementeRotate(self,plus):
         """ Increment Y value by plus, for rotation of the plane"""
         self.lock.acquire()
-        y = self.getY() + plus
-        y = self._normalizeAngle(y)
-        self._y = y
+        # self._theta +=  plus
+        # self._theta = self._normalizeAngle(self._theta)
+        # oldX = self._position[0]
+        # oldZ = self._position[2]
+        # self._position[0] = self._rayon * math.cos(self._theta/self.RATIO_DEGREE_RADIAN)
+        # self._position[2] = self._rayon * math.sin(self._theta/self.RATIO_DEGREE_RADIAN)
+        # rotation = self.RATIO_DEGREE_RADIAN *math.acos( (oldX*self._position[0] + oldZ *self._position[2]) / (math.sqrt(oldX**2 + oldZ**2) * math.sqrt(self._position[0]**2 + self._position[2]**2) ))
+        self.rotateHorizontal(plus)
+        # print(self._direction[1])
         self.lock.release()
         
 
