@@ -91,9 +91,11 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         res = False
         if event.buttons() & QtCore.Qt.LeftButton:
             res |= self._camera.setVerticalAngle(self._camera.getVerticalAngle() + 8 * dy)
+            res |= self._camera.setHorizontalAngle(self._camera.getHorizontalAngle() + 8 * dx)
             #res |= self._camera.setY(self._camera.getY() + 8 * dx)
         elif event.buttons() & QtCore.Qt.RightButton:
-            res |= self._camera.setHorizontalAngle(self._camera.getHorizontalAngle() + 8 * dy)
+            pass
+            #res |= self._camera.setHorizontalAngle(self._camera.getHorizontalAngle() + 8 * dy)
             #res |= self._camera.setZ(self._camera.getZ() + 8 * dx)
         self.lastPos = QtCore.QPoint(event.pos())
         if res:

@@ -38,15 +38,17 @@ class Camera(object):
         return self._direction[1]
 
     def setVerticalAngle(self,angle):
-        if angle != self._direction[0] and -90 < angle < 90:
+        if angle != self._direction[0] and 0 < angle < 90:
             print(self._direction)
             self._direction[0] = angle
             return True
         return False
 
     def setHorizontalAngle(self, angle):
-        if angle != self._direction[1] and 0 < angle < 360 :
-            self._direction[1] = angle
+        print("called")
+        if angle != self._direction[1]:
+            print(self._direction)
+            self._direction[1] = self._normalizeAngle(angle)
             return True
         return False
 
