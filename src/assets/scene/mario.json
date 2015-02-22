@@ -1,8 +1,8 @@
 {
-  "name": "Arbre",
-  "description": "This scene is a tree",
+  "name": "Mario",
+  "description": "This is Mario",
   "algo-compatible": ["Aucune Ombre","Auto-Ombre", "Ray Tracing","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
-      ["assets/obj/tree-palmier/FR01b.obj",[0,0,0]]
+      ["assets/obj/mario/mario5.obj",[0,0,0]]
   ]
 }

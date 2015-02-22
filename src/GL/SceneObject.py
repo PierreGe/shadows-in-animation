@@ -1,3 +1,6 @@
+#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+
 
 class SceneObject:
 	def __init__(self, program, position, color, indices=None, outline = None, visible = True):

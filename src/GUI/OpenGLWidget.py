@@ -5,15 +5,18 @@ from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from vispy.geometry import *
 import numpy
+from threading import Thread, Lock
 
 from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light
 from Algorithms import *  
+import AutoRotateLight
+import AutoRotateCamera
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
-    """ docstring """
+    """ The main openGL widget """
     def __init__(self, objectNames, algoName, controller,  parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
@@ -21,10 +24,24 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._algorithms = {
             "Shadow Mapping": ShadowMapAlgorithm(),
             "Shadow Volume" : ShadowVolumeAlgorithm(),
-            "Aucune Ombre": NoShadowAlgorithm()
+            "Aucune Ombre": NoShadowAlgorithm(),
+            "Auto-Ombre": SelfShadowAlgorithm()
         }
         self.setObjects(objectNames)
         self.setAlgo(algoName)
+        self._mutex = Lock()
+
+        self.timer = QtCore.QTimer(self)
+        self.timer.setSingleShot(False)
+        self.timer.timeout.connect(self.timerUpdate)
+        fps = 24
+        self.timer.start(int(1000/fps))
+        self._lightRotation = None
+        self._cameraRotation = None
+
+    def timerUpdate(self):
+        """ """
+        self.updateGL()
 
     def getObjectNames(self):
         """ Reload openGLWidget """
@@ -96,12 +113,20 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._light.setLightsRatio(position)
         self.updateGL()
 
+    def keyPressEvent(self, e):
+        """ """
+        print("Key pressed")
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+
 
     # ---------- Partie : Opengl ------------
  
     # Called at startup
     def initializeGL(self):
         """ docstring """
+        print "GLSL Version : " + GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
+        self._mutex.acquire()
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
@@ -124,18 +149,26 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
+        self._lightRotation = AutoRotateLight.AutoRotateLight(self._light,1)
+        self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
+
+        self._mutex.release()
 
     # Called on each update/frame
     def paintGL(self):
         """ docstring """
+        self._mutex.acquire()
         gloo.clear(color=True, depth=True)
         self._chosenAlgo.update()
+        self._mutex.release()
 
     # Called when window is resized
     def resizeGL(self, width, height):
         """ docstring """
         # set openGL in the center of the widget
+        self._mutex.acquire()
         GL.glViewport(0, 0, width, height)
+        self._mutex.release()
 
     # Objects construction methods
     def _makePlane(self, position, width, height):
@@ -197,5 +230,29 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def _addNormals(self, normals):
         self.normals.append(normals)
+
+    def switchLightAnimation(self):
+        """ """
+        if self._lightRotation:
+            if self._lightRotation.getAlive():
+                self._lightRotation.stop()
+            else:
+                self._lightRotation.start()
+
+    def switchCameraAnimation(self):
+        """ """
+        if self._cameraRotation:
+            if self._cameraRotation.getAlive():
+                self._cameraRotation.stop()
+            else:
+                self._cameraRotation.start()
+
+    def killThreads(self):
+        """ """
+        if self._lightRotation:
+            self._lightRotation.stop()
+        if self._cameraRotation:
+            self._cameraRotation.stop()
+
  
  

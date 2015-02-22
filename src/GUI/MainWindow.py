@@ -5,10 +5,10 @@ import sys
 import os
 
 from PyQt4 import QtGui, QtCore
+from OpenGL import GL
 
 import SplitPane
 import Controller
-
 import LightPanel
 import HelpWidget
 
@@ -45,13 +45,20 @@ class MainWindow(QtGui.QMainWindow):
    
         self.showMaximized()
 
+    def closeApp(self):
+        """ """
+        self.close()
+        self._controller.killThreads()
+        exit()
+        #os.system("kill -9 " + os.getpid()) # hihi
+
     def displayHelp(self):
         """ """
         QtGui.QMessageBox.information(self, "Aide", "Printemps des sciences 2015")
 
     def displayAbout(self):
         """ Display some info"""
-        QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015")
+        QtGui.QMessageBox.information(self, "A propos", "- Pierre Gerard, Bruno Rocha Pereira, Antoine Carpentier" + "\n" + "- Dans ce projet nous examinons le domaine des algorithmes de rendu d'ombre et nous en comparerons quelques-uns dans un environnement de simulation 3D comme le OpenGL. Le but est de tester leurs aspects positifs et négatifs et de voir les conditions dans lesquelles ils donnent le meilleur rendu.")
 
     def initMenu(self):
         """ This method will initate the menu """
@@ -62,12 +69,12 @@ class MainWindow(QtGui.QMainWindow):
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/application-exit.png"), 'Quitter', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(self.close)
+        exitAction.triggered.connect(self.closeApp)
         fileMenu.addAction(exitAction)
 
         aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/help-browser.png"), "Aide", self)
         aboutAction.setStatusTip("Aide pour cette application")
-        aboutAction.triggered.connect(self.displayAbout)
+        aboutAction.triggered.connect(self.displayHelp)
         helpMenu.addAction(aboutAction)
 
         aboutAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" + "images/dialog-information.png"), "A propos", self)
@@ -88,9 +95,26 @@ class MainWindow(QtGui.QMainWindow):
         self.l = LightPanel.RemoveLightPanel(self._controller)
 
 
-    def animate(self):
+    def animateLight(self):
         """ """
-        # create a animation
+        self._controller.switchLightAnimation()
+
+    def animateCamera(self):
+        """ """
+        self._controller.switchCameraAnimation()
+
+
+    def showHardwareVersion(self):
+        """ Display opengl and shading version"""
+        helper = self._controller.getOpenGlVersionHelper()
+        vendor = helper.getVendor()
+        renderer = helper.getRenderer()
+        shadingVersion = helper.getShadingVersion()
+        openglVersion = helper.getOpenGlVersion()
+        if isinstance(shadingVersion, str) and isinstance(openglVersion, str):
+            QtGui.QMessageBox.information(self,"Materiel graphique","Vendeur : " + vendor + "\n" + "Renderer : " + renderer + "\n" + "OpenGL : " + openglVersion + "\n" + "GLSL : " + shadingVersion)
+        else:
+            print("GL not initialized")
 
 
     def initToolsBar(self):
@@ -100,7 +124,7 @@ class MainWindow(QtGui.QMainWindow):
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/application-exit.png"), "Exit", self)
         exitAction.setShortcut("Ctrl+Q")
         exitAction.setStatusTip("Quitter l'application")
-        exitAction.triggered.connect(self.close)
+        exitAction.triggered.connect(self.closeApp)
         toolbar.addAction(exitAction)
 
         reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)
@@ -128,11 +152,30 @@ class MainWindow(QtGui.QMainWindow):
         toolbar.addSeparator()
 
 
-        animationAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator.png"), "Animation", self)
-        animationAction.setShortcut("Ctrl+A")
-        animationAction.setStatusTip("Animation")
-        animationAction.triggered.connect(self.animate)
-        toolbar.addAction(animationAction)
+        animationActionCamera = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-camera.png"), "Animation de la camera", self)
+        animationActionCamera.setStatusTip("Animation de la camera")
+        animationActionCamera.triggered.connect(self.animateCamera)
+        toolbar.addAction(animationActionCamera)
+
+
+        animationActionLight = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-light.png"), "Animation des lampes", self)
+        animationActionLight.setStatusTip("Animation des lampes")
+        animationActionLight.triggered.connect(self.animateLight)
+        toolbar.addAction(animationActionLight)
+
+
+        toolbar.addSeparator()
+
+        hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
+        hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
+        hardwareHelpAction.triggered.connect(self.showHardwareVersion)
+        toolbar.addAction(hardwareHelpAction)
+
+
+
+        toolbar.addSeparator()
+
+
 
         textWidget = QtGui.QLabel(self)
         textWidget.setText("Position lumière :  X ".decode("utf8"))

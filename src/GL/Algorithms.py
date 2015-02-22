@@ -1,3 +1,6 @@
+#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+
 from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *
@@ -33,6 +36,8 @@ def concatIndices(indicesList):
 
 def concatNormals(normalsList):
     return reduce(add, normalsList, [])
+
+DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 
 class ShadowMapAlgorithm:
     def __init__(self):
@@ -97,13 +102,13 @@ class ShadowMapAlgorithm:
             self._program['u_depth_view'] = shadow_view
             self._program['u_depth_projection'] = self._shadow_projection
             self._program['u_shadow_map'] = self._renderTexture
-            self._program['u_color'] = (0.5, 0.5, 0.8, 1) # TODO remove hardcoded value
+            self._program['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
             self._program['u_light_intensity'] = self._light.getIntensity()
             self._program['u_light_position'] = self._light.getPosition()
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap
-            GL.glViewport(0,0,455,256)
+            GL.glViewport(0,0,228,128)
             self._shadowMap.draw('triangles', self._indices)
             GL.glViewport(0,0,1366,768)
 
@@ -120,8 +125,6 @@ class RayTracingAlgorithm:
     def __init__(self):
 
         self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
-
-        self.init(positions, indices, normals, camera, light)
 
     def init(self, positions, indices, normals, camera, light):
         self._positions = gloo.VertexBuffer(positions)
@@ -170,8 +173,51 @@ class NoShadowAlgorithm:
         print normals[0]
         self.active = True
 
-        self._program['u_light_intensity'] = 1.
-        self._program['u_light_position'] = (5., 5., -10.)
+
+        self._program['position'] = self._positions
+        self._program.draw('triangles', self._indices)
+
+    def update(self):
+        if self.active:
+            # create render matrices
+            view = numpy.eye(4, dtype=numpy.float32)
+            translate(view, 0, -4, self._camera.getZoom())
+            model = numpy.eye(4, dtype=numpy.float32)
+            rotate(model, self._camera.getX(), 1, 0, 0)
+            rotate(model, self._camera.getY(), 0, 1, 0)
+            rotate(model, self._camera.getZ(), 0, 0, 1)
+            # draw scene
+            self._program['u_model'] = model
+            self._program['u_view'] = view
+            self._program['u_projection'] = self._projection
+            self._program['u_color'] = DEFAULT_COLOR 
+            self._program.draw('triangles', self._indices)
+
+    def terminate(self):
+        self.active = False
+        self._positions = []
+        self._indices = []
+        self._normals = []
+        self._camera = None
+        self._light = None
+
+
+class SelfShadowAlgorithm:
+    def __init__(self):
+        self._program = gloo.Program("shaders/selfshadowalgo.vertexshader", "shaders/selfshadowalgo.fragmentshader")
+
+    def init(self, positions, indices, normals, camera, light):
+        self._positions = gloo.VertexBuffer(concatPositions(positions))
+        self._indices = gloo.IndexBuffer(numpy.array(concatIndices(indices)))
+        self._normals = gloo.VertexBuffer(concatNormals(normals))
+        self._camera = camera
+        self._light = light
+        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
+
+        self.active = True
+
+        self._program['u_light_intensity'] = self._light.getIntensity()
+        self._program['u_light_position'] = self._light.getPosition()
         self._program['normal'] = self._normals
         self._program['position'] = self._positions
 
@@ -192,7 +238,7 @@ class NoShadowAlgorithm:
             self._program['u_model'] = model
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
-            self._program['u_color'] = (0.5, 0.5, 0.8, 1) 
+            self._program['u_color'] = DEFAULT_COLOR 
             self._program.draw('triangles', self._indices)
 
     def terminate(self):
@@ -245,12 +291,10 @@ class ShadowVolumeAlgorithm:
             b = indices[i+1]
             c = indices[i+2]
             triangle = [positions[a], positions[b], positions[c]]
-            print triangle
             averageTrianglePos = [sum([x[0] for x in triangle])/3.0,
                                   sum([x[1] for x in triangle])/3.0,
                                   sum([x[2] for x in triangle])/3.0, 0.0]
             lightDir = numpy.subtract(averageTrianglePos, lightPosition)
-            # print lightDir
             triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), [1])
             if numpy.dot(lightDir, triangleNormal) >= 0:
                 for edge in [[positions[a], positions[b]],
