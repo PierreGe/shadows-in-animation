@@ -12,7 +12,7 @@ class LightCollection(list):
     def addLight(self, light):
         """ """
         self.append(light)
-        print(self.lightList)
+        print(self)
     
     def getLightList(self):
         """ """

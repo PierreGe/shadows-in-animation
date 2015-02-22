@@ -18,7 +18,7 @@ class ShadowMapAlgorithm:
         # assign members that never change
         self._program = gloo.Program("shaders/shadowmapalgo.vertexshader",
                                     "shaders/shadowmapalgo.fragmentshader")
-        self._shadowMap = gloo.Program("shaders/shadowmap.vertexshader",
+        self._shadowProgram = gloo.Program("shaders/shadowmap.vertexshader",
                                         "shaders/shadowmap.fragmentshader")
 
     def init(self, positions, indices, normals, camera, lightList):
@@ -27,16 +27,20 @@ class ShadowMapAlgorithm:
         self._indices = gloo.IndexBuffer(numpy.array(indices))
         self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
-        self._light = lightList[0]
+        self._lights = lightList
         self._program['position'] = self._positions
         self._program['normal'] = self._normals
-        self._shadowMap['position'] = self._positions
+        self._shadowProgram['position'] = self._positions
         self.active = True
         
         # Shadow map
+        self._shadowMaps = []
+        self._frameBuffers = []
         shape = 768,1366
-        self._renderTexture = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
-        self._fbo = gloo.FrameBuffer(self._renderTexture)
+        for light in self._lights:
+            shadowMap = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+            self._shadowMaps.append(shadowMap)
+            self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
 
         # matrices
         self._projection = perspective(60, 16.0/9.0, 0.1, 50)
@@ -52,15 +56,19 @@ class ShadowMapAlgorithm:
             rotate(model, self._camera.getX(), 1, 0, 0)
             rotate(model, self._camera.getY(), 0, 1, 0)
             rotate(model, self._camera.getZ(), 0, 0, 1)
-            # create shadow map matrices
-            shadow_model = numpy.eye(4, dtype=numpy.float32)
-            shadow_view = lookAt(self._light.getPosition(), (0,2,0), (0,1,0))
-            # create shadow map
-            with self._fbo:
-                self._shadowMap['u_projection'] = self._shadow_projection
-                self._shadowMap['u_model'] = shadow_model
-                self._shadowMap['u_view'] = shadow_view
-                self._shadowMap.draw('triangles', self._indices)
+            for i in range(len(self._frameBuffers)):
+                # create shadow map matrices
+                shadow_model = numpy.eye(4, dtype=numpy.float32)
+                shadow_view = lookAt(self._lights[i].getPosition(), (0,2,0), (0,1,0))
+                self._program['u_depth_model_' + str(i+1)] = shadow_model
+                self._program['u_depth_view_' + str(i+1)] = shadow_view
+                self._program['u_depth_projection_' + str(i+1)] = self._shadow_projection
+                # create shadow map
+                with self._frameBuffers[i]:
+                    self._shadowProgram['u_projection'] = self._shadow_projection
+                    self._shadowProgram['u_model'] = shadow_model
+                    self._shadowProgram['u_view'] = shadow_view
+                    self._shadowProgram.draw('triangles', self._indices)
 
             # draw scene
             biasMatrix = numpy.matrix( [[0.5, 0.0, 0.0, 0.0],
@@ -72,18 +80,22 @@ class ShadowMapAlgorithm:
             self._program['u_view'] = view
             self._program['u_projection'] = self._projection
             self._program['u_bias_matrix'] = biasMatrix
-            self._program['u_depth_model'] = shadow_model
-            self._program['u_depth_view'] = shadow_view
-            self._program['u_depth_projection'] = self._shadow_projection
-            self._program['u_shadow_map'] = self._renderTexture
+            self._program['u_shadow_map_1'] = self._shadowMaps[0]
+            if len(self._lights) >= 2:
+                self._program['u_shadow_map_2'] = self._shadowMaps[1]
             self._program['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
-            self._program['u_light_intensity'] = self._light.getIntensity()
-            self._program['u_light_position'] = self._light.getPosition()
+            self._program['u_light_intensity_1'] = self._lights[0].getIntensity()
+            if len(self._lights) >= 2:
+                self._program['u_light_intensity_2'] = self._lights[1].getIntensity()
+            self._program['u_light_position_1'] = self._lights[0].getIntensity()
+            if len(self._lights) >= 2:
+                self._program['u_light_position_2'] = self._lights[1].getIntensity()
+            self._program['u_light_number'] = float(len(self._lights))
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap
-            GL.glViewport(0,0,228,128)
-            self._shadowMap.draw('triangles', self._indices)
+            # GL.glViewport(0,0,228,128)
+            # self._shadowMap.draw('triangles', self._indices)
             GL.glViewport(0,0,1366,768)
 
     def terminate(self):
