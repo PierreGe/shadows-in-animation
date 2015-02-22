@@ -11,8 +11,8 @@ class Camera(object):
     It's nearly thread-safe"""
     def __init__(self):
         """ Constructeur de la classe Camera"""
-        self._position = (0,10,-20)
-        self._direction = (0,0) # first is rotation around x => vertical
+        self._position = [0,10,-20]
+        self._direction = [0,0] # first is rotation around x => vertical
         self.lock = threading.Lock()
         self._zoomAmplitude = 0.15
 
@@ -25,11 +25,29 @@ class Camera(object):
     def getZ(self):
         return self._position[2]
 
+    def getVerticalAngle(self):
+        return self._direction[0]
+
+    def getHorizontalAngle(self):
+        return self._direction[1]
+
     def getDirectionX(self):
         return self._direction[0]
 
     def getDirectionY(self):
         return self._direction[1]
+
+    def setVerticalAngle(self,angle):
+        if angle != self._direction[0]:
+            self._direction[0] = angle
+            return True
+        return False
+
+    def getHorizontalAngle(self, angle):
+        if angle != self._direction[1]:
+            self._direction[1] = angle
+            return True
+        return False
 
     def rotateHorizontal(self, deltaAngle):
         self._direction[1] += deltaAngle
