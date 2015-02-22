@@ -191,11 +191,6 @@ class AddLightPanel(QtGui.QWidget):
 
 
 
-
-
-
-
-
 class RemoveLightPanel(QtGui.QWidget):
 
     def __init__(self, controller):

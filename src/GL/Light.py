@@ -11,8 +11,10 @@ LIGHT_POSSIBILITY = ["Point", "Directionnel", "Spot", "Ligne", "Rond"]
 LIGHT_WITH_DIRECTION = ["Directionnel","Ligne","Spot"]
 COLOR_POSSIBILITY = ["Blanc", "Rouge", "Jaune", "Bleu"]
 
+
 class Light(object):
     """docstring for Light"""
+    RATIO_DEGREE_RADIAN = 57.2957795
     def __init__(self):
         # interval pour eviter d'envoyer la lampe au perou
         self.lock = threading.Lock()
@@ -111,12 +113,12 @@ class Light(object):
     def setThetaAngle(self):
         """ """
         if self._position[0] < 0 and self._position[2] < 0:
-            theta = math.atan(self._position[2]/self._position[0]) * 57.2957795
+            theta = math.atan(self._position[2]/self._position[0]) * Light.RATIO_DEGREE_RADIAN
             theta += 180
         elif self._position[2] > 0:
-            theta = math.acos(self._position[0]/self._rayon) * 57.2957795
+            theta = math.acos(self._position[0]/self._rayon) * Light.RATIO_DEGREE_RADIAN
         else:
-            theta = math.asin(self._position[2]/self._rayon) * 57.2957795
+            theta = math.asin(self._position[2]/self._rayon) * Light.RATIO_DEGREE_RADIAN
 
         self._theta = theta
 
@@ -125,6 +127,6 @@ class Light(object):
         self.lock.acquire()
         self._theta +=  plus
         self._theta = self._normalizeAngle(self._theta)
-        self._position[0] = self._rayon * math.cos(self._theta/57.2957795)
-        self._position[2] = self._rayon * math.sin(self._theta/57.2957795)
+        self._position[0] = self._rayon * math.cos(self._theta/Light.RATIO_DEGREE_RADIAN)
+        self._position[2] = self._rayon * math.sin(self._theta/Light.RATIO_DEGREE_RADIAN)
         self.lock.release()

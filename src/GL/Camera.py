@@ -14,6 +14,7 @@ class Camera(object):
         self._position = (0,10,-20)
         self._direction = (0,0) # first is rotation around x => vertical
         self.lock = threading.Lock()
+        self._zoomAmplitude = 0.15
 
     def getX(self):
         return self._position[0]
@@ -46,7 +47,7 @@ class Camera(object):
 
 
     def zoomIn(self):
-        self._position = list(numpy.add(self._position, self._directionVectorFromAngle()))
+        self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,self._directionVectorFromAngle())))
 
     def zoomOut(self):
         self._zoomAmplitude = -self._zoomAmplitude
