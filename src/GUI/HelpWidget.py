@@ -45,9 +45,6 @@ class HelpWidget(QtGui.QWidget):
         
         self.show()
 
-    def resizeEvent(self, event):
-        """ """
-        #print("Resized")
 
     def _getStyleSheet(self):
         """ Retourne la feuille de style du QLabel"""

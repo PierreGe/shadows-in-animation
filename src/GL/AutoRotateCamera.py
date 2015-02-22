@@ -6,14 +6,15 @@ import time
 import threading
 
 
-class AutoRotate(object):
+class AutoRotateCamera(object):
     """ This class rotate the view constantly
     It manage race condition"""
-    def __init__(self, camera):
+    def __init__(self, camera, incrementation=0.5):
         self._camera = camera
         # receiver of signal to update
         self._thread = None
         self._alive = False
+        self._incrementation = incrementation
         self.lock = threading.Lock()
 
 
@@ -23,13 +24,11 @@ class AutoRotate(object):
         alive = self._alive
         self.lock.release()
         while alive:
-            self._camera.incrementeY(0.5)
-            time.sleep(0.05)
+            self._camera.incrementeRotate(self._incrementation)
+            time.sleep(0.04) # set by frame per second
             self.lock.acquire()
             alive = self._alive
             self.lock.release()
-            #updateGL()
-
 
     def start(self):
         """ start the rotation"""
@@ -41,13 +40,13 @@ class AutoRotate(object):
 
 
     def stop(self):
-        """ """
+        """ Stop the thread"""
         self.lock.acquire()
         self._alive = False
         self.lock.release()
 
     def getAlive(self):
-        """ """
+        """ get the state of the thread """
         self.lock.acquire()
         alive = self._alive
         self.lock.release()

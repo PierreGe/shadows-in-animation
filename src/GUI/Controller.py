@@ -12,6 +12,7 @@ from os.path import isfile, join
 import HelpWidget
 import OpenGLWidget
 import LightCollection
+import OpenGlVersionHelper
 
 class Controller(object):
     """Controller will controll :
@@ -28,6 +29,7 @@ class Controller(object):
         self._lightPosition = [0,0,0]
         self._glWidget = None
         self._helpWidget = HelpWidget.HelpWidget()
+        self._openGlVersionHelper = OpenGlVersionHelper.OpenGlVersionHelper()
 
     def initStatusBar(self,statusBar):
         """ """
@@ -123,7 +125,6 @@ class Controller(object):
                 jasonDict = json.loads(open(mypath + singleFile).read())
                 name = jasonDict["name"]
                 dicti = jasonDict
-                print(dicti["obj-liste"])
                 if name in self._scene:
                     print("[WARNING] : Two scenes with same name found : the first one will be overwrited!")
                 self._scene[name] = dicti
@@ -140,7 +141,25 @@ class Controller(object):
         """ set the status bar to computing"""
         self._statusBar.showMessage("Computing ....")
 
-    def switchAnimation(self):
+    def switchLightAnimation(self):
         """ """
         if self._glWidget:
-            self._glWidget.switchAnimation()
+            self._glWidget.switchLightAnimation()
+        else:
+            print("Error switchLightAnimation : openGl not running")
+
+    def switchCameraAnimation(self):
+        """ """
+        if self._glWidget:
+            self._glWidget.switchCameraAnimation()
+        else:
+            print("Error switchCameraAnimation : openGl not running")
+
+    def getOpenGlVersionHelper(self):
+        """ """
+        return self._openGlVersionHelper
+
+    def killThreads(self):
+        """ """
+        if self._glWidget:
+            self._glWidget.killThreads()
