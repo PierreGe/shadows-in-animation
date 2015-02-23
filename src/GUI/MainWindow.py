@@ -135,18 +135,10 @@ class MainWindow(QtGui.QMainWindow):
 
         toolbar.addSeparator()
 
-        addLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBublePlus.png"), "Light+", self)
-        addLightAction.setShortcut("Ctrl+L")
-        addLightAction.setStatusTip("Ajouter une lampe")
-        addLightAction.triggered.connect(self.addALight)
-        toolbar.addAction(addLightAction)
-
-
-        removeLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBubleMinus.png"), "Light-", self)
-        #removeLightAction.setShortcut("Ctrl+L")
-        removeLightAction.setStatusTip("Retirer une lampe")
-        removeLightAction.triggered.connect(self.removeALight)
-        toolbar.addAction(removeLightAction)
+        hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
+        hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
+        hardwareHelpAction.triggered.connect(self.showHardwareVersion)
+        toolbar.addAction(hardwareHelpAction)
 
 
         toolbar.addSeparator()
@@ -164,12 +156,21 @@ class MainWindow(QtGui.QMainWindow):
         toolbar.addAction(animationActionLight)
 
 
+
         toolbar.addSeparator()
 
-        hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
-        hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
-        hardwareHelpAction.triggered.connect(self.showHardwareVersion)
-        toolbar.addAction(hardwareHelpAction)
+        addLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBublePlus.png"), "Light+", self)
+        addLightAction.setShortcut("Ctrl+L")
+        addLightAction.setStatusTip("Ajouter une lampe")
+        addLightAction.triggered.connect(self.addALight)
+        toolbar.addAction(addLightAction)
+
+
+        removeLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBubleMinus.png"), "Light-", self)
+        #removeLightAction.setShortcut("Ctrl+L")
+        removeLightAction.setStatusTip("Retirer une lampe")
+        removeLightAction.triggered.connect(self.removeALight)
+        toolbar.addAction(removeLightAction)
 
 
 
