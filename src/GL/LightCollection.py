@@ -12,7 +12,6 @@ class LightCollection(list):
     def addLight(self, light):
         """ """
         self.append(light)
-        print(self)
     
     def getLightList(self):
         """ """
@@ -20,4 +19,5 @@ class LightCollection(list):
 
     def deleteLight(self, lightIndex):
         """ """
-        del self[lightIndex]
+        if len(self) > 1:
+            del self[lightIndex]
