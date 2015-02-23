@@ -105,11 +105,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self._camera.zoomOut()
         self.updateGL()
 
-    def updateLights(self,position):
-        """ """
-        self._light.setLightsRatio(position)
-        self.updateGL()
-
     def keyPressEvent(self, event):
         """ """
         if event.key() == QtCore.Qt.Key_Left or event.key() == QtCore.Qt.Key_Q:
@@ -143,7 +138,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                        line_width=0.75)
         # create camera and light
         self._camera = Camera()
-        self._light = Light()
+        self._lights = self._controller.getLightCollection()
 
         self.positions = []
         self.indices = []
@@ -155,8 +150,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # self._makeSphere((0,3,0))
         self._loadObjects()
 
-        self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._light)
-        self._lightRotation = AutoRotateLight.AutoRotateLight(self._light,1)
+        self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._controller.getLightCollection())
+        self._lightRotation = AutoRotateLight.AutoRotateLight(self._lights[0],1)
         self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
