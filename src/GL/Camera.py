@@ -63,8 +63,7 @@ class Camera(object):
 
 
     def _directionVectorFromAngle(self):
-        print(self._direction)
-        return (math.sin((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN)*math.cos((90-self._direction[1])/Camera.RATIO_DEGREE_RADIAN),
+        return (math.cos((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN)*math.cos((90-self._direction[1])/Camera.RATIO_DEGREE_RADIAN),
                 math.cos((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN),
                 math.sin((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN)*math.sin((90-self._direction[1])/Camera.RATIO_DEGREE_RADIAN))
 
@@ -93,10 +92,10 @@ class Camera(object):
 
     def zoomIn(self):
         dirVect = self._directionVectorFromAngle()
-        print(dirVect)
         self._position[0] += dirVect[0] * self._zoomAmplitude
-        self._position[1] += dirVect[1] * self._zoomAmplitude +10
+        self._position[1] += dirVect[1] * self._zoomAmplitude
         self._position[2] += dirVect[2] * self._zoomAmplitude
+        print(self._position)
         #self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,dirVect)))
 
     def zoomOut(self):
@@ -143,10 +142,28 @@ class Camera(object):
 
 if __name__ == '__main__':
     camera = Camera()
-    assert (camera._position == (0,10,-20))
-    assert (camera._direction == (0,0))
+    camera._position = [0,10,-20]
+    camera._direction = [0,0]
     camera.zoomIn()
     print camera._directionVectorFromAngle()
     print camera._position
-    # assert (camera._position == (0.0, 11.0, -19.0))
+    print("Normalement 0 10 -19")
+
+    camera = Camera()
+    camera._position = [1,10,-20]
+    camera._direction = [0,270]
+    camera.zoomIn()
+    print camera._directionVectorFromAngle()
+    print camera._position
+    print("Normalement 0 10 -20")
+
+
+    camera = Camera()
+    camera._position = [0,10,-20]
+    camera._direction = [88,0]
+    camera.zoomIn()
+    print camera._directionVectorFromAngle()
+    print camera._position
+    print("Normalement 0 9 -19")
+    
 

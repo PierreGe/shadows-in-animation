@@ -19,7 +19,7 @@ class MainWindow(QtGui.QMainWindow):
         """Constructor of the class MainWindow"""
         super(MainWindow, self).__init__()
         # The GUI controller
-        self._controller = Controller.Controller()
+        self._controller = Controller.Controller(self)
         # init the GUI
         self.initUI()
         
@@ -116,104 +116,123 @@ class MainWindow(QtGui.QMainWindow):
         else:
             print("GL not initialized")
 
+    def onTypeSelection(self):
+        """ """
+        pass
+
 
     def initToolsBar(self):
         """ This method will initate the toolsBar"""
-        toolbar = self.addToolBar("Tool Bar")
+        self.toolbar = self.addToolBar("Tool Bar")
 
         exitAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/application-exit.png"), "Exit", self)
         exitAction.setShortcut("Ctrl+Q")
         exitAction.setStatusTip("Quitter l'application")
         exitAction.triggered.connect(self.closeApp)
-        toolbar.addAction(exitAction)
+        self.toolbar.addAction(exitAction)
 
         reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)
         reloadAction.setShortcut("Ctrl+R")
         reloadAction.setStatusTip("Recharge l'application")
         reloadAction.triggered.connect(self.reloadOpenGl)
-        toolbar.addAction(reloadAction)
+        self.toolbar.addAction(reloadAction)
 
-        toolbar.addSeparator()
+        self.toolbar.addSeparator()
 
         hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
         hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
         hardwareHelpAction.triggered.connect(self.showHardwareVersion)
-        toolbar.addAction(hardwareHelpAction)
+        self.toolbar.addAction(hardwareHelpAction)
 
 
-        toolbar.addSeparator()
+        self.toolbar.addSeparator()
 
 
         animationActionCamera = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-camera.png"), "Animation de la camera", self)
         animationActionCamera.setStatusTip("Animation de la camera")
         animationActionCamera.triggered.connect(self.animateCamera)
-        toolbar.addAction(animationActionCamera)
+        self.toolbar.addAction(animationActionCamera)
 
 
         animationActionLight = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-light.png"), "Animation des lampes", self)
         animationActionLight.setStatusTip("Animation des lampes")
         animationActionLight.triggered.connect(self.animateLight)
-        toolbar.addAction(animationActionLight)
+        self.toolbar.addAction(animationActionLight)
 
 
 
-        toolbar.addSeparator()
+        self.toolbar.addSeparator()
 
         addLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBublePlus.png"), "Light+", self)
         addLightAction.setShortcut("Ctrl+L")
         addLightAction.setStatusTip("Ajouter une lampe")
         addLightAction.triggered.connect(self.addALight)
-        toolbar.addAction(addLightAction)
+        self.toolbar.addAction(addLightAction)
 
 
         removeLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBubleMinus.png"), "Light-", self)
         #removeLightAction.setShortcut("Ctrl+L")
         removeLightAction.setStatusTip("Retirer une lampe")
         removeLightAction.triggered.connect(self.removeALight)
-        toolbar.addAction(removeLightAction)
+        self.toolbar.addAction(removeLightAction)
 
 
 
-        # toolbar.addSeparator()
+        self.toolbar.addSeparator()
+
+        lightCollection = self._controller.getLightCollection()
+        if len(lightCollection) > 0:
+            self._choiceType = "0 Default"
+            combo = QtGui.QComboBox(self)
+            for lightIndex in range(len(lightCollection)):
+                string = "Lampe "+ str(lightIndex+1)
+                
+                combo.addItem(string)
+            combo.activated[str].connect(self.onTypeSelection)
+        
+        self.toolbar.addWidget(combo)
 
 
 
-        # textWidget = QtGui.QLabel(self)
-        # textWidget.setText("Position lumière :  X ".decode("utf8"))
-        # toolbar.addWidget(textWidget)
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText("  Position lumière :  X ".decode("utf8"))
+        self.toolbar.addWidget(textWidget)
 
 
-        # sliderX = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        # sliderX.valueChanged.connect(self._controller.lightPercentX)
-        # sliderX.setSliderPosition(99)
-        # toolbar.addWidget(sliderX)
+        sliderX = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        sliderX.valueChanged.connect(self._controller.lightPercentX)
+        sliderX.setSliderPosition(99)
+        self.toolbar.addWidget(sliderX)
 
 
-        # textWidget = QtGui.QLabel(self)
-        # textWidget.setText("  Z ")
-        # toolbar.addWidget(textWidget)
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText("  Z ")
+        self.toolbar.addWidget(textWidget)
 
-        # sliderZ = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        # sliderZ.valueChanged.connect(self._controller.lightPercentZ)
-        # sliderZ.setSliderPosition(99)
-        # toolbar.addWidget(sliderZ)
-
-
-        # textWidget = QtGui.QLabel(self)
-        # textWidget.setText("  Hauteur ")
-        # toolbar.addWidget(textWidget)
-
-        # sliderY = QtGui.QSlider(QtCore.Qt.Horizontal, self)
-        # sliderY.valueChanged.connect(self._controller.lightPercentY)
-        # sliderY.setSliderPosition(99)
-        # toolbar.addWidget(sliderY)
-
-        # # un espace blanc
-        # textWidget = QtGui.QLabel(self)
-        # textWidget.setText(" "* 100)
-        # toolbar.addWidget(textWidget)
+        sliderZ = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        sliderZ.valueChanged.connect(self._controller.lightPercentZ)
+        sliderZ.setSliderPosition(99)
+        self.toolbar.addWidget(sliderZ)
 
 
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText("  Hauteur ")
+        self.toolbar.addWidget(textWidget)
 
+        sliderY = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        sliderY.valueChanged.connect(self._controller.lightPercentY)
+        sliderY.setSliderPosition(99)
+        self.toolbar.addWidget(sliderY)
+
+        # un espace blanc
+        textWidget = QtGui.QLabel(self)
+        textWidget.setText(" "* 10)
+        self.toolbar.addWidget(textWidget)
+
+
+    def updateToolsBar(self):
+        """ """
+        self.toolbar.hide()
+        self.initToolsBar()
         
         

@@ -94,6 +94,7 @@ class Light(object):
         """ """
         return (math.cos(self._horizontalAngle), math.sin(self._verticalAngle ), 1)
 
+
     def setLightsRatio(self,positionPercent):
         "light with a custom position"
         x = self._xInterval[0] + (float(positionPercent[0])/100 * ( abs(self._xInterval[0]) + abs(self._xInterval[1])))
@@ -101,6 +102,21 @@ class Light(object):
         z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
         #print("{0}, {1}, {2}".format(x,y,z))
         self.setPosition([x,y,z])
+
+    def setLightsRatioX(self,positionPercent):
+        "light with a custom position"
+        x = self._xInterval[0] + (float(positionPercent)/100 * ( abs(self._xInterval[0]) + abs(self._xInterval[1])))
+        self._position[0] = x
+
+    def setLightsRatioY(self,positionPercent):
+        "light with a custom position"
+        y = self._yInterval[0] + (float(positionPercent)/100 * ( abs(self._yInterval[0]) + abs(self._yInterval[1])))
+        self._position[1] = y
+
+    def setLightsRatioZ(self,positionPercent):
+        "light with a custom position"
+        z = self._zInterval[0] + (float(positionPercent)/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
+        self._position[2] = z
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""

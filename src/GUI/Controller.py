@@ -19,7 +19,8 @@ class Controller(object):
             - what widget is diplayed on the left part of the splitPane
             - what the statusBar show
         The controller also know all the scene"""
-    def __init__(self):
+    def __init__(self, mainWindow):
+        self._mainWindow = mainWindow
         self._statusBar = None
         self._splitPane = None
         self._scene = {} # nom : obj-liste  (from assets/scene/)
@@ -82,10 +83,12 @@ class Controller(object):
     def addLight(self, light):
         """ """
         self._lightCollection.addLight(light)
+        self._mainWindow.updateToolsBar()
 
     def deleteLight(self, lightIndex):
         """ """
         self._lightCollection.deleteLight(lightIndex)
+        self._mainWindow.updateToolsBar()
 
     def getLightCollection(self):
         """ """
@@ -143,3 +146,22 @@ class Controller(object):
         """ """
         if self._glWidget:
             self._glWidget.killThreads()
+
+    def lightPercentX(self,x):
+        """ """
+        self._lightCollection.getSelectedLight().setLightsRatioX(x)
+ 
+    def lightPercentY(self,y):
+        """ """
+        self._lightCollection.getSelectedLight().setLightsRatioY(y)
+ 
+    def lightPercentZ(self,z):
+        """ """
+        self._lightCollection.getSelectedLight().setLightsRatioZ(z)
+ 
+    def _updateLight(self):
+        """ """
+        if self._glWidget:
+            self._glWidget.updateLights(self._lightPosition)
+
+

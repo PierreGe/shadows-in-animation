@@ -8,6 +8,7 @@ class LightCollection(list):
     def __init__(self, *args):
         list.__init__(self, *args)
         self.append(Light.Light())
+        self._selection = 0
 
     def addLight(self, light):
         """ """
@@ -21,3 +22,14 @@ class LightCollection(list):
         """ """
         if len(self) > 1:
             del self[lightIndex]
+
+    def getSelectedLight(self):
+        """ """
+        return self[self._selection]
+
+    def setSelection(self,index):
+        """ """
+        if index < len(self):
+            self._selection = index
+        else:
+            print("LightCollection.setSelection index out of range")
