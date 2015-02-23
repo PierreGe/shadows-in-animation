@@ -14,12 +14,28 @@ from Utils import *
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 
 class ShadowMapAlgorithm:
+    FRAGMENT_SHADER_FILENAME = "shaders/shadowmapalgo.fragmentshader"
+    VERTEX_SHADER_FILENAME = "shaders/shadowmapalgo.vertexshader"
     def __init__(self):
         # assign members that never change
-        self._program = gloo.Program("shaders/shadowmapalgo.vertexshader",
-                                    "shaders/shadowmapalgo.fragmentshader")
         self._shadowProgram = gloo.Program("shaders/shadowmap.vertexshader",
                                         "shaders/shadowmap.fragmentshader")
+
+    def _loadShaders(self):
+        light_number = len(self._lights)
+        light_number_float = float(light_number)
+        print light_number
+        fragment = open(self.FRAGMENT_SHADER_FILENAME, 'r')
+        fragment_str = fragment.read()
+        fragment_str = fragment_str.replace("$LIGHT_NUMBER$", str(light_number))
+        fragment_str = fragment_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
+        vertex = open(self.VERTEX_SHADER_FILENAME, 'r')
+        vertex_str = vertex.read()
+        vertex_str = vertex_str.replace("$LIGHT_NUMBER$", str(light_number))
+        vertex_str = vertex_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
+        self._program = gloo.Program(vertex_str, fragment_str)
+        fragment.close()
+        vertex.close()
 
     def init(self, positions, indices, normals, camera, lightList):
         """ Method that initialize the algorithm """
@@ -28,6 +44,7 @@ class ShadowMapAlgorithm:
         self._normals = gloo.VertexBuffer(normals)
         self._camera = camera
         self._lights = lightList
+        self._loadShaders()
         self._program['position'] = self._positions
         self._program['normal'] = self._normals
         self._shadowProgram['position'] = self._positions
@@ -86,8 +103,6 @@ class ShadowMapAlgorithm:
                 self._program['u_lights_intensity[%d]' % i] = self._lights[i].getIntensity()
             for i in range(len(self._lights)):
                 self._program['u_lights_position[%d]' % i] = self._lights[i].getPosition()
-            self._program['u_light_number'] = len(self._lights)
-            self._program['u_light_number_float'] = float(len(self._lights))
             self._program.draw('triangles', self._indices)
 
             # draw shadowmap as minimap

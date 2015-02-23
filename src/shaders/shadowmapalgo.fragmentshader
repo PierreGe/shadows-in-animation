@@ -1,15 +1,13 @@
 #version 110
 
-uniform vec3 u_lights_intensity[5];
-uniform sampler2D u_shadow_maps[5];
-uniform int u_light_number;
-uniform float u_light_number_float;
+uniform vec3 u_lights_intensity[$LIGHT_NUMBER$];
+uniform sampler2D u_shadow_maps[$LIGHT_NUMBER$];
 
 varying vec4 v_color;
-varying vec4 v_shadow_coords[5];
+varying vec4 v_shadow_coords[$LIGHT_NUMBER$];
 varying vec3 v_position_worldspace;
 varying vec3 v_eyedirection_cameraspace;
-varying vec3 v_lightsdirection_cameraspace[5];
+varying vec3 v_lightsdirection_cameraspace[$LIGHT_NUMBER$];
 varying vec3 v_normal_cameraspace;
 
 
@@ -34,13 +32,13 @@ void main()
   poissonDisk[15] = vec2( 0.14383161, -0.14100790);
   int antialiasing_level = 4;
   float antialiasing_level_float = 4.0;
-  float shadow_precision = 1.0 / antialiasing_level_float / u_light_number_float;
+  float shadow_precision = 1.0 / antialiasing_level_float / $LIGHT_NUMBER_FLOAT$;
   float spreading = 700.0;
 
   float visibility = 1.0;
   gl_FragColor = vec4(0,0,0,0);
 
-  for (int i = 0; i < u_light_number; ++i) {
+  for (int i = 0; i < $LIGHT_NUMBER$; ++i) {
     // Normal of the computed fragment, in camera space
     vec3 n = normalize( v_normal_cameraspace );
     // Direction of the light (from the fragment to the light)
@@ -69,7 +67,7 @@ void main()
           visibility -= shadow_precision;
       }
     }
-    gl_FragColor += visibility * v_color * cosTheta * vec4(u_lights_intensity[i], 1) / u_light_number_float + 
-    visibility * v_color * pow(cosAlpha, 5) * vec4(u_lights_intensity[i], 1) / u_light_number_float;
+    gl_FragColor += visibility * v_color * cosTheta * vec4(u_lights_intensity[i], 1) / $LIGHT_NUMBER_FLOAT$ + 
+    visibility * v_color * pow(cosAlpha, 5) * vec4(u_lights_intensity[i], 1) / $LIGHT_NUMBER_FLOAT$;
   }
 }
