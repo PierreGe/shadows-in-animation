@@ -112,14 +112,18 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def keyPressEvent(self, event):
         """ """
-        if event.key() == QtCore.Qt.Key_Left:
+        if event.key() == QtCore.Qt.Key_Left or event.key() == QtCore.Qt.Key_Q:
             self._camera.left()
-        elif event.key() == QtCore.Qt.Key_Right:
+        elif event.key() == QtCore.Qt.Key_Right or event.key() == QtCore.Qt.Key_D:
             self._camera.right()
         elif event.key() == QtCore.Qt.Key_Up:
              self._camera.up()
         elif event.key() == QtCore.Qt.Key_Down:
             self._camera.down()
+        elif event.key() == QtCore.Qt.Key_Z:
+            self._camera.zoomOut()
+        elif event.key() == QtCore.Qt.Key_S:
+            self._camera.zoomIn()
         self.updateGL()
 
 
