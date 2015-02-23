@@ -245,32 +245,32 @@ class ShadowVolumeAlgorithm:
             shadow_triangles = self.drawShadowTriangles(contour_edges)
 
     def findContourEdges(self, index):
-        positions = self._positions[index]
-        indices = self._indices[index]
-        normals = self._normals[index]
-        ret = []
+        positions = numpy.array(self._positions[index])
+        indices = numpy.array(self._indices[index])
+        normals = numpy.array(self._normals[index])
+        ret = numpy.array([])
         lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
         for i in range(0,len(indices), 3):
             a = indices[i]
             b = indices[i+1]
             c = indices[i+2]
-            triangle = [positions[a], positions[b], positions[c]]
-            averageTrianglePos = [sum([x[0] for x in triangle])/3.0,
+            triangle = numpy.array([positions[a], positions[b], positions[c]])
+            averageTrianglePos = numpy.array([sum([x[0] for x in triangle])/3.0,
                                   sum([x[1] for x in triangle])/3.0,
-                                  sum([x[2] for x in triangle])/3.0, 0.0]
+                                  sum([x[2] for x in triangle])/3.0, 0.0])
             lightDir = numpy.subtract(averageTrianglePos, lightPosition)
-            triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), [1])
+            triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), numpy.array([1]))
             if numpy.dot(lightDir, triangleNormal) >= 0:
-                for edge in [[positions[a], positions[b]],
-                            [positions[a], positions[c]],
-                            [positions[b], positions[c]]]:
-                    if edge in ret or [edge[1], edge[0]] in ret:
+                for edge in numpy.nditer(numpy.array([[positions[a], positions[b]],[positions[a], positions[c]],[positions[b], positions[c]]])):
+                    print edge
+                    if edge in ret.tolist() :#or [edge[1], edge[0]] in ret.tolist():
                         try:
                             ret.remove(edge)
                         except Exception, e:
                             ret.remove([edge[1], edge[0]])
                     else:
-                        ret.append(edge)
+                        numpy.append(ret,edge)
+        print "YES FINI LOLE\n"
         return ret
 
     def drawShadowTriangles(self, contour_edges):
