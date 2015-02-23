@@ -63,10 +63,13 @@ class Camera(object):
 
 
     def _directionVectorFromAngle(self):
+        theta = 90-self._direction[0]
+        phi = 90-self._direction[1]
         print(self._direction)
-        return (math.sin((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN)*math.cos((90-self._direction[1])/Camera.RATIO_DEGREE_RADIAN),
-                math.cos((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN),
-                math.sin((90-self._direction[0])/Camera.RATIO_DEGREE_RADIAN)*math.sin((90-self._direction[1])/Camera.RATIO_DEGREE_RADIAN))
+        print theta, phi
+        return (math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN),
+                -math.cos(theta/Camera.RATIO_DEGREE_RADIAN),
+                -math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.sin(phi/Camera.RATIO_DEGREE_RADIAN))
 
 
     def up(self):
@@ -93,10 +96,11 @@ class Camera(object):
 
     def zoomIn(self):
         dirVect = self._directionVectorFromAngle()
-        print(dirVect)
         self._position[0] += dirVect[0] * self._zoomAmplitude
-        self._position[1] += dirVect[1] * self._zoomAmplitude +10
+        self._position[1] += dirVect[1] * self._zoomAmplitude
         self._position[2] += dirVect[2] * self._zoomAmplitude
+        print dirVect
+        print self._position
         #self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,dirVect)))
 
     def zoomOut(self):
