@@ -24,7 +24,6 @@ class ShadowMapAlgorithm:
     def _loadShaders(self):
         light_number = len(self._lights)
         light_number_float = float(light_number)
-        print light_number
         fragment = open(self.FRAGMENT_SHADER_FILENAME, 'r')
         fragment_str = fragment.read()
         fragment_str = fragment_str.replace("$LIGHT_NUMBER$", str(light_number))
@@ -36,6 +35,18 @@ class ShadowMapAlgorithm:
         self._program = gloo.Program(vertex_str, fragment_str)
         fragment.close()
         vertex.close()
+        self._program['position'] = self._positions
+        self._program['normal'] = self._normals
+        self._shadowProgram['position'] = self._positions
+        # Shadow map
+        self._shadowMaps = []
+        self._frameBuffers = []
+        shape = 768,1366
+        for light in self._lights:
+            shadowMap = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+            self._shadowMaps.append(shadowMap)
+            self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
+        self._old_light_number = light_number
 
     def init(self, positions, indices, normals, camera, lightList):
         """ Method that initialize the algorithm """
@@ -45,25 +56,15 @@ class ShadowMapAlgorithm:
         self._camera = camera
         self._lights = lightList
         self._loadShaders()
-        self._program['position'] = self._positions
-        self._program['normal'] = self._normals
-        self._shadowProgram['position'] = self._positions
         self.active = True
-        
-        # Shadow map
-        self._shadowMaps = []
-        self._frameBuffers = []
-        shape = 768,1366
-        for light in self._lights:
-            shadowMap = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
-            self._shadowMaps.append(shadowMap)
-            self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
 
         # matrices
         self._projection = perspective(60, 16.0/9.0, 0.1, 50)
         self._shadow_projection = ortho(-5, +5, -5, +5, 10, 50)
 
     def update(self):
+        if len(self._lights) != self._old_light_number:
+            self._loadShaders()
         """ Method to call on each OpenGL update """
         if self.active:
             # create render matrices
