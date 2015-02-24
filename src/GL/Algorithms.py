@@ -13,6 +13,13 @@ from Utils import *
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 
+def createViewMatrix(camera):
+    view = numpy.eye(4, dtype=numpy.float32)
+    translate(view, -camera.getX(), -camera.getY(), -camera.getZ())
+    rotate(view, -camera.getDirectionX(), 1, 0, 0)
+    rotate(view, -camera.getDirectionY(), 0, 1, 0)
+    return view
+
 class ShadowMapAlgorithm:
     FRAGMENT_SHADER_FILENAME = "shaders/shadowmapalgo.fragmentshader"
     VERTEX_SHADER_FILENAME = "shaders/shadowmapalgo.vertexshader"
@@ -68,11 +75,8 @@ class ShadowMapAlgorithm:
         """ Method to call on each OpenGL update """
         if self.active:
             # create render matrices
-            view = numpy.eye(4, dtype=numpy.float32)
-            translate(view, -self._camera.getX(), -self._camera.getY(), -self._camera.getZ())
+            view = createViewMatrix(self._camera)
             model = numpy.eye(4, dtype=numpy.float32)
-            rotate(model, self._camera.getDirectionX(), 1, 0, 0)
-            rotate(model, self._camera.getDirectionY(), 0, 1, 0)
             for i in range(len(self._frameBuffers)):
                 # create shadow map matrices
                 shadow_model = numpy.eye(4, dtype=numpy.float32)
@@ -178,11 +182,8 @@ class NoShadowAlgorithm:
     def update(self):
         if self.active:
             # create render matrices
-            view = numpy.eye(4, dtype=numpy.float32)
-            translate(view, -self._camera.getX(), -self._camera.getY(), -self._camera.getZ())
+            view = createViewMatrix(self._camera)
             model = numpy.eye(4, dtype=numpy.float32)
-            rotate(model, self._camera.getDirectionX(), 1, 0, 0)
-            rotate(model, self._camera.getDirectionY(), 0, 1, 0)
             # draw scene
             self._program['u_model'] = model
             self._program['u_view'] = view
@@ -222,11 +223,8 @@ class SelfShadowAlgorithm:
     def update(self):
         if self.active:
             # create render matrices
-            view = numpy.eye(4, dtype=numpy.float32)
-            translate(view, -self._camera.getX(), -self._camera.getY(), -self._camera.getZ())
+            view = createViewMatrix(self._camera)
             model = numpy.eye(4, dtype=numpy.float32)
-            rotate(model, self._camera.getDirectionX(), 1, 0, 0)
-            rotate(model, self._camera.getDirectionY(), 0, 1, 0)
             # draw scene
             normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             self._program['u_normal'] = normal
