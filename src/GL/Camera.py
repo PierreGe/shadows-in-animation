@@ -73,38 +73,49 @@ class Camera(object):
                 math.cos(theta/Camera.RATIO_DEGREE_RADIAN),
                 -math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.sin(phi/Camera.RATIO_DEGREE_RADIAN))
 
+    def _rightVectorFromAngle(self):
+        theta = 90-self._direction[0]
+        phi = 90-self._direction[1]
+        return (math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.sin(phi/Camera.RATIO_DEGREE_RADIAN),
+                -math.cos(theta/Camera.RATIO_DEGREE_RADIAN),
+                -math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN))
+
+    def _upVectorFromAngle(self):
+        theta = 90-self._direction[0]
+        phi = 90-self._direction[1]
+        return (math.cos(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN),
+                math.sin(theta/Camera.RATIO_DEGREE_RADIAN),
+                math.cos(theta/Camera.RATIO_DEGREE_RADIAN)*math.sin(phi/Camera.RATIO_DEGREE_RADIAN))
+
 
     def up(self):
         """ """
-        if self._position[1] + self._keyStep < self._limitUp:
-            self._position[0] += math.cos(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) \
-                                * -math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN)\
-                                * self._keyStep
-            self._position[1] += math.cos(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-            self._position[2] += math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-        print self._position
+        upVector = self._upVectorFromAngle()
+        self._position[0] += upVector[0] * self._keyStep
+        self._position[1] += upVector[1] * self._keyStep
+        self._position[2] += upVector[2] * self._keyStep
 
     def down(self):
         """ """
-        print(self._position[1])
-        if self._position[1] - self._keyStep > self._limitDown:
-            self._position[1] -= math.cos(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-            self._position[2] -= math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-        print self._position
+        upVector = self._upVectorFromAngle()
+        self._position[0] -= upVector[0] * self._keyStep
+        self._position[1] -= upVector[1] * self._keyStep
+        self._position[2] -= upVector[2] * self._keyStep
 
     def left(self):
         """ """
-        # if self._position[0] - self._keyStep > -self._limitSide:
-        self._position[0] -= math.cos(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-        self._position[2] += math.sin(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
+        rightVector = self._rightVectorFromAngle()
+        self._position[0] -= rightVector[0] * self._keyStep
+        self._position[1] -= rightVector[1] * self._keyStep
+        self._position[2] -= rightVector[2] * self._keyStep
         print self._position
 
     def right(self):
         """ """
-        # if self._position[0] + self._keyStep < self._limitSide:
-        self._position[0] += math.cos(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-        self._position[2] -= math.sin(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
-        print self._position
+        rightVector = self._rightVectorFromAngle()
+        self._position[0] += rightVector[0] * self._keyStep
+        self._position[1] += rightVector[1] * self._keyStep
+        self._position[2] += rightVector[2] * self._keyStep
 
 
     def forward(self):
