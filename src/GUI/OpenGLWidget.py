@@ -120,9 +120,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         elif event.key() == QtCore.Qt.Key_S:
             self._camera.backward()
         elif event.key() == QtCore.Qt.Key_E:
-            self._camera.rotateHorizontal(2.0)
-        elif event.key() == QtCore.Qt.Key_A:
             self._camera.rotateHorizontal(-2.0)
+        elif event.key() == QtCore.Qt.Key_A:
+            self._camera.rotateHorizontal(2.0)
         elif event.key() == QtCore.Qt.Key_O:
             self._camera.rotateVertical(2.0)
         elif event.key() == QtCore.Qt.Key_L:
@@ -135,7 +135,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     # Called at startup
     def initializeGL(self):
         """ docstring """
-        print "GLSL Version : " + GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
         self._mutex.acquire()
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
@@ -152,7 +151,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.indices = []
         self.normals = []
 
-        self._makePlane((0,0,0), 20, 20)
+        self._makePlane((0,0,0), 200, 200)
         # examples : should be removed or used for empty scenes
         # self._makeCube((0,1.1,0))
         # self._makeSphere((0,3,0))

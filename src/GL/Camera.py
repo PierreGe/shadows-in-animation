@@ -11,7 +11,7 @@ class Camera(object):
     It's nearly thread-safe"""
     def __init__(self):
         """ Constructeur de la classe Camera"""
-        self._position = [0,0,30]
+        self._position = [0,1.5,30]
         self._direction = [0,0] # first is rotation around x => vertical
         self.lock = threading.Lock()
         self._zoomAmplitude = 1
@@ -58,17 +58,17 @@ class Camera(object):
 
     def rotateHorizontal(self, deltaAngle):
         self._direction[1] += deltaAngle
+        print(self._direction)
 
 
     def rotateVertical(self, deltaAngle):
         self._direction[0] += deltaAngle
+        print(self._direction)
 
 
     def _directionVectorFromAngle(self):
         theta = 90-self._direction[0]
         phi = 90-self._direction[1]
-        print(self._direction)
-        print theta, phi
         return (math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN),
                 -math.cos(theta/Camera.RATIO_DEGREE_RADIAN),
                 -math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.sin(phi/Camera.RATIO_DEGREE_RADIAN))
@@ -78,22 +78,28 @@ class Camera(object):
         """ """
         if self._position[1] + self._keyStep < self._limitUp:
             self._position[1] += self._keyStep
+        print self._position
 
     def down(self):
         """ """
         print(self._position[1])
         if self._position[1] - self._keyStep > self._limitDown:
             self._position[1] -= self._keyStep
+        print self._position
 
     def left(self):
         """ """
-        if self._position[0] - self._keyStep > self._limitDown:
-            self._position[0] -= self._keyStep
+        if self._position[0] - self._keyStep > -self._limitSide:
+            self._position[0] -= math.cos(self._direction[1]) * self._keyStep
+            self._position[2] += math.sin(self._direction[1]) * self._keyStep
+        print self._position
 
     def right(self):
         """ """
-        if self._position[0] + self._keyStep < self._limitUp:
-            self._position[0] += self._keyStep
+        if self._position[0] + self._keyStep < self._limitSide:
+            self._position[0] += math.cos(self._direction[1]) * self._keyStep
+            self._position[2] -= math.sin(self._direction[1]) * self._keyStep
+        print self._position
 
 
     def forward(self):
@@ -101,7 +107,6 @@ class Camera(object):
         self._position[0] += dirVect[0] * self._zoomAmplitude
         self._position[1] += dirVect[1] * self._zoomAmplitude
         self._position[2] += dirVect[2] * self._zoomAmplitude
-        print dirVect
         print self._position
         #self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,dirVect)))
 
@@ -109,6 +114,7 @@ class Camera(object):
         self._zoomAmplitude = -self._zoomAmplitude
         self.forward()
         self._zoomAmplitude = -self._zoomAmplitude
+        print self._position
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""
