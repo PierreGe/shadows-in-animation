@@ -77,14 +77,19 @@ class Camera(object):
     def up(self):
         """ """
         if self._position[1] + self._keyStep < self._limitUp:
-            self._position[1] += self._keyStep
+            self._position[0] += math.cos(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) \
+                                * -math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN)\
+                                * self._keyStep
+            self._position[1] += math.cos(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
+            self._position[2] += math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
         print self._position
 
     def down(self):
         """ """
         print(self._position[1])
         if self._position[1] - self._keyStep > self._limitDown:
-            self._position[1] -= self._keyStep
+            self._position[1] -= math.cos(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
+            self._position[2] -= math.sin(self._direction[0]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
         print self._position
 
     def left(self):
