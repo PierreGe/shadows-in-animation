@@ -20,6 +20,9 @@ class Camera(object):
         self._limitSide = 60
         self._keyStep = 1
 
+    def getPosition(self):
+        return self._position;
+
     def getX(self):
         return self._position[0]
 
@@ -55,7 +58,6 @@ class Camera(object):
 
     def rotateHorizontal(self, deltaAngle):
         self._direction[1] += deltaAngle
-        self._direction[1] = self._normalizeAngle(self._direction[1])
 
 
     def rotateVertical(self, deltaAngle):
@@ -94,7 +96,7 @@ class Camera(object):
             self._position[0] += self._keyStep
 
 
-    def zoomIn(self):
+    def forward(self):
         dirVect = self._directionVectorFromAngle()
         self._position[0] += dirVect[0] * self._zoomAmplitude
         self._position[1] += dirVect[1] * self._zoomAmplitude
@@ -103,9 +105,9 @@ class Camera(object):
         print self._position
         #self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,dirVect)))
 
-    def zoomOut(self):
+    def backward(self):
         self._zoomAmplitude = -self._zoomAmplitude
-        self.zoomIn()
+        self.forward()
         self._zoomAmplitude = -self._zoomAmplitude
 
     def _normalizeAngle(self, angle):

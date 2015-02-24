@@ -116,17 +116,17 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         elif event.key() == QtCore.Qt.Key_Down:
             self._camera.down()
         elif event.key() == QtCore.Qt.Key_Z:
-            self._camera.zoomOut()
+            self._camera.forward()
         elif event.key() == QtCore.Qt.Key_S:
-            self._camera.zoomIn()
+            self._camera.backward()
         elif event.key() == QtCore.Qt.Key_E:
-            self._camera.rotateHorizontal(0.5)
+            self._camera.rotateHorizontal(2.0)
         elif event.key() == QtCore.Qt.Key_A:
-            self._camera.rotateHorizontal(-0.5)
+            self._camera.rotateHorizontal(-2.0)
         elif event.key() == QtCore.Qt.Key_O:
-            self._camera.rotateVertical(0.5)
+            self._camera.rotateVertical(2.0)
         elif event.key() == QtCore.Qt.Key_L:
-            self._camera.rotateVertical(-0.5)
+            self._camera.rotateVertical(-2.0)
         self.updateGL()
 
 
