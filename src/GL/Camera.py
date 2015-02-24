@@ -89,16 +89,16 @@ class Camera(object):
 
     def left(self):
         """ """
-        if self._position[0] - self._keyStep > -self._limitSide:
-            self._position[0] -= math.cos(self._direction[1]) * self._keyStep
-            self._position[2] += math.sin(self._direction[1]) * self._keyStep
+        # if self._position[0] - self._keyStep > -self._limitSide:
+        self._position[0] -= math.cos(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
+        self._position[2] += math.sin(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
         print self._position
 
     def right(self):
         """ """
-        if self._position[0] + self._keyStep < self._limitSide:
-            self._position[0] += math.cos(self._direction[1]) * self._keyStep
-            self._position[2] -= math.sin(self._direction[1]) * self._keyStep
+        # if self._position[0] + self._keyStep < self._limitSide:
+        self._position[0] += math.cos(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
+        self._position[2] -= math.sin(self._direction[1]/Camera.RATIO_DEGREE_RADIAN) * self._keyStep
         print self._position
 
 
