@@ -127,6 +127,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             self._camera.rotateVertical(2.0)
         elif event.key() == QtCore.Qt.Key_L:
             self._camera.rotateVertical(-2.0)
+        elif event.key() == QtCore.Qt.Key_Space:
+            self._camera.setVerticalAngle(0)
         self.updateGL()
 
 

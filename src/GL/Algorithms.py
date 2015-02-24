@@ -16,8 +16,8 @@ DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 def createViewMatrix(camera):
     view = numpy.eye(4, dtype=numpy.float32)
     translate(view, -camera.getX(), -camera.getY(), -camera.getZ())
-    rotate(view, -camera.getDirectionX(), 1, 0, 0)
     rotate(view, -camera.getDirectionY(), 0, 1, 0)
+    rotate(view, -camera.getDirectionX(), 1, 0, 0)
     return view
 
 class ShadowMapAlgorithm:
