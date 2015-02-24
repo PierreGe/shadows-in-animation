@@ -69,8 +69,8 @@ class Camera(object):
     def _directionVectorFromAngle(self):
         theta = 90-self._direction[0]
         phi = 90-self._direction[1]
-        return (math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN),
-                -math.cos(theta/Camera.RATIO_DEGREE_RADIAN),
+        return (-math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN),
+                math.cos(theta/Camera.RATIO_DEGREE_RADIAN),
                 -math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.sin(phi/Camera.RATIO_DEGREE_RADIAN))
 
 
