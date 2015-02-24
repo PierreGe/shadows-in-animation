@@ -16,7 +16,7 @@ class Camera(object):
         self.lock = threading.Lock()
         self._zoomAmplitude = 1
         self._limitUp = 60
-        self._limitDown = -10
+        self._limitDown = 1
         self._limitSide = 60
         self._keyStep = 1
 
@@ -66,7 +66,7 @@ class Camera(object):
         print(self._direction)
 
 
-    def _directionVectorFromAngle(self):
+    def _forwardVectorFromAngle(self):
         theta = 90-self._direction[0]
         phi = 90-self._direction[1]
         return (-math.sin(theta/Camera.RATIO_DEGREE_RADIAN)*math.cos(phi/Camera.RATIO_DEGREE_RADIAN),
@@ -94,6 +94,7 @@ class Camera(object):
         self._position[0] += upVector[0] * self._keyStep
         self._position[1] += upVector[1] * self._keyStep
         self._position[2] += upVector[2] * self._keyStep
+        self._normalizePosition()
 
     def down(self):
         """ """
@@ -101,14 +102,7 @@ class Camera(object):
         self._position[0] -= upVector[0] * self._keyStep
         self._position[1] -= upVector[1] * self._keyStep
         self._position[2] -= upVector[2] * self._keyStep
-
-    def left(self):
-        """ """
-        rightVector = self._rightVectorFromAngle()
-        self._position[0] -= rightVector[0] * self._keyStep
-        self._position[1] -= rightVector[1] * self._keyStep
-        self._position[2] -= rightVector[2] * self._keyStep
-        print self._position
+        self._normalizePosition()
 
     def right(self):
         """ """
@@ -116,21 +110,47 @@ class Camera(object):
         self._position[0] += rightVector[0] * self._keyStep
         self._position[1] += rightVector[1] * self._keyStep
         self._position[2] += rightVector[2] * self._keyStep
+        self._normalizePosition()
 
+    def left(self):
+        """ """
+        rightVector = self._rightVectorFromAngle()
+        self._position[0] -= rightVector[0] * self._keyStep
+        self._position[1] -= rightVector[1] * self._keyStep
+        self._position[2] -= rightVector[2] * self._keyStep
+        self._normalizePosition()
 
     def forward(self):
-        dirVect = self._directionVectorFromAngle()
+        dirVect = self._forwardVectorFromAngle()
         self._position[0] += dirVect[0] * self._zoomAmplitude
         self._position[1] += dirVect[1] * self._zoomAmplitude
         self._position[2] += dirVect[2] * self._zoomAmplitude
-        print self._position
+        self._normalizePosition()
         #self._position = list(numpy.add(self._position, numpy.multiply(self._zoomAmplitude,dirVect)))
 
     def backward(self):
-        self._zoomAmplitude = -self._zoomAmplitude
-        self.forward()
-        self._zoomAmplitude = -self._zoomAmplitude
-        print self._position
+        dirVect = self._forwardVectorFromAngle()
+        self._position[0] -= dirVect[0] * self._zoomAmplitude
+        self._position[1] -= dirVect[1] * self._zoomAmplitude
+        self._position[2] -= dirVect[2] * self._zoomAmplitude
+        self._normalizePosition()
+
+    def _normalizePosition(self):
+        # X axis
+        if self._position[0] < -self._limitSide:
+            self._position[0] = -self._limitSide
+        elif self._position[0] > self._limitSide:
+            self._position[0] = self._limitSide
+        # Y axis
+        if self._position[1] < self._limitDown:
+            self._position[1] = self._limitDown
+        elif self._position[1] > self._limitUp:
+            self._position[1] = self._limitUp
+        # Z axis
+        if self._position[2] < -self._limitSide:
+            self._position[2] = -self._limitSide
+        elif self._position[2] > self._limitSide:
+            self._position[2] = self._limitSide
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""
@@ -174,7 +194,7 @@ if __name__ == '__main__':
     assert (camera._position == (0,10,-20))
     assert (camera._direction == (0,0))
     camera.zoomIn()
-    print camera._directionVectorFromAngle()
+    print camera._forwardVectorFromAngle()
     print camera._position
     # assert (camera._position == (0.0, 11.0, -19.0))
 
