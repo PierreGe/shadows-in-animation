@@ -10,7 +10,7 @@ class SceneObject:
     def __init__(self, vertices, indices, normals, position, color=None, texture=None, outline = None, visible = True):
         self._vertices = numpy.array(vertices)
         try:
-            self._indices = reduce(add, indices, [])
+            self._indices = [item for sublist in indices for item in sublist]
         except:
             self._indices = indices
         self._indices = numpy.array(self._indices)

@@ -181,10 +181,11 @@ class NoShadowAlgorithm:
     def __init__(self):
         self._program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, lightList):
-        self._positions = gloo.VertexBuffer(concatPositions(positions))
-        self._indices = gloo.IndexBuffer(numpy.array(concatIndices(indices)))
-        self._normals = gloo.VertexBuffer(concatNormals(normals))
+    def init(self, objects, camera, lightList):
+        self._objects = objects
+        self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects]))
+        self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
+        self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
         self._camera = camera
         self._light = lightList[0]
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
@@ -218,10 +219,11 @@ class SelfShadowAlgorithm:
     def __init__(self):
         self._program = gloo.Program("shaders/selfshadowalgo.vertexshader", "shaders/selfshadowalgo.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, lightList):
-        self._positions = gloo.VertexBuffer(concatPositions(positions))
-        self._indices = gloo.IndexBuffer(numpy.array(concatIndices(indices)))
-        self._normals = gloo.VertexBuffer(concatNormals(normals))
+    def init(self, objects, camera, lightList):
+        self._objects = objects
+        self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects]))
+        self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
+        self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
         self._camera = camera
         self._light = lightList[0]
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
@@ -261,12 +263,10 @@ class ShadowVolumeAlgorithm:
         self._program = gloo.Program("shaders/shadowvolume.vertexshader",
             "shaders/shadowvolume.fragmentshader")
 
-    def init(self, positions, indices, normals, camera, light):
-        self._positions = positions
-        self._indices = indices
-        self._normals = normals
+    def init(self, objects, camera, lightList):
+        self._objects = objects
         self._camera = camera
-        self._light = light
+        self._light = lightList[0]
         self._projection = perspective(60, 4.0/3.0, 0.1, 100)
         # self._program['normal'] = self._normals
         # self._program['position'] = self._positions
@@ -283,14 +283,14 @@ class ShadowVolumeAlgorithm:
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def drawVolumes(self):
         # for each object
-        for i in range(len(self._positions)):
+        for i in range(len(self._objects)):
             contour_edges = self.findContourEdges(i)
             shadow_triangles = self.drawShadowTriangles(contour_edges)
 
     def findContourEdges(self, index):
-        positions = numpy.array(self._positions[index])
-        indices = numpy.array(self._indices[index])
-        normals = numpy.array(self._normals[index])
+        positions = self._objects[index].getVertices()
+        indices = self._objects[index].getIndices()
+        normals = self._objects[index].getNormals()
         ret = numpy.array([])
         lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
         for i in range(0,len(indices), 3):
@@ -305,7 +305,6 @@ class ShadowVolumeAlgorithm:
             triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), numpy.array([1]))
             if numpy.dot(lightDir, triangleNormal) >= 0:
                 for edge in numpy.nditer(numpy.array([[positions[a], positions[b]],[positions[a], positions[c]],[positions[b], positions[c]]])):
-                    print edge
                     if edge in ret.tolist() :#or [edge[1], edge[0]] in ret.tolist():
                         try:
                             ret.remove(edge)
@@ -313,7 +312,6 @@ class ShadowVolumeAlgorithm:
                             ret.remove([edge[1], edge[0]])
                     else:
                         numpy.append(ret,edge)
-        print "YES FINI LOLE\n"
         return ret
 
     def drawShadowTriangles(self, contour_edges):
@@ -343,12 +341,8 @@ class ShadowVolumeAlgorithm:
     def update(self):
         if self.active:
             # create render matrices
-            self._view = numpy.eye(4, dtype=numpy.float32)
-            translate(self._view, 0, -4, self._camera.getZoom())
+            self._view = createViewMatrix(self._camera)
             self._model = numpy.eye(4, dtype=numpy.float32)
-            rotate(self._model, self._camera.getX(), 1, 0, 0)
-            rotate(self._model, self._camera.getY(), 0, 1, 0)
-            rotate(self._model, self._camera.getZ(), 0, 0, 1)
 
             #create shadow volumes
             self._volumes = self.drawVolumes()
