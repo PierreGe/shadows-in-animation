@@ -199,7 +199,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
         textWidget = QtGui.QLabel(self)
-        textWidget.setText("  Position lumière :  X ".decode("utf8"))
+        textWidget.setText("Position lumière :  X ".decode("utf8"))
         self.toolbar.addWidget(textWidget)
 
 
