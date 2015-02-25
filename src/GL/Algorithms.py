@@ -39,6 +39,9 @@ def createViewMatrix(camera):
     rotate(view, -camera.getDirectionX(), 1, 0, 0)
     return view
 
+def createProjectionMatrix():
+    return perspective(60, 16.0/9.0, 0.1, 50)
+
 class ShadowMapAlgorithm:
     FRAGMENT_SHADER_FILENAME = "shaders/shadowmapalgo.fragmentshader"
     VERTEX_SHADER_FILENAME = "shaders/shadowmapalgo.vertexshader"
@@ -65,14 +68,6 @@ class ShadowMapAlgorithm:
         self._program['position'] = self._positions
         self._program['normal'] = self._normals
         self._shadowProgram['position'] = self._positions
-        # Shadow map
-        self._shadowMaps = []
-        self._frameBuffers = []
-        shape = 768,1366
-        for light in self._lights:
-            shadowMap = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
-            self._shadowMaps.append(shadowMap)
-            self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
         self._old_light_number = light_number
 
     def init(self, objects, camera, lightList):
@@ -84,11 +79,20 @@ class ShadowMapAlgorithm:
         self._camera = camera
         self._lights = lightList
         self._loadShaders()
-        self.active = True
+        # Shadow map
+        self._shadowMaps = []
+        self._frameBuffers = []
+        shape = 768,1366
+        for light in self._lights:
+            shadowMap = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+            self._shadowMaps.append(shadowMap)
+            self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
 
         # matrices
-        self._projection = perspective(60, 16.0/9.0, 0.1, 50)
+        self._projection = createProjectionMatrix()
         self._shadow_projection = ortho(-5, +5, -5, +5, 10, 50)
+
+        self.active = True
 
     def update(self):
         if len(self._lights) != self._old_light_number:
@@ -147,7 +151,6 @@ class ShadowMapAlgorithm:
 
 class RayTracingAlgorithm:
     def __init__(self):
-
         self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
 
     def init(self, objects, camera, lightList):
@@ -171,11 +174,6 @@ class RayTracingAlgorithm:
 
     def terminate(self):
         self.active = False
-        self._positions = []
-        self._indices = []
-        self._normals = []
-        self._camera = None
-        self._light = None
 
 class NoShadowAlgorithm:
     def __init__(self):
@@ -185,10 +183,8 @@ class NoShadowAlgorithm:
         self._objects = objects
         self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects]))
         self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
-        self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
         self._camera = camera
-        self._light = lightList[0]
-        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
+        self._projection = createProjectionMatrix()
 
         self.active = True
 
@@ -210,9 +206,7 @@ class NoShadowAlgorithm:
         self.active = False
         self._positions = []
         self._indices = []
-        self._normals = []
         self._camera = None
-        self._light = None
 
 
 class SelfShadowAlgorithm:
@@ -226,7 +220,7 @@ class SelfShadowAlgorithm:
         self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
         self._camera = camera
         self._light = lightList[0]
-        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
+        self._projection = createProjectionMatrix()
 
         self.active = True
 
@@ -267,7 +261,7 @@ class ShadowVolumeAlgorithm:
         self._objects = objects
         self._camera = camera
         self._light = lightList[0]
-        self._projection = perspective(60, 4.0/3.0, 0.1, 100)
+        self._projection = createProjectionMatrix()
         # self._program['normal'] = self._normals
         # self._program['position'] = self._positions
 
@@ -305,7 +299,7 @@ class ShadowVolumeAlgorithm:
             triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), numpy.array([1]))
             if numpy.dot(lightDir, triangleNormal) >= 0:
                 for edge in numpy.nditer(numpy.array([[positions[a], positions[b]],[positions[a], positions[c]],[positions[b], positions[c]]])):
-                    if edge in ret.tolist() :#or [edge[1], edge[0]] in ret.tolist():
+                    if edge in ret.tolist() or [edge[1], edge[0]] in ret.tolist():
                         try:
                             ret.remove(edge)
                         except Exception, e:
