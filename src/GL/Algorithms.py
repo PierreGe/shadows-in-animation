@@ -11,8 +11,9 @@ from vispy.geometry import *
 from Camera import Camera
 from Light import Light
 from Utils import *
-
-def concatPositions(verticesList, positionList):
+def concatPositions(objects):
+    verticesList = [obj.getVertices().tolist() for obj in objects]
+    positionList = [obj.getPosition() for obj in objects]
     ret = []
     for i in range(len(verticesList)):
         ret.extend(move(verticesList[i], positionList[i]))
@@ -22,7 +23,8 @@ def move(vertices, position):
     return [[vertex[i]+position[i] for i in range(len(vertex))] for vertex in vertices]
 
 # add index so mesh reference only their vertices
-def concatIndices(indicesList):
+def concatIndices(objects):
+    indicesList = [obj.getIndices().tolist() for obj in objects]
     def addIndices(newIndices, indices):
         max_index = max(newIndices)+1 if len(newIndices) > 0 else 0
         try:
@@ -32,7 +34,8 @@ def concatIndices(indicesList):
         return newIndices
     return reduce(addIndices, indicesList, [])
 
-def concatNormals(normalsList):
+def concatNormals(objects):
+    normalsList = [obj.getNormals().tolist() for obj in objects]
     return reduce(add, normalsList, [])
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
@@ -43,10 +46,9 @@ class AbstractAlgorithm:
 
     def init(self, objects, camera, lights):
         self._objects = objects
-        self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects], \
-                                                            [obj.getPosition() for obj in objects]))
-        self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
-        self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
+        self._positions = gloo.VertexBuffer(self._concatPositions())
+        self._indices = gloo.IndexBuffer(numpy.array(self._concatIndices()))
+        self._normals = gloo.VertexBuffer(self._concatNormals())
         self._camera = camera
         self._lights = lights
         vertex_str, fragment_str = self._loadShaders()
@@ -115,6 +117,32 @@ class AbstractAlgorithm:
         vertex.close()
         self._old_light_number = light_number
         return vertex_str, fragment_str
+
+    def _concatPositions(self):
+        def move(vertices, position):
+            return [[vertex[i]+position[i] for i in range(len(vertex))] for vertex in vertices]
+        verticesList = [obj.getVertices().tolist() for obj in self._objects]
+        positionList = [obj.getPosition() for obj in self._objects]
+        ret = []
+        for i in range(len(verticesList)):
+            ret.extend(move(verticesList[i], positionList[i]))
+        return ret
+
+    # add index so mesh reference only their vertices
+    def _concatIndices(self):
+        indicesList = [obj.getIndices().tolist() for obj in self._objects]
+        def addIndices(newIndices, indices):
+            max_index = max(newIndices)+1 if len(newIndices) > 0 else 0
+            try:
+                newIndices.extend([item+max_index for sublist in indices for item in sublist])
+            except:
+                newIndices.extend([item+max_index for item in indices])
+            return newIndices
+        return reduce(addIndices, indicesList, [])
+
+    def _concatNormals(self):
+        normalsList = [obj.getNormals().tolist() for obj in self._objects]
+        return reduce(add, normalsList, [])
 
 
 class ShadowMapAlgorithm(AbstractAlgorithm):
