@@ -3,11 +3,13 @@
   "description": "Cette scene est basique",
   "algo-compatible": ["Aucune Ombre", "Auto-Ombre","Shadow Mapping","Shadow Volume"],
   "obj-liste": [
-      ["assets/obj/satellite/Satellite2.obj",[8,15,8]],
+      ["assets/obj/satellite/Satellite2.obj",[15,20,15]],
       ["assets/obj/tree-palmier/FR01b.obj", [-9.5,0,0]],
       ["assets/obj/tree-palmier/FR01b.obj", [-8,0,5]],
       ["assets/obj/tree-palmier/FR01b.obj", [-8,0,-5]],
       ["assets/obj/bike/bike2.obj",[-2,0.5,2]],
-      ["assets/obj/mario/mario5.obj",[2,0,2]]
+      ["assets/obj/mario/mario5.obj",[2,0,2]],
+      ["assets/obj/helicopter/helicopter.obj",[8,15,8]],
+      ["assets/obj/chestnut/chestnut.obj",[8,0,8]]
   ]
 }

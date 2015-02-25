@@ -13,6 +13,7 @@ from Utils import *
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 
+
 def createViewMatrix(camera):
     view = numpy.eye(4, dtype=numpy.float32)
     translate(view, -camera.getX(), -camera.getY(), -camera.getZ())
