@@ -232,32 +232,24 @@ class SelfShadowAlgorithm(AbstractAlgorithm):
     def init(self, objects, camera, lights):
         AbstractAlgorithm.init(self, objects, camera, lights)
 
-        self._program['normal'] = self._normals
-        self._program['position'] = self._positions
+        for i in range(len(self._programs)):
+            obj = self._objects[i]
+            prog = self._programs[i]
+            prog['normal'] = obj.getNormalBuffer()
 
     def update(self):
         if self.active:
-            # create render matrices
-            view = createViewMatrix(self._camera)
-            model = numpy.eye(4, dtype=numpy.float32)
-            # draw scene
-            normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
-            self._program['u_normal'] = normal
-            self._program['u_light_position'] = self._light.getPosition()
-            self._program['u_light_intensity'] = self._light.getIntensity()
-            self._program['u_model'] = model
-            self._program['u_view'] = view
-            self._program['u_projection'] = self._projection
-            self._program['u_color'] = DEFAULT_COLOR 
-            self._program.draw('triangles', self._indices)
-
-    def terminate(self):
-        self.active = False
-        self._positions = []
-        self._indices = []
-        self._normals = []
-        self._camera = None
-        self._light = None
+            for i in range(len(self._programs)):
+                obj = self._objects[i]
+                prog = self._programs[i]
+                model = numpy.eye(4, dtype=numpy.float32)
+                translate(model, *obj.getPosition())
+                view = self._createViewMatrix()
+                normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
+                prog['u_normal'] = normal
+                prog['u_light_position'] = self._lights[0].getPosition()
+                prog['u_light_intensity'] = self._lights[0].getIntensity()
+            self.draw()
 
 
 class ShadowVolumeAlgorithm:
