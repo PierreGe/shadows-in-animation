@@ -2,17 +2,23 @@
 # -*- coding: utf-8 -*-
 
 import Light
+import AutoRotateLight
+
 
 class LightCollection(list):
     """docstring for LightCollection"""
     def __init__(self, *args):
         list.__init__(self, *args)
-        self.append(Light.Light())
+        l = Light.Light()
+        self.append(l)
         self._selection = 0
+        self._incrementationRotate = 3
+        self._lightRotation = [AutoRotateLight.AutoRotateLight(l,self._incrementationRotate)]
 
     def addLight(self, light):
         """ """
         self.append(light)
+        self._lightRotation.append(AutoRotateLight.AutoRotateLight(light,self._incrementationRotate))
     
     def getLightList(self):
         """ """
@@ -22,6 +28,7 @@ class LightCollection(list):
         """ """
         if len(self) > 1:
             del self[lightIndex]
+            del self._lightRotation[lightIndex]
 
     def getSelectedLight(self):
         """ """
@@ -33,3 +40,19 @@ class LightCollection(list):
             self._selection = index
         else:
             print("LightCollection.setSelection index out of range")
+
+    def switchLightAnimation(self):
+        """ """
+        if self._lightRotation[self._selection]:
+            if self._lightRotation[self._selection].getAlive():
+                self._lightRotation[self._selection].stop()
+            else:
+                self._lightRotation[self._selection].start()
+
+
+    def killThreads(self):
+        """ """
+        for l in self._lightRotation:
+            l.stop()
+
+

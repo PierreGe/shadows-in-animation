@@ -49,7 +49,7 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         self.close()
         self._controller.killThreads()
-        exit()
+        #exit()
         #os.system("kill -9 " + os.getpid()) # hihi
 
     def displayHelp(self):
@@ -154,11 +154,6 @@ class MainWindow(QtGui.QMainWindow):
         self.toolbar.addAction(animationActionCamera)
 
 
-        animationActionLight = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-light.png"), "Animation des lampes", self)
-        animationActionLight.setStatusTip("Animation des lampes")
-        animationActionLight.triggered.connect(self.animateLight)
-        self.toolbar.addAction(animationActionLight)
-
 
 
         self.toolbar.addSeparator()
@@ -179,6 +174,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
         self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
 
         lightCollection = self._controller.getLightCollection()
         if len(lightCollection) > 0:
@@ -192,10 +188,18 @@ class MainWindow(QtGui.QMainWindow):
         
         self.toolbar.addWidget(combo)
 
+        self.toolbar.addSeparator()
+
+        animationActionLight = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/tool-animator-light.png"), "Animation des lampes", self)
+        animationActionLight.setStatusTip("Animation des lampes")
+        animationActionLight.triggered.connect(self.animateLight)
+        self.toolbar.addAction(animationActionLight)
+
+        self.toolbar.addSeparator()
 
 
         textWidget = QtGui.QLabel(self)
-        textWidget.setText("  Position lumière :  X ".decode("utf8"))
+        textWidget.setText("Position lumière :  X ".decode("utf8"))
         self.toolbar.addWidget(textWidget)
 
 

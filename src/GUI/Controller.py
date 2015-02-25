@@ -126,8 +126,8 @@ class Controller(object):
 
     def switchLightAnimation(self):
         """ """
-        if self._glWidget:
-            self._glWidget.switchLightAnimation()
+        if self._lightCollection:
+            self._lightCollection.switchLightAnimation()
         else:
             print("Error switchLightAnimation : openGl not running")
 
@@ -146,6 +146,8 @@ class Controller(object):
         """ """
         if self._glWidget:
             self._glWidget.killThreads()
+        if self._lightCollection:
+            self._lightCollection.killThreads()
 
     def lightPercentX(self,x):
         """ """

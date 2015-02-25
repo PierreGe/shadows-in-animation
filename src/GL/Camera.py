@@ -58,12 +58,10 @@ class Camera(object):
 
     def rotateHorizontal(self, deltaAngle):
         self._direction[1] += deltaAngle
-        print(self._direction)
 
 
     def rotateVertical(self, deltaAngle):
         self._direction[0] += deltaAngle
-        print(self._direction)
 
 
     def _forwardVectorFromAngle(self):
@@ -176,15 +174,14 @@ class Camera(object):
     def incrementeRotate(self,plus):
         """ Increment Y value by plus, for rotation of the plane"""
         self.lock.acquire()
-        # self._theta +=  plus
-        # self._theta = self._normalizeAngle(self._theta)
-        # oldX = self._position[0]
-        # oldZ = self._position[2]
-        # self._position[0] = self._rayon * math.cos(self._theta/self.RATIO_DEGREE_RADIAN)
-        # self._position[2] = self._rayon * math.sin(self._theta/self.RATIO_DEGREE_RADIAN)
-        # rotation = self.RATIO_DEGREE_RADIAN *math.acos( (oldX*self._position[0] + oldZ *self._position[2]) / (math.sqrt(oldX**2 + oldZ**2) * math.sqrt(self._position[0]**2 + self._position[2]**2) ))
-        self.rotateHorizontal(plus)
-        # print(self._direction[1])
+        self._theta +=  plus
+        self._theta = self._normalizeAngle(self._theta)
+        oldX = self._position[0]
+        oldZ = self._position[2]
+        self._position[0] = self._rayon * math.cos(self._theta/self.RATIO_DEGREE_RADIAN)
+        self._position[2] = self._rayon * math.sin(self._theta/self.RATIO_DEGREE_RADIAN)
+        rotation = self.RATIO_DEGREE_RADIAN *math.acos( (oldX*self._position[0] + oldZ *self._position[2]) / (math.sqrt(oldX**2 + oldZ**2) * math.sqrt(self._position[0]**2 + self._position[2]**2) ))
+        self.rotateHorizontal(-rotation)
         self.lock.release()
         
 

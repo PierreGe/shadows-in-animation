@@ -26,7 +26,7 @@ class AutoRotateCamera(object):
         self._camera.setThetaAngle()
         while alive:
             self._camera.incrementeRotate(self._incrementation)
-            time.sleep(0.04) # set by frame per second
+            time.sleep(0.03) # set by frame per second
             self.lock.acquire()
             alive = self._alive
             self.lock.release()
