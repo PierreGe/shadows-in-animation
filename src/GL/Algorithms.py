@@ -64,11 +64,9 @@ class ShadowMapAlgorithm:
         self._program = gloo.Program(vertex_str, fragment_str)
         fragment.close()
         vertex.close()
-
-        self._program['position'] = self._positions
-        self._program['normal'] = self._normals
-        self._shadowProgram['position'] = self._positions
         self._old_light_number = light_number
+        return vertex_str, fragment_str
+
 
     def init(self, objects, camera, lightList):
         """ Method that initialize the algorithm """
@@ -78,7 +76,15 @@ class ShadowMapAlgorithm:
         self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
         self._camera = camera
         self._lights = lightList
-        self._loadShaders()
+        vertex_str, fragment_str = self._loadShaders()
+
+        self._programs = []
+        for obj in self._objects:
+            newProg = gloo.Program(vertex_str, fragment_str)
+            newProg['position'] = obj.getVertexBuffer()
+            newProg['normal'] = obj.getNormalBuffer()
+            self._programs.append(newProg)
+        self._shadowProgram['position'] = self._positions
         # Shadow map
         self._shadowMaps = []
         self._frameBuffers = []
@@ -101,14 +107,14 @@ class ShadowMapAlgorithm:
         if self.active:
             # create render matrices
             view = createViewMatrix(self._camera)
-            model = numpy.eye(4, dtype=numpy.float32)
             for i in range(len(self._frameBuffers)):
                 # create shadow map matrices
                 shadow_model = numpy.eye(4, dtype=numpy.float32)
                 shadow_view = lookAt(self._lights[i].getPosition(), (0,2,0), (0,1,0))
-                self._program['u_depth_model[%d]' % i] = shadow_model
-                self._program['u_depth_view[%d]' % i] = shadow_view
-                self._program['u_depth_projection[%d]' % i] = self._shadow_projection
+                for prog in self._programs:
+                    prog['u_depth_model[%d]' % i] = shadow_model
+                    prog['u_depth_view[%d]' % i] = shadow_view
+                    prog['u_depth_projection[%d]' % i] = self._shadow_projection
                 # create shadow map
                 with self._frameBuffers[i]:
                     self._shadowProgram['u_projection'] = self._shadow_projection
@@ -122,18 +128,23 @@ class ShadowMapAlgorithm:
                                         [0.0, 0.0, 0.5, 0.0],
                                         [0.5, 0.5, 0.5, 1.0]])
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
-            self._program['u_model'] = model
-            self._program['u_view'] = view
-            self._program['u_projection'] = self._projection
-            self._program['u_bias_matrix'] = biasMatrix
-            for i in range(len(self._shadowMaps)):
-                self._program['u_shadow_maps[%d]' % i] = self._shadowMaps[i]
-            self._program['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
-            for i in range(len(self._lights)):
-                self._program['u_lights_intensity[%d]' % i] = self._lights[i].getIntensity()
-            for i in range(len(self._lights)):
-                self._program['u_lights_position[%d]' % i] = self._lights[i].getPosition()
-            self._program.draw('triangles', self._indices)
+            for i in range(len(self._objects)):
+                obj = self._objects[i]
+                prog = self._programs[i]
+                model = numpy.eye(4, dtype=numpy.float32)
+                translate(model, *obj.getPosition())
+                prog['u_model'] = model
+                prog['u_view'] = view
+                prog['u_projection'] = self._projection
+                prog['u_bias_matrix'] = biasMatrix
+                for i in range(len(self._shadowMaps)):
+                    prog['u_shadow_maps[%d]' % i] = self._shadowMaps[i]
+                prog['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
+                for i in range(len(self._lights)):
+                    prog['u_lights_intensity[%d]' % i] = self._lights[i].getIntensity()
+                for i in range(len(self._lights)):
+                    prog['u_lights_position[%d]' % i] = self._lights[i].getPosition()
+                prog.draw('triangles', obj.getIndexBuffer())
 
             # draw shadowmap as minimap
             # GL.glViewport(0,0,228,128)

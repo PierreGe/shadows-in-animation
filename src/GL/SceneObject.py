@@ -8,13 +8,13 @@ import numpy
 
 class SceneObject:
     def __init__(self, vertices, indices, normals, position, color=None, texture=None, outline = None, visible = True):
-        self._vertices = numpy.array(vertices)
+        self._vertices = numpy.array(vertices).astype(numpy.float32)
         try:
             self._indices = [item for sublist in indices for item in sublist]
         except:
             self._indices = indices
-        self._indices = numpy.array(self._indices)
-        self._normals = numpy.array(normals)
+        self._indices = numpy.array(self._indices).astype(numpy.uint16)
+        self._normals = numpy.array(normals).astype(numpy.float32)
         self._position = position
         self._color = color
         self._texture = texture
