@@ -19,14 +19,6 @@ def concatPositions(verticesList):
 def concatIndices(indicesList):
     def addIndices(newIndices, indices):
         max_index = max(newIndices)+1 if len(newIndices) > 0 else 0
-        # curr = indices
-        # prev = None
-        # # reduce from n dimensions to 1
-        # while (type(curr) != int):
-        #     prev = curr
-        #     print (type(curr))
-        #     print type(prev)
-        #     curr = reduce(lambda x,y: x+y, prev)
         try:
             newIndices.extend([item+max_index for sublist in indices for item in sublist])
         except:
@@ -83,11 +75,12 @@ class ShadowMapAlgorithm:
             self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
         self._old_light_number = light_number
 
-    def init(self, positions, indices, normals, camera, lightList):
+    def init(self, objects, camera, lightList):
         """ Method that initialize the algorithm """
-        self._positions = gloo.VertexBuffer(concatPositions(positions))
-        self._indices = gloo.IndexBuffer(numpy.array(concatIndices(indices)))
-        self._normals = gloo.VertexBuffer(concatNormals(normals))
+        self._objects = objects
+        self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects]))
+        self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
+        self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
         self._camera = camera
         self._lights = lightList
         self._loadShaders()

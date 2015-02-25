@@ -11,6 +11,7 @@ from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light
 from Algorithms import *  
+from SceneObject import SceneObject
 
 import AutoRotateCamera
 
@@ -101,9 +102,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def wheelEvent(self, event):
         """ docstring """
         if (event.delta() > 0):
-            self._camera.zoomIn()
+            self._camera.forward()
         else:
-            self._camera.zoomOut()
+            self._camera.backward()
         self.updateGL()
 
     def keyPressEvent(self, event):
@@ -150,9 +151,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._camera = Camera()
         self._lights = self._controller.getLightCollection()
 
-        self.positions = []
-        self.indices = []
-        self.normals = []
+        self._objects = []
 
         self._makePlane((0,0,0), 200, 200)
         # examples : should be removed or used for empty scenes
@@ -160,7 +159,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # self._makeSphere((0,3,0))
         self._loadObjects()
 
-        self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._controller.getLightCollection())
+        self._chosenAlgo.init(self._objects, self._camera, self._controller.getLightCollection())
         self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
@@ -199,48 +198,29 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # O = [0,1, 1,2, 2,3, 3,0,
         #      4,7, 7,6, 6,5, 5,4,
         #      0,5, 1,6, 2,7, 3,4 ]
-
-        self._addPositions(vertices, position)
-        self._addIndices(I)
-        self._addNormals(normals)
-# 
+        obj = SceneObject(vertices, I, normals, position)
+        self._objects.append(obj)
+ 
     def _makeCube(self, position):
         """ docstring """
         V, F, O = create_cube()
         positions = [x[0] for x in V]
         normals = [x[2] for x in V]
-        self._addPositions(positions, position)
-        self._addIndices(F.tolist())
-        self._addNormals(normals)
+        obj = SceneObject(positions, F, normals, position)
+        self._objects.append(obj)
 
     def _makeSphere(self, position):
         sphere = create_sphere(36,36)
-        self._addPositions(sphere.vertices().tolist(), position)
-        self._addIndices(sphere.faces().tolist())
-        self._addNormals(sphere.vertex_normals().tolist())
+        obj = SceneObject(sphere.vertices(), sphere.faces(), sphere.vertex_normals(), position)
+        self._objects.append(obj)
 
     def _loadObjects(self):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
+            position = obj[1]
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            self._addPositions(parser.getVertices().tolist(), obj[1])
-            self._addIndices(parser.getFaces().astype(numpy.uint16).tolist())
-            self._addNormals(parser.getNormals().astype(numpy.float32).tolist())
-
-    def _addPositions(self, vertices, position):
-        self.positions.append([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
-
-    def _addIndices(self, indices):
-        try:
-            newIndices = []
-            for item in indices:
-                newIndices.extend(item)
-            self.indices.append(newIndices)
-        except:
-            self.indices.append(indices)
-
-    def _addNormals(self, normals):
-        self.normals.append(normals)
+            sceneObj = SceneObject(parser.getVertices(), parser.getFaces().astype(numpy.uint16), parser.getNormals().astype(numpy.float32), position)
+            self._objects.append(sceneObj)
 
 
     def switchCameraAnimation(self):
