@@ -84,7 +84,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
  
     def mouseMoveEvent(self, event):
         """ This method is called when there is a mouse (drag) event"""
-        smoothFactor = 10
+        smoothFactor = 100
         dx = event.x() - self.lastPos.x()
         dy = event.y() - self.lastPos.y()
         dx = int(dx/smoothFactor)
@@ -100,9 +100,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def wheelEvent(self, event):
         """ docstring """
         if (event.delta() > 0):
-            self._camera.zoomIn()
+            self._camera.forward()
         else:
-            self._camera.zoomOut()
+            self._camera.backward()
         self.updateGL()
 
     def keyPressEvent(self, event):
