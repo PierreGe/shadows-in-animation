@@ -143,7 +143,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # save mouse cursor position for smooth rotation
         self.lastPos = QtCore.QPoint()
 
-        gloo.set_state(clear_color=(0.30, 0.30, 0.35, 1.00), depth_test=True,
+        gloo.set_state(clear_color=(0.2734375, 0.5078125, 0.703125, 1.00), depth_test=True,
                        polygon_offset=(1, 1),
                        blend_func=('src_alpha', 'one_minus_src_alpha'),
                        line_width=0.75)
