@@ -9,7 +9,6 @@
       ["assets/obj/tree-palmier/FR01b.obj", [-8,0,-5]],
       ["assets/obj/bike/bike2.obj",[-2,0.5,2]],
       ["assets/obj/mario/mario5.obj",[2,0,2]],
-      ["assets/obj/helicopter/helicopter.obj",[8,15,8]],
-      ["assets/obj/chestnut/chestnut.obj",[8,0,8]]
+      ["assets/obj/helicopter/helicopter.obj",[8,15,8]]
   ]
 }
