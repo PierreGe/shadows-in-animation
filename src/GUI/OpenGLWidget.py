@@ -218,8 +218,9 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
             position = obj[1]
+            color = obj[2]
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            sceneObj = SceneObject(parser.getVertices(), parser.getFaces().astype(numpy.uint16), parser.getNormals().astype(numpy.float32), position)
+            sceneObj = SceneObject(parser.getVertices(), parser.getFaces().astype(numpy.uint16), parser.getNormals().astype(numpy.float32), position, color)
             self._objects.append(sceneObj)
 
 

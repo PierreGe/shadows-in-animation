@@ -56,6 +56,10 @@ class AbstractAlgorithm:
         for obj in self._objects:
             newProg = gloo.Program(vertex_str, fragment_str)
             newProg['position'] = obj.getVertexBuffer()
+            if not obj.getColor():
+                newProg['u_color'] = DEFAULT_COLOR
+            else:
+                newProg['u_color'] = obj.getColorAlpha()
             newProg['u_projection'] = self._projection
             self._programs.append(newProg)
         self.active = True
@@ -74,7 +78,6 @@ class AbstractAlgorithm:
             translate(model, *obj.getPosition())
             prog['u_model'] = model
             prog['u_view'] = view
-            prog['u_color'] = DEFAULT_COLOR # TODO remove hardcoded value
             prog.draw('triangles', obj.getIndexBuffer())
 
     def terminate(self):
