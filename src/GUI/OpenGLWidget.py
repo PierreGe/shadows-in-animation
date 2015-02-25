@@ -11,6 +11,7 @@ from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light
 from Algorithms import *  
+from SceneObject import SceneObject
 
 import AutoRotateCamera
 
@@ -23,6 +24,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._controller = controller
         self._algorithms = {
             "Shadow Mapping": ShadowMapAlgorithm(),
+            "Shadow Volume" : ShadowVolumeAlgorithm(),
             "Aucune Ombre": NoShadowAlgorithm(),
             "Auto-Ombre": SelfShadowAlgorithm()
         }
@@ -149,17 +151,15 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._camera = Camera()
         self._lights = self._controller.getLightCollection()
 
-        self.positions = []
-        self.indices = []
-        self.normals = []
+        self._objects = []
 
-        self._makePlane((0,0,0), 200, 200)
+        self._makePlane([0,0,0], 200, 200)
         # examples : should be removed or used for empty scenes
         # self._makeCube((0,1.1,0))
         # self._makeSphere((0,3,0))
         self._loadObjects()
 
-        self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._controller.getLightCollection())
+        self._chosenAlgo.init(self._objects, self._camera, self._controller.getLightCollection())
         self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
@@ -198,47 +198,33 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # O = [0,1, 1,2, 2,3, 3,0,
         #      4,7, 7,6, 6,5, 5,4,
         #      0,5, 1,6, 2,7, 3,4 ]
-
-        self._addPositions(vertices, position)
-        self._addIndices(I)
-        self.normals.extend(normals)
-# 
+        obj = SceneObject(vertices, I, normals, position)
+        self._objects.append(obj)
+ 
     def _makeCube(self, position):
         """ docstring """
         V, F, O = create_cube()
         positions = [x[0] for x in V]
         normals = [x[2] for x in V]
-        self._addPositions(positions, position)
-        self._addIndices(F.tolist())
-        self.normals.extend(normals)
+        obj = SceneObject(positions, F, normals, position)
+        self._objects.append(obj)
 
     def _makeSphere(self, position):
         sphere = create_sphere(36,36)
-        self._addPositions(sphere.vertices().tolist(), position)
-        self._addIndices(sphere.faces().tolist())
-        self.normals.extend(sphere.vertex_normals().tolist())
+        obj = SceneObject(sphere.vertices(), sphere.faces(), sphere.vertex_normals(), position)
+        self._objects.append(obj)
 
     def _loadObjects(self):
         for obj in self._objectNames:
             parser = ObjParser(obj[0])
+            position = obj[1]
+            if len(obj) == 3:
+                color = obj[2]
+            else:
+                color = None
             #program['u_texture'] = gloo.Texture2D(imread(parser.getMtl().getTexture()))
-            self._addPositions(parser.getVertices().tolist(), obj[1])
-            self._addIndices(parser.getFaces().astype(numpy.uint16).tolist())
-            self.normals.extend(parser.getNormals().astype(numpy.float32).tolist())
-
-    def _addPositions(self, vertices, position):
-        self.positions.extend([[vertex[i]+position[i] for i in range(3)] for vertex in vertices])
-
-    # add index so mesh reference only their vertices
-    def _addIndices(self, indices):
-        if (len(self.indices) > 0):
-            max_index = max(self.indices)+1
-        else:
-            max_index = 0
-        try:
-            self.indices.extend([item+max_index for sublist in indices for item in sublist])
-        except:
-            self.indices.extend([item+max_index for item in indices])
+            sceneObj = SceneObject(parser.getVertices(), parser.getFaces().astype(numpy.uint16), parser.getNormals().astype(numpy.float32), position, color)
+            self._objects.append(sceneObj)
 
 
     def switchCameraAnimation(self):
@@ -253,5 +239,3 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ """
         if self._cameraRotation:
             self._cameraRotation.stop()
-
-

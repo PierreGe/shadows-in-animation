@@ -1,0 +1,7 @@
+uniform vec3 u_color;
+uniform vec3 u_light_color;
+uniform vec3 u_light_position;
+
+void main() {
+	gl_FragColor = vec4(u_color,1.0);
+}
