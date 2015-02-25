@@ -13,6 +13,7 @@ from Utils import *
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 
+
 def createViewMatrix(camera):
     view = numpy.eye(4, dtype=numpy.float32)
     translate(view, -camera.getX(), -camera.getY(), -camera.getZ())
@@ -175,9 +176,7 @@ class NoShadowAlgorithm:
 
         self.active = True
 
-
         self._program['position'] = self._positions
-        self._program.draw('triangles', self._indices)
 
     def update(self):
         if self.active:
@@ -214,11 +213,8 @@ class SelfShadowAlgorithm:
 
         self.active = True
 
-        self._program['u_light_intensity'] = self._light.getIntensity()
-        self._program['u_light_position'] = self._light.getPosition()
         self._program['normal'] = self._normals
         self._program['position'] = self._positions
-        self._program.draw('triangles', self._indices)
 
     def update(self):
         if self.active:
