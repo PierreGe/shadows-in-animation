@@ -56,13 +56,13 @@ class AbstractAlgorithm:
         for obj in self._objects:
             newProg = gloo.Program(vertex_str, fragment_str)
             newProg['position'] = obj.getVertexBuffer()
-            newProg['normal'] = obj.getNormalBuffer()
             newProg['u_projection'] = self._projection
             self._programs.append(newProg)
         self.active = True
 
     def update(self):
         if len(self._lights) != self._old_light_number:
+            print "lights"
             self._loadShaders()
 
     def draw(self):
@@ -131,8 +131,11 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
         """ Method that initialize the algorithm """
         AbstractAlgorithm.init(self, objects, camera, lights)
 
-        for prog in self._programs:
+        for i in range(len(self._programs)):
+            obj = self._objects[i]
+            prog = self._programs[i]
             prog['u_bias_matrix'] = self.BIAS_MATRIX
+            prog['normal'] = obj.getNormalBuffer()
 
         self._shadowProgram['position'] = self._positions
         # Shadow map
@@ -207,54 +210,27 @@ class RayTracingAlgorithm:
     def terminate(self):
         self.active = False
 
-class NoShadowAlgorithm:
+class NoShadowAlgorithm(AbstractAlgorithm):
+    VERTEX_SHADER_FILENAME="shaders/noshadowalgo.vertexshader"
+    FRAGMENT_SHADER_FILENAME="shaders/noshadowalgo.fragmentshader"
     def __init__(self):
-        self._program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
+        AbstractAlgorithm.__init__(self)
 
-    def init(self, objects, camera, lightList):
-        self._objects = objects
-        self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects]))
-        self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
-        self._camera = camera
-        self._projection = createProjectionMatrix()
-
-        self.active = True
-
-        self._program['position'] = self._positions
+    def init(self, objects, camera, lights):
+        AbstractAlgorithm.init(self, objects, camera, lights)
 
     def update(self):
         if self.active:
-            # create render matrices
-            view = createViewMatrix(self._camera)
-            model = numpy.eye(4, dtype=numpy.float32)
-            # draw scene
-            self._program['u_model'] = model
-            self._program['u_view'] = view
-            self._program['u_projection'] = self._projection
-            self._program['u_color'] = DEFAULT_COLOR 
-            self._program.draw('triangles', self._indices)
+            self.draw()
 
-    def terminate(self):
-        self.active = False
-        self._positions = []
-        self._indices = []
-        self._camera = None
-
-
-class SelfShadowAlgorithm:
+class SelfShadowAlgorithm(AbstractAlgorithm):
+    VERTEX_SHADER_FILENAME="shaders/selfshadowalgo.vertexshader"
+    FRAGMENT_SHADER_FILENAME="shaders/selfshadowalgo.fragmentshader"
     def __init__(self):
-        self._program = gloo.Program("shaders/selfshadowalgo.vertexshader", "shaders/selfshadowalgo.fragmentshader")
+        AbstractAlgorithm.__init__(self)
 
-    def init(self, objects, camera, lightList):
-        self._objects = objects
-        self._positions = gloo.VertexBuffer(concatPositions([obj.getVertices().tolist() for obj in objects]))
-        self._indices = gloo.IndexBuffer(numpy.array(concatIndices([obj.getIndices().tolist() for obj in objects])))
-        self._normals = gloo.VertexBuffer(concatNormals([obj.getNormals().tolist() for obj in objects]))
-        self._camera = camera
-        self._light = lightList[0]
-        self._projection = createProjectionMatrix()
-
-        self.active = True
+    def init(self, objects, camera, lights):
+        AbstractAlgorithm.init(self, objects, camera, lights)
 
         self._program['normal'] = self._normals
         self._program['position'] = self._positions

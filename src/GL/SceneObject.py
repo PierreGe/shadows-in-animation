@@ -20,24 +20,33 @@ class SceneObject:
         self._texture = texture
         self._outline = outline
         self._visible = visible
+        self._vertexBuffer = None
+        self._indexBuffer = None
+        self._normalBuffer = None
 
     def getVertices(self):
         return self._vertices
 
     def getVertexBuffer(self):
-        return gloo.VertexBuffer(self.getVertices())
+        if not self._vertexBuffer:
+            self._vertexBuffer = gloo.VertexBuffer(self.getVertices())
+        return self._vertexBuffer
 
     def getIndices(self):
         return self._indices
 
     def getIndexBuffer(self):
-        return gloo.IndexBuffer(self.getIndices())
+        if not self._indexBuffer:
+            self._indexBuffer = gloo.IndexBuffer(self.getIndices())
+        return self._indexBuffer
 
     def getNormals(self):
         return self._normals
 
     def getNormalBuffer(self):
-        return gloo.VertexBuffer(self.getNormals())
+        if not self._normalBuffer:
+            self._normalBuffer = gloo.VertexBuffer(self.getNormals())
+        return self._normalBuffer
 
     def getPosition(self):
         return self._position
