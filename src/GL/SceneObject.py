@@ -1,37 +1,67 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 
+from operator import add
+from vispy import gloo
+from vispy.geometry import *
+import numpy
 
 class SceneObject:
-	def __init__(self, vertices, indices, normals, position, color=None, texture=None, outline = None, visible = True):
-        self._vertices = [[vertex[i]+position[i] for i in range(len(vertex))] for vertex in vertices]
-		try:
-			self._indices = reduce(add, indices, [])
-		except:
-			self._indices = indices
-		self._normals = normals
-		self._color = color
-		self._texture = texture
-		self._outline = outline
-		self._visible = visible
+    def __init__(self, vertices, indices, normals, position, color=None, texture=None, outline = None, visible = True):
+        self._vertices = numpy.array(vertices)
+        try:
+            self._indices = reduce(add, indices, [])
+        except:
+            self._indices = indices
+        self._indices = numpy.array(self._indices)
+        self._normals = numpy.array(normals)
+        self._position = position
+        self._color = color
+        self._texture = texture
+        self._outline = outline
+        self._visible = visible
 
-	def getVertices(self):
-		return self._vertices
+    def getVertices(self):
+        return self._vertices
 
-	def getIndices(self):
-		return self._indices
+    def getVertexBuffer(self):
+        return gloo.VertexBuffer(self.getVertices())
 
-	def getNormals(self):
-		return self._normals
+    def getIndices(self):
+        return self._indices
 
-	def getColor(self):
-		return self._color
+    def getIndexBuffer(self):
+        return gloo.IndexBuffer(self.getIndices())
 
-	def getTexture(self):
-		return self._texture
+    def getNormals(self):
+        return self._normals
 
-	def hasOutline(self):
-		return self._outline
+    def getNormalBuffer(self):
+        return gloo.VertexBuffer(self.getNormals())
 
-	def isVisible(self):
-		return self._visible
+    def getColor(self):
+        return self._color
+
+    def getColorAlpha(self):
+        return self._color + [1]
+
+    def getTexture(self):
+        return self._texture
+
+    def hasOutline(self):
+        return self._outline
+
+    def isVisible(self):
+        return self._visible
+
+if __name__ == '__main__':
+    V, F, O = create_cube()
+    vertices = [x[0] for x in V]
+    indices = F.tolist()
+    normals = [x[2].tolist() for x in V]
+    position = [1,1,1]
+    color = [0.7,0.7,0.7]
+    obj = SceneObject(vertices, indices, normals, position, color)
+    print obj.getVertices()
+    print obj.getIndices()
+    print obj.getNormals()
