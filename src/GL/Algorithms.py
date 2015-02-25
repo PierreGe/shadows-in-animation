@@ -13,6 +13,7 @@ from Light import Light
 from Utils import *
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
+DEFAULT_SHAPE = (768,1366)
 
 class AbstractAlgorithm:
     def __init__(self):
@@ -146,9 +147,8 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
         # Shadow map
         self._shadowMaps = []
         self._frameBuffers = []
-        shape = 768,1366
         for light in self._lights:
-            shadowMap = gloo.Texture2D(shape=(shape + (4,)), dtype=numpy.float32)
+            shadowMap = gloo.Texture2D(shape=(DEFAULT_SHAPE + (4,)), dtype=numpy.float32)
             self._shadowMaps.append(shadowMap)
             self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
 
