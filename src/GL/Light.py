@@ -146,3 +146,5 @@ class Light(object):
         self._position[0] = self._rayon * math.cos(self._theta/Light.RATIO_DEGREE_RADIAN)
         self._position[2] = self._rayon * math.sin(self._theta/Light.RATIO_DEGREE_RADIAN)
         self.lock.release()
+
+

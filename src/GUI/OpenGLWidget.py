@@ -11,7 +11,7 @@ from ObjParser import ObjParser
 from Camera import Camera
 from Light import Light
 from Algorithms import *  
-import AutoRotateLight
+
 import AutoRotateCamera
 
 
@@ -160,7 +160,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._loadObjects()
 
         self._chosenAlgo.init(self.positions, self.indices, self.normals, self._camera, self._controller.getLightCollection())
-        self._lightRotation = AutoRotateLight.AutoRotateLight(self._lights[0],1)
         self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
@@ -241,13 +240,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         except:
             self.indices.extend([item+max_index for item in indices])
 
-    def switchLightAnimation(self):
-        """ """
-        if self._lightRotation:
-            if self._lightRotation.getAlive():
-                self._lightRotation.stop()
-            else:
-                self._lightRotation.start()
 
     def switchCameraAnimation(self):
         """ """
@@ -259,8 +251,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
     def killThreads(self):
         """ """
-        if self._lightRotation:
-            self._lightRotation.stop()
         if self._cameraRotation:
             self._cameraRotation.stop()
 
