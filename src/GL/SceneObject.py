@@ -39,6 +39,12 @@ class SceneObject:
     def getNormalBuffer(self):
         return gloo.VertexBuffer(self.getNormals())
 
+    def getPosition(self):
+        return self._position
+
+    def getPositionHomogeneous(self):
+        return self._position + [0]
+
     def getColor(self):
         return self._color
 
