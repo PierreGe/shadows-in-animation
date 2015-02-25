@@ -11,32 +11,6 @@ from vispy.geometry import *
 from Camera import Camera
 from Light import Light
 from Utils import *
-def concatPositions(objects):
-    verticesList = [obj.getVertices().tolist() for obj in objects]
-    positionList = [obj.getPosition() for obj in objects]
-    ret = []
-    for i in range(len(verticesList)):
-        ret.extend(move(verticesList[i], positionList[i]))
-    return ret
-
-def move(vertices, position):
-    return [[vertex[i]+position[i] for i in range(len(vertex))] for vertex in vertices]
-
-# add index so mesh reference only their vertices
-def concatIndices(objects):
-    indicesList = [obj.getIndices().tolist() for obj in objects]
-    def addIndices(newIndices, indices):
-        max_index = max(newIndices)+1 if len(newIndices) > 0 else 0
-        try:
-            newIndices.extend([item+max_index for sublist in indices for item in sublist])
-        except:
-            newIndices.extend([item+max_index for item in indices])
-        return newIndices
-    return reduce(addIndices, indicesList, [])
-
-def concatNormals(objects):
-    normalsList = [obj.getNormals().tolist() for obj in objects]
-    return reduce(add, normalsList, [])
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 
