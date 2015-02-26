@@ -28,17 +28,20 @@ class AbstractAlgorithm:
         self._camera = camera
         self._lights = lights
         vertex_str, fragment_str = self._loadShaders()
+        vertex_texture, fragment_texture = self._loadShaders(texture=True)
 
         self._projection = self._createProjectionMatrix()
         self._programs = []
         for obj in self._objects:
-            newProg = gloo.Program(vertex_str, fragment_str)
             if obj.getTexture():
+                newProg = gloo.Program(vertex_texture, fragment_texture)
                 newProg['u_texture'] = gloo.Texture2D(imread(obj.getTexture()))
-            elif obj.getColor():
-                newProg['u_color'] = obj.getColorAlpha()
             else:
-                newProg['u_color'] = DEFAULT_COLOR
+                newProg = gloo.Program(vertex_str, fragment_str)
+                if obj.getColor():
+                    newProg['u_color'] = obj.getColorAlpha()
+                else:
+                    newProg['u_color'] = DEFAULT_COLOR
             newProg['position'] = obj.getVertexBuffer()
             newProg['u_projection'] = self._projection
             self._programs.append(newProg)
@@ -80,13 +83,19 @@ class AbstractAlgorithm:
     def _createProjectionMatrix(self):
         return perspective(60, 16.0/9.0, 0.1, 50)
 
-    def _loadShaders(self):
+    def _loadShaders(self, texture=False):
         light_number = len(self._lights)
         light_number_float = float(light_number)
         fragment = open(self.FRAGMENT_SHADER_FILENAME, 'r')
         fragment_str = fragment.read()
         fragment_str = fragment_str.replace("$LIGHT_NUMBER$", str(light_number))
         fragment_str = fragment_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
+        if texture:
+            pass
+            # TODO replace for textures
+        else:
+            pass
+            #TODO replace for colors
         vertex = open(self.VERTEX_SHADER_FILENAME, 'r')
         vertex_str = vertex.read()
         vertex_str = vertex_str.replace("$LIGHT_NUMBER$", str(light_number))
