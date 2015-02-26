@@ -227,7 +227,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
                 elif isinstance(obj[2], list):
                     texture = None
                     color = obj[2]
-            sceneObj = SceneObject(parser.getVertices(), parser.getFaces().astype(numpy.uint16), parser.getNormals().astype(numpy.float32), position, color, texture)
+            sceneObj = SceneObject(parser.getVertices(), parser.getFaces(), parser.getNormals(), position, color, texture, parser.getTextureCoords())
             self._objects.append(sceneObj)
 
 

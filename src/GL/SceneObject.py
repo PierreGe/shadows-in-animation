@@ -7,8 +7,9 @@ from vispy.geometry import *
 import numpy
 
 class SceneObject:
-    def __init__(self, vertices, indices, normals, position, color=None, texture=None, outline = None, visible = True):
+    def __init__(self, vertices, indices, normals, position, color=None, texture=None, texcoord = None, outline = None, visible = True):
         self._vertices = numpy.array(vertices).astype(numpy.float32)
+        self._texcoord = numpy.array(texcoord).astype(numpy.float32)
         try:
             self._indices = [item for sublist in indices for item in sublist]
         except:
@@ -47,6 +48,14 @@ class SceneObject:
         if not self._normalBuffer:
             self._normalBuffer = gloo.VertexBuffer(self.getNormals())
         return self._normalBuffer
+
+    def getTexCoords(self):
+        return self._texcoord
+
+    def getTexBuffer(self):
+        if not self._texcoordBuffer:
+            self._texcoordBuffer = gloo.VertexBuffer(self.getTexCoords())
+        return self._texcoordBuffer
 
     def getPosition(self):
         return self._position
