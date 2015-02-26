@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <set>
 #include <vector>
+#include <iostream>
 
 class Vector {
 public:
@@ -10,6 +11,19 @@ public:
 	float z;
 	bool operator==(const Vector& other) {
 		return this->x == other.x and this->y == other.y and this->z == other.z;
+	}
+	Vector(){}
+	Vector(float floats[3]){
+		this->x = floats[0];
+		this->y = floats[1];
+		this->z = floats[2];
+	}
+	operator float*() {
+		float* ret = new float[3];
+		ret[0] = this->x;
+		ret[1] = this->y;
+		ret[2] = this->z;
+		return ret;
 	}
 };
 
@@ -20,7 +34,23 @@ public:
 	bool operator==(const Edge& other) {
 		return this->one == other.one and this->two == other.two;
 	}
+	operator Vector*() {
+		Vector* ret = new Vector[2];
+		ret[0] = this->one;
+		ret[1] = this->two;
+		return ret;
+	}
 };
+
+std::ostream& operator<<(std::ostream& out, const Vector& vec) {
+	out << "[" << vec.x << "," << vec.y << "," << vec.z << "]";
+	return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const Edge& edge) {
+	out << "[" << edge.one << "," << edge.two << "]";
+	return out;
+}
 
 class Triangle {
 public:
@@ -62,8 +92,29 @@ void computeAverageTrianglePosition(Triangle* triangle, Vector* ret) {
 	ret->z = sumZ/3;
 }
 
+bool erase(std::vector<Edge>& edges, Edge& edge1, Edge& edge2) {
+	int size_vec = edges.size();
+	for (int i = 0; i < size_vec; ++i) {
+		if (edges[i] == edge1 or edges[i] == edge2) {
+			edges.erase(edges.begin()+i);
+			return true;
+		}
+	}
+	return false;
+}
+
 Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals, 
 					   int sizeIndices, Vector lightPosition) {
+	// for (int i = 0; i < 8; ++i) {
+	// 	std::cout << positions[i][0] << "," << positions[i][1] << "," << positions[i][2] << std::endl;
+	// }
+	// for (int i = 0; i < sizeIndices; ++i) {
+	// 	std::cout << indices[i]  << std::endl;
+	// }
+	// for (int i = 0; i < 8; ++i) {
+	// 	std::cout << normals[i][0] << "," << normals[i][1] << "," << normals[i][2] << std::endl;
+	// }
+
 	int index_indices;
 	Triangle triangle;
 	Vector averageTrianglePos;
@@ -97,21 +148,20 @@ Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals,
 			reverseEdges[2].two = triangle.two;
 			reverseEdges[2].one = triangle.three;
 			for (int i = 0; i < 3; ++i){ // for each edge
-				std::vector<Edge> it;
-				int size_vec = returnVec.size();
-				for (int j = 0; j < size_vec; ++j) {
-					Edge currentEdge = returnVec[j];
-					if (returnVec[j] == edges[i] or returnVec[j] == reverseEdges[i]) {
-						returnVec.erase(returnVec.begin()+j);
-					}
-					else {
-						returnVec.push_back(edges[i]);
-					}
+				if (not erase(returnVec, edges[i], reverseEdges[i])) {
+					returnVec.push_back(edges[i]);
 				}
 			}
 		}
 	}
-	return returnVec.data();
+	Edge* returnEdges = new Edge[returnVec.size()];
+	std::vector<Edge>::iterator it;
+	int i = 0;
+	for (it = returnVec.begin(); it != returnVec.end(); ++it) {
+		returnEdges[i++] = *it;
+		std::cout << (*it) << std::endl;
+	}
+	return returnEdges;
 }
 	        // positions = self._objects[index].getVertices()
 	        // indices = self._objects[index].getIndices()

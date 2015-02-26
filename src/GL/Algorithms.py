@@ -8,7 +8,7 @@ from vispy.io import imread
 import numpy
 from operator import add
 from vispy.geometry import *
-from ctypes import cdll
+from ctypes import *
 libvolume = cdll.LoadLibrary("GL/shadow_volume.so")
 
 from Camera import Camera
@@ -308,18 +308,20 @@ class SelfShadowAlgorithm(AbstractAlgorithm):
             self.draw()
 
 
-class ShadowVolumeAlgorithm:
-    def __init__(self):
-        self._program = gloo.Program("shaders/shadowvolume.vertexshader",
-            "shaders/shadowvolume.fragmentshader")
+class Vector(Structure):
+    _fields_ = ("x", c_float), ("y", c_float), ("z", c_float)
 
-    def init(self, objects, camera, lightList):
-        self._objects = objects
-        self._camera = camera
-        self._light = lightList[0]
-        self._projection = createProjectionMatrix()
-        # self._program['normal'] = self._normals
-        # self._program['position'] = self._positions
+class Edge(Structure):
+    _fields_ = ("one", Vector), ("two", Vector)
+
+class ShadowVolumeAlgorithm(AbstractAlgorithm):
+    VERTEX_SHADER_FILENAME="shaders/shadowvolume.vertexshader"
+    FRAGMENT_SHADER_FILENAME="shaders/shadowvolume.fragmentshader"
+    def __init__(self):
+        AbstractAlgorithm.__init__(self)
+
+    def init(self, objects, camera, lights):
+        AbstractAlgorithm.init(self, objects, camera, lights)
 
         # shape=(1366,768)
         # self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
@@ -334,8 +336,38 @@ class ShadowVolumeAlgorithm:
     def drawVolumes(self):
         # for each object
         for i in range(len(self._objects)):
-            contour_edges = self.findContourEdges(i)
-            shadow_triangles = self.drawShadowTriangles(contour_edges)
+            model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *self._objects[i].getPosition())
+            positions = Vector * len(self._objects[i].getVertices())
+            j = 0
+            positions = positions()
+            for pos in positions:
+                pos.x = self._objects[i].getVertices()[j][0]
+                pos.y = self._objects[i].getVertices()[j][1]
+                pos.z = self._objects[i].getVertices()[j][2]
+                j += 1
+
+            indices = c_int * len(self._objects[i].getIndices())
+            k = 0
+            indices = indices()
+            for index in indices:
+                indices[k] = self._objects[i].getIndices()[k]
+                k += 1
+
+            normals = Vector * len(self._objects[i].getNormals())
+            l = 0
+            normals = normals()
+            for normal in normals:
+                normal.x = self._objects[i].getNormals()[l][0]
+                normal.y = self._objects[i].getNormals()[l][1]
+                normal.z = self._objects[i].getNormals()[l][2]
+                l += 1
+
+            size_indices = c_int(len(self._objects[i].getIndices()))
+            light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
+            lightPosition = Vector(x=light[0],y=light[1],z=light[2])
+            contour_edges = libvolume.findContourEdges(positions, indices, normals, size_indices,lightPosition)
+            print "edges: ", type(contour_edges)
 
     def findContourEdges(self, index):
         positions = self._objects[index].getVertices()
@@ -390,10 +422,6 @@ class ShadowVolumeAlgorithm:
 
     def update(self):
         if self.active:
-            # create render matrices
-            self._view = createViewMatrix(self._camera)
-            self._model = numpy.eye(4, dtype=numpy.float32)
-
             #create shadow volumes
             self._volumes = self.drawVolumes()
 
@@ -466,13 +494,12 @@ if __name__ == '__main__':
         diff1 = numpy.subtract(prev, curr)
         diff2 = numpy.subtract(next, curr)
         cube_normals.append(numpy.cross(diff2, diff1))
+    obj = SceneObject(cube_positions, cube_indices, cube_normals, [0,0,0])
     camera = Camera()
-    camera.setX(2)
-    camera.setY(2)
-    camera.setZ(-2)
+    camera._position = [2,2,-2]
     light = Light()
-    light.setPosition([2,2,-2])
+    light._position = [2,2,-2]
     shadowvolumealgo = ShadowVolumeAlgorithm()
-    shadowvolumealgo.init([cube_positions], [cube_indices], [cube_normals], camera, light)
+    shadowvolumealgo.init([obj], camera, [light])
     shadowvolumealgo.update()
     # print shadowvolumealgo.findContourEdges(0)
