@@ -336,6 +336,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     def init(self, objects, camera, lights):
         AbstractAlgorithm.init(self, objects, camera, lights)
+        del self._objects[0]
 
         # shape=(1366,768)
         # self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))

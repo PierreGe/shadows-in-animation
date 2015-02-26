@@ -163,7 +163,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
 
         self._objects = []
 
-        # self._makePlane([0,0,0], 200, 200)
+        self._makePlane([0,0,0], 200, 200)
         # examples : should be removed or used for empty scenes
         # self._makeCube((0,1.1,0))
         # self._makeSphere((0,3,0))
