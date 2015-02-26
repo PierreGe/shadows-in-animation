@@ -24,6 +24,7 @@ class SceneObject:
         self._vertexBuffer = None
         self._indexBuffer = None
         self._normalBuffer = None
+        self._texcoordBuffer = None
 
     def getVertices(self):
         return self._vertices
