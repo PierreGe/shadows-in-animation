@@ -10,6 +10,7 @@
       ["assets/obj/bike/bike2.obj",[-2,0.5,2]],
       ["assets/obj/mario/mario5.obj",[2,0,2]],
       ["assets/obj/helicopter/helicopter.obj",[8,15,8]],
-      ["assets/obj/cat/cat2.obj",[-8,0,0]]
+      ["assets/obj/cat/cat2.obj",[-8,0,0]],
+      ["assets/obj/mario-luigi/Luigi_obj3.obj",[0,0,0]]
   ]
 }

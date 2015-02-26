@@ -3,6 +3,6 @@
   "description": "This is Mario",
   "algo-compatible": ["Aucune Ombre", "Auto-Ombre", "Shadow Mapping", "Shadow Volume"],
   "obj-liste": [
-      ["assets/obj/mario/mario5.obj",[0,0,0]]
+      ["assets/obj/mario-luigi/Luigi_obj3.obj",[0,0,0], "assets/obj/mario-luigi/luigiD.jpg"]
   ]
 }
