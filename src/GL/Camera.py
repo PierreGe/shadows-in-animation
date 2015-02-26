@@ -18,7 +18,7 @@ class Camera(object):
         self._limitUp = 60
         self._limitDown = 1
         self._limitSide = 60
-        self._keyStep = 1
+        self._keyStep = 0.4
 
     def getPosition(self):
         return self._position;
@@ -120,16 +120,16 @@ class Camera(object):
 
     def forward(self):
         dirVect = self._forwardVectorFromAngle()
-        self._position[0] += dirVect[0] * self._zoomAmplitude
-        self._position[1] += dirVect[1] * self._zoomAmplitude
-        self._position[2] += dirVect[2] * self._zoomAmplitude
+        self._position[0] += dirVect[0] * self._keyStep
+        self._position[1] += dirVect[1] * self._keyStep
+        self._position[2] += dirVect[2] * self._keyStep
         self._normalizePosition()
 
     def backward(self):
         dirVect = self._forwardVectorFromAngle()
-        self._position[0] -= dirVect[0] * self._zoomAmplitude
-        self._position[1] -= dirVect[1] * self._zoomAmplitude
-        self._position[2] -= dirVect[2] * self._zoomAmplitude
+        self._position[0] -= dirVect[0] * self._keyStep
+        self._position[1] -= dirVect[1] * self._keyStep
+        self._position[2] -= dirVect[2] * self._keyStep
         self._normalizePosition()
 
     def _normalizePosition(self):
