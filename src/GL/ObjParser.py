@@ -27,8 +27,6 @@ class ObjParser:
         try:
             if os.path.isfile(self._filePath + filename):
                 self._parseObjFile(filename)
-                print "OBJ :"
-                print self._textureCoords
             else:
                 raise IOError("File does not exist")
         except Exception, e:
