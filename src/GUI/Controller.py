@@ -124,6 +124,10 @@ class Controller(object):
         """ set the status bar to computing"""
         self._statusBar.showMessage("Computing ....")
 
+    def setFPS(self, fps):
+        """ """
+        self._statusBar.showMessage("Frame per second (fps) : " + str(fps))
+
     def switchLightAnimation(self):
         """ """
         if self._lightCollection:

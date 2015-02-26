@@ -5,7 +5,6 @@ from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *
 from vispy.io import imread
-import numpy
 from operator import add
 from vispy.geometry import *
 
@@ -13,6 +12,9 @@ from Camera import Camera
 from Light import Light
 from Utils import *
 from SceneObject import SceneObject
+
+import numpy
+import time
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 DEFAULT_SHAPE = (768,1366)
@@ -51,6 +53,18 @@ class AbstractAlgorithm:
         self._lightObjects = self._createLightObjects()
         self._lightPrograms = self._createLightPrograms()
         self.active = True
+        self._fps = 1
+
+    def timedUpdate(self):
+        start = time.time() 
+        self.update()
+        elapsed = time.time()
+        elapsed = elapsed - start
+        self._fps = 1/elapsed
+
+    def getFPS(self):
+        """ """
+        return self._fps
 
     def update(self):
         if len(self._lights) != self._old_light_number:

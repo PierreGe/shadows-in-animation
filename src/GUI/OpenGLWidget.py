@@ -4,7 +4,6 @@
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from vispy.geometry import *
-import numpy
 from threading import Thread, Lock
 
 from ObjParser import ObjParser
@@ -12,6 +11,9 @@ from Camera import Camera
 from Light import Light
 from Algorithms import *  
 from SceneObject import SceneObject
+
+import numpy
+import time
 
 import AutoRotateCamera
 
@@ -35,14 +37,22 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.timer = QtCore.QTimer(self)
         self.timer.setSingleShot(False)
         self.timer.timeout.connect(self.timerUpdate)
-        fps = 24
-        self.timer.start(int(1000/fps))
+        self._timerfps = 24
+        self.timer.start(int(1000/self._timerfps))
         self._lightRotation = None
         self._cameraRotation = None
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self._softFPS = []
 
     def timerUpdate(self):
         """ """
+        instantFps = int(self._chosenAlgo.getFPS())
+        if len(self._softFPS) < self._timerfps:
+            self._softFPS.append(instantFps)
+        else:
+            fps = sum(self._softFPS) / len(self._softFPS)
+            self._controller.setFPS(fps)
+            self._softFPS = []
         self.updateGL()
 
     def getObjectNames(self):
@@ -169,7 +179,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ docstring """
         self._mutex.acquire()
         gloo.clear(color=True, depth=True)
-        self._chosenAlgo.update()
+        self._chosenAlgo.timedUpdate()
         self._mutex.release()
 
     # Called when window is resized
