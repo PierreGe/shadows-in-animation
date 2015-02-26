@@ -9,7 +9,7 @@ uniform mat4 u_normal;
 
 varying vec3 v_normal;
 
-varying vec4 v_color;
+$COLOR_VARIABLES$
 
 
 void main() {
@@ -27,6 +27,8 @@ void main() {
                       (length(surfaceToLight) * length(normal));
 
     brightness = max(min(brightness,1.0),0.0);
+
+    $COLOR_CODE$
 
     gl_FragColor = v_color * brightness * vec4(u_light_intensity, 1);
 }

@@ -1,5 +1,6 @@
-varying vec4 v_color;
+$COLOR_VARIABLES$
 
 void main() {
+	$COLOR_CODE$
     gl_FragColor = v_color;
 }
