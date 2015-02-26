@@ -4,6 +4,7 @@
 from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *
+from vispy.io import imread
 import numpy
 from operator import add
 from vispy.geometry import *
@@ -32,11 +33,13 @@ class AbstractAlgorithm:
         self._programs = []
         for obj in self._objects:
             newProg = gloo.Program(vertex_str, fragment_str)
-            newProg['position'] = obj.getVertexBuffer()
-            if not obj.getColor():
-                newProg['u_color'] = DEFAULT_COLOR
-            else:
+            if obj.getTexture():
+                newProg['u_texture'] = gloo.Texture2D(imread(obj.getTexture()))
+            elif obj.getColor():
                 newProg['u_color'] = obj.getColorAlpha()
+            else:
+                newProg['u_color'] = DEFAULT_COLOR
+            newProg['position'] = obj.getVertexBuffer()
             newProg['u_projection'] = self._projection
             self._programs.append(newProg)
         self.active = True
