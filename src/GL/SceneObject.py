@@ -9,7 +9,11 @@ import numpy
 class SceneObject:
     def __init__(self, vertices, indices, normals, position, color=None, texture=None, texcoord = None, outline = None, visible = True):
         self._vertices = numpy.array(vertices).astype(numpy.float32)
-        self._texcoord = numpy.array(texcoord).astype(numpy.float32)
+        if texcoord != None:
+            self._texcoord = [[x[1], x[0]] for x in texcoord]
+            self._texcoord = numpy.array(self._texcoord).astype(numpy.float32)
+        else:
+            self._texcoord = None
         try:
             self._indices = [item for sublist in indices for item in sublist]
         except:
