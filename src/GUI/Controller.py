@@ -49,7 +49,7 @@ class Controller(object):
         scene = str(item.parent().text(0))
         algo = str(item.text(0))
         if algo == "Ray Tracing":
-            self._glWidget = RayTracingWidget.RayTracingWidget()
+            self._glWidget = RayTracingWidget.RayTracingWidget(self)
         else:
             self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"],algo,self)
         self._replaceRightWidget(self._glWidget)

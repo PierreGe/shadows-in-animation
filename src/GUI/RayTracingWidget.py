@@ -6,24 +6,27 @@ from vispy import gloo
 from vispy.util.transforms import *
 from vispy import app
 import math
+import time
 
 class RayTracingWidget(QtGui.QWidget):
     """ The QT widget of ray tracing"""
-    def __init__(self):
+    def __init__(self, controller):
         QtGui.QWidget.__init__(self, None)
         self.setMinimumSize(600, 400)
-        self.canvas = Canvas(parent=self)
+        self.canvas = Canvas(controller, parent=self)
         hlayout = QtGui.QHBoxLayout(self)
         self.setLayout(hlayout)
         hlayout.addWidget(self.canvas.native, 1)
+
 
     def killThreads(self):
         """ In case of thread"""
         pass # do NOT delete method
 
 class Canvas(app.Canvas):
-    def __init__(self, **kwargs):
+    def __init__(self,controller, **kwargs):
         app.Canvas.__init__(self, **kwargs)
+        self._controller = controller
         self.geometry = 0, 0, 400, 400
 
         self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
@@ -50,7 +53,28 @@ class Canvas(app.Canvas):
         #self.program.draw('triangle_strip')
 
         #self.active = True
-        self._timer = app.Timer('auto', connect=self.on_timer, start=True)
+        self._timer = app.Timer('auto', connect=self.timedUpdate, start=True)
+
+        self._fps = 1
+        self._timerfps = 24
+        self._softFPS = []
+
+    def timerUpdate(self):
+        """ """
+        instantFps = int(self._fps)
+        if len(self._softFPS) < self._timerfps:
+            self._softFPS.append(instantFps)
+        else:
+            fps = sum(self._softFPS) / len(self._softFPS)
+            self._controller.setFPS(fps)
+            self._softFPS = []
+
+    def timedUpdate(self,event):
+        start = time.time() 
+        self.on_timer(event)
+        elapsed = time.time()
+        elapsed = elapsed - start
+        self._fps = 1/elapsed
 
 
     def on_timer(self, event):
@@ -59,6 +83,7 @@ class Canvas(app.Canvas):
         self.program['sphere_position_0'] = (+ math.sin(t), .1, 2.0 + 1.0 * math.cos(t))
         self.program['sphere_position_1'] = (- math.sin(t), .1, 2.0 - 1.0 * math.cos(t))
         self.update()
+        self.timerUpdate()
 
     def on_resize(self, event):
         width, height = event.size
