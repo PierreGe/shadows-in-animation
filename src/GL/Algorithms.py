@@ -8,6 +8,8 @@ from vispy.io import imread
 import numpy
 from operator import add
 from vispy.geometry import *
+from ctypes import cdll
+libvolume = cdll.LoadLibrary("GL/shadow_volume.so")
 
 from Camera import Camera
 from Light import Light
