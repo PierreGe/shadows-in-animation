@@ -335,69 +335,59 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def drawVolumes(self):
         # for each object
+        positions = [None for _ in range(len(self._objects))]
+        indices = [None for _ in range(len(self._objects))]
+        normals = [None for _ in range(len(self._objects))]
+        size_indices = [None for _ in range(len(self._objects))]
+        lightPosition = [None for _ in range(len(self._objects))]
+        contour_edges = [None for _ in range(len(self._objects))]
+        nb_edges = [None for _ in range(len(self._objects))]
         for i in range(len(self._objects)):
             model = numpy.eye(4, dtype=numpy.float32)
             translate(model, *self._objects[i].getPosition())
-            positions = Vector * len(self._objects[i].getVertices())
+            positions[i] = (Vector * len(self._objects[i].getVertices()))
             j = 0
-            positions = positions()
-            for pos in positions:
+            positions[i] = positions[i]()
+            for pos in positions[i]:
                 pos.x = self._objects[i].getVertices()[j][0]
                 pos.y = self._objects[i].getVertices()[j][1]
                 pos.z = self._objects[i].getVertices()[j][2]
                 j += 1
 
-            indices = c_int * len(self._objects[i].getIndices())
+            indices[i] = c_int * len(self._objects[i].getIndices())
             k = 0
-            indices = indices()
-            for index in indices:
-                indices[k] = self._objects[i].getIndices()[k]
+            indices[i] = indices[i]()
+            for index in indices[i]:
+                indices[i][k] = self._objects[i].getIndices()[k]
                 k += 1
 
-            normals = Vector * len(self._objects[i].getNormals())
+            normals[i] = Vector * len(self._objects[i].getNormals())
             l = 0
-            normals = normals()
-            for normal in normals:
+            normals[i] = normals[i]()
+            for normal in normals[i]:
                 normal.x = self._objects[i].getNormals()[l][0]
                 normal.y = self._objects[i].getNormals()[l][1]
                 normal.z = self._objects[i].getNormals()[l][2]
                 l += 1
 
-            size_indices = c_int(len(self._objects[i].getIndices()))
+            size_indices[i] = c_int(len(self._objects[i].getIndices()))
             light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
-            lightPosition = Vector(x=light[0],y=light[1],z=light[2])
-            contour_edges = libvolume.findContourEdges(positions, indices, normals, size_indices,lightPosition)
-            print "edges: ", type(contour_edges)
+            lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
 
-    def findContourEdges(self, index):
-        positions = self._objects[index].getVertices()
-        indices = self._objects[index].getIndices()
-        normals = self._objects[index].getNormals()
-        ret = numpy.array([])
-        lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
-        for i in range(0,len(indices), 3):
-            a = indices[i]
-            b = indices[i+1]
-            c = indices[i+2]
-            triangle = numpy.array([positions[a], positions[b], positions[c]])
-            averageTrianglePos = numpy.array([sum([x[0] for x in triangle])/3.0,
-                                  sum([x[1] for x in triangle])/3.0,
-                                  sum([x[2] for x in triangle])/3.0, 0.0])
-            lightDir = numpy.subtract(averageTrianglePos, lightPosition)
-            triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), numpy.array([1]))
-            if numpy.dot(lightDir, triangleNormal) >= 0:
-                for edge in numpy.nditer(numpy.array([[positions[a], positions[b]],[positions[a], positions[c]],[positions[b], positions[c]]])):
-                    if edge in ret.tolist() or [edge[1], edge[0]] in ret.tolist():
-                        try:
-                            ret.remove(edge)
-                        except Exception, e:
-                            ret.remove([edge[1], edge[0]])
-                    else:
-                        numpy.append(ret,edge)
-        return ret
+            contour_edges[i] = Edge * len(self._objects[i].getVertices())
+            contour_edges[i] = contour_edges[i]()
+
+            nb_edges[i] = pointer(c_int(0))
+
+            libvolume.findContourEdges(positions[i], indices[i], normals[i], size_indices[i],lightPosition[i], contour_edges[i], nb_edges[i])
+            retEdges = []
+            for edge in contour_edges[i]:
+                retEdges.append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
+            return self.drawShadowTriangles(retEdges)
 
     def drawShadowTriangles(self, contour_edges):
-        lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
+        model = numpy.eye(4, dtype=numpy.float32)
+        lightPosition = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
         extrudeMagnitude = 20
         shadow_triangles = []
         for edge in contour_edges:
@@ -411,13 +401,12 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         for triangle in shadow_triangles:
             for vertex in triangle:
                 vertices.append([vertex[0], vertex[1], vertex[2]])
-        program = gloo.Program("shaders/noshadowalgo.vertexshader", "shaders/noshadowalgo.fragmentshader")
-        program['position'] = gloo.VertexBuffer(vertices)
-        program['u_model'] = self._model
-        program['u_view'] = self._view
-        program['u_projection'] = self._projection
-        program['u_color'] = DEFAULT_COLOR
-        program.draw('triangles')
+        self._programs[0]['position'] = gloo.VertexBuffer(vertices)
+        self._programs[0]['u_model'] = model
+        self._programs[0]['u_view'] = self._createViewMatrix()
+        self._programs[0]['u_projection'] = self._projection
+        self._programs[0]['u_color'] = DEFAULT_COLOR
+        self._programs[0].draw('triangles')
 
 
     def update(self):
@@ -495,11 +484,14 @@ if __name__ == '__main__':
         diff2 = numpy.subtract(next, curr)
         cube_normals.append(numpy.cross(diff2, diff1))
     obj = SceneObject(cube_positions, cube_indices, cube_normals, [0,0,0])
+    obj2 = SceneObject(cube_positions, cube_indices, cube_normals, [0,0,0])
     camera = Camera()
     camera._position = [2,2,-2]
     light = Light()
     light._position = [2,2,-2]
     shadowvolumealgo = ShadowVolumeAlgorithm()
-    shadowvolumealgo.init([obj], camera, [light])
+    shadowvolumealgo.init([obj, obj2], camera, [light])
     shadowvolumealgo.update()
+    while True:
+        shadowvolumealgo.update()
     # print shadowvolumealgo.findContourEdges(0)

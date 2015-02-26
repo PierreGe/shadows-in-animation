@@ -18,13 +18,6 @@ public:
 		this->y = floats[1];
 		this->z = floats[2];
 	}
-	operator float*() {
-		float* ret = new float[3];
-		ret[0] = this->x;
-		ret[1] = this->y;
-		ret[2] = this->z;
-		return ret;
-	}
 };
 
 class Edge {
@@ -33,12 +26,6 @@ public:
 	Vector two;
 	bool operator==(const Edge& other) {
 		return this->one == other.one and this->two == other.two;
-	}
-	operator Vector*() {
-		Vector* ret = new Vector[2];
-		ret[0] = this->one;
-		ret[1] = this->two;
-		return ret;
 	}
 };
 
@@ -108,18 +95,8 @@ bool erase(std::vector<Edge>& edges, Edge& edge1, Edge& edge2) {
 	return ret;
 }
 
-Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals, 
-					   int sizeIndices, Vector lightPosition) {
-	// for (int i = 0; i < 8; ++i) {
-	// 	std::cout << positions[i][0] << "," << positions[i][1] << "," << positions[i][2] << std::endl;
-	// }
-	// for (int i = 0; i < sizeIndices; ++i) {
-	// 	std::cout << indices[i]  << std::endl;
-	// }
-	// for (int i = 0; i < 8; ++i) {
-	// 	std::cout << normals[i][0] << "," << normals[i][1] << "," << normals[i][2] << std::endl;
-	// }
-
+void findContourEdges2(Vector* positions, int* indices, Vector* normals, 
+					   int sizeIndices, Vector lightPosition, Edge* returnEdges, int* returnSize) {
 	int index_indices;
 	Triangle triangle;
 	Vector averageTrianglePos;
@@ -159,10 +136,12 @@ Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals,
 			}
 		}
 	}
-	Edge* returnEdges = new Edge[returnVec.size()];
 	std::vector<Edge>::iterator it;
 	int i = 0;
-	return returnEdges;
+	for (it = returnVec.begin(); it != returnVec.end(); ++it) {
+		returnEdges[i++] = *it;
+	}
+	*returnSize = returnVec.size();
 }
 	        // positions = self._objects[index].getVertices()
 	        // indices = self._objects[index].getIndices()
@@ -193,13 +172,9 @@ Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals,
 
 extern "C" {
 	Edge* findContourEdges(Vector* positions, int* indices, Vector* normals,
-					       int sizeIndices, Vector lightPosition)
+					       int sizeIndices, Vector lightPosition, Edge* returnEdges, int* returnSize)
 	{
-		return findContourEdges2(positions, indices, normals, sizeIndices, lightPosition);
+		findContourEdges2(positions, indices, normals, sizeIndices, lightPosition, returnEdges, returnSize);
 	}
-}
-
-int main(int argc, char** argv) {
-	return 0;
 }
 

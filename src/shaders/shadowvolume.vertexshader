@@ -3,7 +3,6 @@ uniform mat4 u_view;
 uniform mat4 u_projection;
 
 attribute vec3 position;
-attribute vec3 normal;
 $COLOR_VARIABLES$
 
 void main() {
