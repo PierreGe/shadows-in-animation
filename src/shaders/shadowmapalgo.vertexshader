@@ -5,13 +5,13 @@ uniform mat4 u_depth_model[$LIGHT_NUMBER$];
 uniform mat4 u_depth_view[$LIGHT_NUMBER$];
 uniform mat4 u_depth_projection[$LIGHT_NUMBER$];
 uniform mat4 u_bias_matrix;
-uniform vec4 u_color;
 uniform vec3 u_lights_position[$LIGHT_NUMBER$];
+
+$COLOR_VARIABLES$
 
 attribute vec3 position;
 attribute vec3 normal;
 
-varying vec4 v_color;
 varying vec4 v_shadow_coords[$LIGHT_NUMBER$];
 varying vec3 v_position_worldspace;
 varying vec3 v_eyedirection_cameraspace;
@@ -21,7 +21,7 @@ varying vec3 v_normal_cameraspace;
 void main()
 {
     gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
-    v_color = u_color;
+    $COLOR_CODE$
 
 	// Position of the vertex, in worldspace : M * position
 	v_position_worldspace = (u_model * vec4(position,1)).xyz;

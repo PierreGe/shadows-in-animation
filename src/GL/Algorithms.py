@@ -90,16 +90,23 @@ class AbstractAlgorithm:
         fragment_str = fragment.read()
         fragment_str = fragment_str.replace("$LIGHT_NUMBER$", str(light_number))
         fragment_str = fragment_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
-        if texture:
-            pass
-            # TODO replace for textures
-        else:
-            pass
-            #TODO replace for colors
         vertex = open(self.VERTEX_SHADER_FILENAME, 'r')
         vertex_str = vertex.read()
         vertex_str = vertex_str.replace("$LIGHT_NUMBER$", str(light_number))
         vertex_str = vertex_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
+        if texture:
+            vertex_str = vertex_str.replace("$COLOR_VARIABLES$", "attribute vec2 texcoord;\nvarying vec2 v_texcoord;\n")
+            vertex_str = vertex_str.replace("$COLOR_CODE$", "v_texcoord = texcoord;\n")
+            fragment_str = fragment_str.replace("$COLOR_VARIABLES$", "varying vec2 v_texcoord;\nuniform sampler2D u_texture;\n")
+            fragment_str = fragment_str.replace("$COLOR_CODE$", "vec4 v_color = texture2D(u_texture, v_texcoord);\n")
+        else:
+            vertex_str = vertex_str.replace("$COLOR_VARIABLES$", "uniform vec4 u_color;\nvarying vec4 v_color;\n")
+            vertex_str = vertex_str.replace("$COLOR_CODE$", "v_color = u_color;\n")
+            fragment_str = fragment_str.replace("$COLOR_VARIABLES$", "varying vec4 v_color;\n")
+            fragment_str = fragment_str.replace("$COLOR_CODE$", "");
+
+        print vertex_str
+        print fragment_str
         fragment.close()
         vertex.close()
         self._old_light_number = light_number
