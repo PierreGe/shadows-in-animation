@@ -5,32 +5,28 @@ from OpenGL import GL
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 
-class OpenGlVersionHelper(object):
+
+import os
+import signal
+import subprocess
+import time
+
+class GPUUsageHelper(object):
     """Check the hardware compatibility"""
     def __init__(self):
         # init GL
-        glutInit([])
-        window = glutCreateWindow("version")
-        glutHideWindow()
-        self._vendor = GL.glGetString(GL.GL_VENDOR)
-        self._renderer = GL.glGetString(GL.GL_RENDERER)
-        self._shadingVersion = GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)
-        self._openglVersion = GL.glGetString(GL.GL_VERSION)
-        glutDestroyWindow(window)
+        pass
 
-    def getVendor(self):
+    def getOutput(self):
         """ """
-        return self._vendor
+        p = subprocess.Popen("date", stdout=subprocess.PIPE, shell=True)
+        time.sleep(1)
+        (output, err) = p.communicate()
+        os.killpg(p.pid, signal.SIGTERM) 
+        print(output)
 
-    def getRenderer(self):
-        """ """
-        return self._renderer
-
-    def getShadingVersion(self):
-        """ """
-        return self._shadingVersion
-
-    def getOpenGlVersion(self):
-        """ """
-        return self._openglVersion
         
+
+if __name__ == '__main__':
+    g = GPUUsageHelper()
+    g.getOutput()
