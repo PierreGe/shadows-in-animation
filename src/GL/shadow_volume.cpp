@@ -42,6 +42,16 @@ public:
 	}
 };
 
+class Triangle {
+public:
+	Vector one;
+	Vector two;
+	Vector three;
+	bool operator==(const Triangle& other) {
+		return this->one == other.one and this->two == other.two and this->three == other.three;
+	}
+};
+
 std::ostream& operator<<(std::ostream& out, const Vector& vec) {
 	out << "[" << vec.x << "," << vec.y << "," << vec.z << "]";
 	return out;
@@ -52,15 +62,9 @@ std::ostream& operator<<(std::ostream& out, const Edge& edge) {
 	return out;
 }
 
-class Triangle {
-public:
-	Vector one;
-	Vector two;
-	Vector three;
-	bool operator==(const Triangle& other) {
-		return this->one == other.one and this->two == other.two and this->three == other.three;
-	}
-};
+std::ostream& operator<<(std::ostream& out, const Triangle& triangle) {
+	out << "[" << triangle.one << "," << triangle.two << "," << triangle.three << "]";
+}
 
 void subtract(Vector* vector1, Vector* vector2, Vector* res) {
 	res->x = vector1->x - vector2->x;
@@ -94,13 +98,14 @@ void computeAverageTrianglePosition(Triangle* triangle, Vector* ret) {
 
 bool erase(std::vector<Edge>& edges, Edge& edge1, Edge& edge2) {
 	int size_vec = edges.size();
+	bool ret = false;
 	for (int i = 0; i < size_vec; ++i) {
 		if (edges[i] == edge1 or edges[i] == edge2) {
 			edges.erase(edges.begin()+i);
-			return true;
+			ret = true;
 		}
 	}
-	return false;
+	return ret;
 }
 
 Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals, 
@@ -122,7 +127,7 @@ Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals,
 	Vector triangleDir1, triangleDir2;
 	Vector triangleNormal;
 	std::vector<Edge> returnVec;
-	for (index_indices = 0; index_indices < sizeIndices; ++index_indices) {
+	for (index_indices = 0; index_indices < sizeIndices; index_indices+=3) {
 		int a = indices[index_indices], b = indices[index_indices+1], c = indices[index_indices+2];
 		triangle.one = positions[a];
 		triangle.two = positions[b];
@@ -157,10 +162,6 @@ Edge* findContourEdges2(Vector* positions, int* indices, Vector* normals,
 	Edge* returnEdges = new Edge[returnVec.size()];
 	std::vector<Edge>::iterator it;
 	int i = 0;
-	for (it = returnVec.begin(); it != returnVec.end(); ++it) {
-		returnEdges[i++] = *it;
-		std::cout << (*it) << std::endl;
-	}
 	return returnEdges;
 }
 	        // positions = self._objects[index].getVertices()
