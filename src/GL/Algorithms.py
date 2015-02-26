@@ -98,7 +98,8 @@ class AbstractAlgorithm:
             vertex_str = vertex_str.replace("$COLOR_VARIABLES$", "attribute vec2 texcoord;\nvarying vec2 v_texcoord;\n")
             vertex_str = vertex_str.replace("$COLOR_CODE$", "v_texcoord = texcoord;\n")
             fragment_str = fragment_str.replace("$COLOR_VARIABLES$", "varying vec2 v_texcoord;\nuniform sampler2D u_texture;\n")
-            fragment_str = fragment_str.replace("$COLOR_CODE$", "vec4 v_color = texture2D(u_texture, v_texcoord);\n")
+            fragment_str = fragment_str.replace("$COLOR_CODE$", "float ty = v_texcoord.y;\nfloat tx = v_texcoord.x;\nvec4 v_color = texture2D(u_texture, vec2(ty, tx));\n")
+
         else:
             vertex_str = vertex_str.replace("$COLOR_VARIABLES$", "uniform vec4 u_color;\nvarying vec4 v_color;\n")
             vertex_str = vertex_str.replace("$COLOR_CODE$", "v_color = u_color;\n")
