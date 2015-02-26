@@ -12,6 +12,7 @@ from vispy.geometry import *
 from Camera import Camera
 from Light import Light
 from Utils import *
+from SceneObject import SceneObject
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 DEFAULT_SHAPE = (768,1366)
@@ -46,6 +47,9 @@ class AbstractAlgorithm:
             newProg['position'] = obj.getVertexBuffer()
             newProg['u_projection'] = self._projection
             self._programs.append(newProg)
+
+        self._lightObjects = self._createLightObjects()
+        self._lightPrograms = self._createLightPrograms()
         self.active = True
 
     def update(self):
@@ -58,6 +62,15 @@ class AbstractAlgorithm:
             obj = self._objects[i]
             prog = self._programs[i]
             model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *obj.getPosition())
+            prog['u_model'] = model
+            prog['u_view'] = view
+            prog.draw('triangles', obj.getIndexBuffer())
+
+        for i in range(len(self._lightPrograms)):
+            obj = self._lightObjects[i]
+            prog = self._lightPrograms[i]
+            model = numpy.eye(4,dtype=numpy.float32)
             translate(model, *obj.getPosition())
             prog['u_model'] = model
             prog['u_view'] = view
@@ -81,7 +94,7 @@ class AbstractAlgorithm:
         return view
 
     def _createProjectionMatrix(self):
-        return perspective(60, 16.0/9.0, 0.1, 50)
+        return perspective(60, 16.0/9.0, 0.1, 200)
 
     def _loadShaders(self, texture=False):
         light_number = len(self._lights)
@@ -110,6 +123,24 @@ class AbstractAlgorithm:
         vertex.close()
         self._old_light_number = light_number
         return vertex_str, fragment_str
+
+    def _createLightObjects(self):
+        objects = []
+        for light in self._lights:
+            sphere = create_sphere(36,36)
+            newObj = SceneObject(sphere.vertices(), sphere.faces(), sphere.vertex_normals(), light.getPosition(), [1,1,1])
+            objects.append(newObj)
+        return objects
+
+    def _createLightPrograms(self):
+        programs = []
+        for obj in self._lightObjects:
+            newProg = gloo.Program("shaders/light.vertexshader", "shaders/light.fragmentshader")
+            newProg['position'] = obj.getVertexBuffer()
+            newProg['u_color'] = obj.getColorAlpha()
+            newProg['u_projection'] = self._projection
+            programs.append(newProg)
+        return programs
 
     def _concatPositions(self):
         def move(vertices, position):
