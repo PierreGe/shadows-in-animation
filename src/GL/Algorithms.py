@@ -36,6 +36,7 @@ class AbstractAlgorithm:
             if obj.getTexture():
                 newProg = gloo.Program(vertex_texture, fragment_texture)
                 newProg['u_texture'] = gloo.Texture2D(imread(obj.getTexture()))
+                newProg['texcoord'] = obj.getTexBuffer()
             else:
                 newProg = gloo.Program(vertex_str, fragment_str)
                 if obj.getColor():
@@ -49,7 +50,6 @@ class AbstractAlgorithm:
 
     def update(self):
         if len(self._lights) != self._old_light_number:
-            print "lights"
             self._loadShaders()
 
     def draw(self):
@@ -105,8 +105,6 @@ class AbstractAlgorithm:
             fragment_str = fragment_str.replace("$COLOR_VARIABLES$", "varying vec4 v_color;\n")
             fragment_str = fragment_str.replace("$COLOR_CODE$", "");
 
-        print vertex_str
-        print fragment_str
         fragment.close()
         vertex.close()
         self._old_light_number = light_number
