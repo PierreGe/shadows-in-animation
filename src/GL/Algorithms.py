@@ -331,6 +331,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                                                 # self._depth_buffer,
                                                 # self._stencil_buffer)
         self.active = True
+        self._volumes = self.drawVolumes()
+        self.createPrograms(self._volumes)
 
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def drawVolumes(self):
@@ -342,6 +344,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         lightPosition = [None for _ in range(len(self._objects))]
         contour_edges = [None for _ in range(len(self._objects))]
         nb_edges = [None for _ in range(len(self._objects))]
+        retEdges = [range(len(self._objects))]
         for i in range(len(self._objects)):
             model = numpy.eye(4, dtype=numpy.float32)
             translate(model, *self._objects[i].getPosition())
@@ -380,39 +383,43 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             nb_edges[i] = pointer(c_int(0))
 
             libvolume.findContourEdges(positions[i], indices[i], normals[i], size_indices[i],lightPosition[i], contour_edges[i], nb_edges[i])
-            retEdges = []
+            retEdges[i] = []
             for edge in contour_edges[i]:
-                retEdges.append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
-            return self.drawShadowTriangles(retEdges)
+                retEdges[i].append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
+        return retEdges
 
-    def drawShadowTriangles(self, contour_edges):
-        model = numpy.eye(4, dtype=numpy.float32)
-        lightPosition = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
-        extrudeMagnitude = 20
-        shadow_triangles = []
-        for edge in contour_edges:
-            a = edge[0]
-            b = edge[1]
-            c = numpy.add(numpy.append(edge[1], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[1], [0]), lightPosition)).tolist()
-            d = numpy.add(numpy.append(edge[0], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[0], [0]), lightPosition)).tolist()
-            shadow_triangles.append([a, b, c])
-            shadow_triangles.append([a, c, d])
-        vertices = []
-        for triangle in shadow_triangles:
-            for vertex in triangle:
-                vertices.append([vertex[0], vertex[1], vertex[2]])
-        self._programs[0]['position'] = gloo.VertexBuffer(vertices)
-        self._programs[0]['u_model'] = model
-        self._programs[0]['u_view'] = self._createViewMatrix()
-        self._programs[0]['u_projection'] = self._projection
-        self._programs[0]['u_color'] = DEFAULT_COLOR
-        self._programs[0].draw('triangles')
+    def createPrograms(self, contour_edges):
+        for i in range(len(contour_edges)):
+            obj = contour_edges[i]
+            prog = self._programs[i]
+            model = numpy.eye(4, dtype=numpy.float32)
+            lightPosition = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
+            extrudeMagnitude = 20
+            shadow_triangles = []
+            for edge in obj:
+                a = edge[0]
+                b = edge[1]
+                c = numpy.add(numpy.append(edge[1], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[1], [0]), lightPosition)).tolist()
+                d = numpy.add(numpy.append(edge[0], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[0], [0]), lightPosition)).tolist()
+                shadow_triangles.append([a, b, c])
+                shadow_triangles.append([a, c, d])
+            vertices = []
+            for triangle in shadow_triangles:
+                for vertex in triangle:
+                    vertices.append([vertex[0], vertex[1], vertex[2]])
+            self._programs[i]['position'] = gloo.VertexBuffer(vertices)
+            self._programs[i]['u_model'] = model
+            self._programs[i]['u_view'] = self._createViewMatrix()
+            self._programs[i]['u_projection'] = self._projection
+            self._programs[i]['u_color'] = DEFAULT_COLOR
 
 
     def update(self):
         if self.active:
             #create shadow volumes
-            self._volumes = self.drawVolumes()
+            # self._volumes = self.drawVolumes()
+            for prog in self._programs:
+                prog.draw('triangles')
 
             # draw scene
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)

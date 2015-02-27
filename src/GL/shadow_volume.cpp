@@ -4,6 +4,17 @@
 #include <vector>
 #include <iostream>
 
+#include <sys/time.h>
+#include <sys/resource.h>
+
+double get_time()
+{
+    struct timeval t;
+    struct timezone tzp;
+    gettimeofday(&t, &tzp);
+    return t.tv_sec + t.tv_usec*1e-6;
+}
+
 class Vector {
 public:
 	float x;
@@ -104,6 +115,7 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 	Vector triangleDir1, triangleDir2;
 	Vector triangleNormal;
 	std::vector<Edge> returnVec;
+	#pragma omp for
 	for (index_indices = 0; index_indices < sizeIndices; index_indices+=3) {
 		int a = indices[index_indices], b = indices[index_indices+1], c = indices[index_indices+2];
 		triangle.one = positions[a];
@@ -129,6 +141,7 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 			reverseEdges[1].one = triangle.three;
 			reverseEdges[2].two = triangle.two;
 			reverseEdges[2].one = triangle.three;
+			#pragma omp for
 			for (int i = 0; i < 3; ++i){ // for each edge
 				if (not erase(returnVec, edges[i], reverseEdges[i])) {
 					returnVec.push_back(edges[i]);
