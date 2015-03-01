@@ -5,7 +5,7 @@ EXECUTABLE=main.py
 
 all : run
 
-run:
+run: cpp
 	python2 $(EXECUTABLE)
 
 cpp:
