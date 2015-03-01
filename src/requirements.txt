@@ -10,3 +10,4 @@ python-pygame
 PyQt4
 glut
 vispy
+psutil

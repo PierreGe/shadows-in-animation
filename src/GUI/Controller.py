@@ -3,6 +3,13 @@
 
 import json
 import io
+try:
+    import psutil
+except :
+    print("NEW REQUIREMENT")
+    print("Error no module named psutil")
+    print("Please run pip[2] install psutil")
+    exit()
 
 from os import listdir
 from os.path import isfile, join
@@ -126,7 +133,15 @@ class Controller(object):
 
     def setFPS(self, fps):
         """ """
-        self._statusBar.showMessage("Frame per second (fps) : " + str(fps))
+        msg = "Frame per second (fps) : " 
+        msg += (str(fps)) #.zfill(4).replace("0"," ")
+        msg += "  |  "
+        msg += "Nombre de lampe : "
+        msg += str(len(self._lightCollection))
+
+        # pip install psutil
+
+        self._statusBar.showMessage(msg)
 
     def switchLightAnimation(self):
         """ """
