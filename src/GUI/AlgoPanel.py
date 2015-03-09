@@ -7,7 +7,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import * 
 from PyQt4.QtCore import * 
 
-import Light
+import  GLShadow.Light
 
 
 class AlgoPanel(QtGui.QWidget):

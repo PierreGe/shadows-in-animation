@@ -4,23 +4,17 @@
 import json
 import io
 import os
-try:
-    import psutil
-except :
-    print("NEW REQUIREMENT")
-    print("Error no module named psutil")
-    print("Please run pip[2] install psutil")
-    exit()
+import psutil
 
 from os import listdir
 from os.path import isfile, join
 
 
-import HelpWidget
-import OpenGLWidget
-import LightCollection
-import OpenGlVersionHelper
-import RayTracingWidget
+from GUI.HelpWidget import HelpWidget
+from GUI.OpenGLWidget import OpenGLWidget
+from GUI.RayTracingWidget import RayTracingWidget
+from GLShadow.LightCollection import LightCollection
+from  GLShadow.OpenGlVersionHelper import OpenGlVersionHelper
 
 class Controller(object):
     """Controller will controll :
@@ -33,11 +27,11 @@ class Controller(object):
         self._splitPane = None
         self._scene = {} # nom : obj-liste  (from assets/scene/)
         self._parseAllScene() #
-        self._lightCollection = LightCollection.LightCollection()
+        self._lightCollection = LightCollection()
 
         self._glWidget = None
-        self._helpWidget = HelpWidget.HelpWidget()
-        self._openGlVersionHelper = OpenGlVersionHelper.OpenGlVersionHelper()
+        self._helpWidget = HelpWidget()
+        self._openGlVersionHelper = OpenGlVersionHelper()
 
     def initStatusBar(self,statusBar):
         """ """
@@ -53,39 +47,33 @@ class Controller(object):
     def showGL(self, item):
         """ Set the right widget in the splitpane as the gl widget """
         self._setStatusComputing()
-
         scene = str(item.parent().text(0))
         algo = str(item.text(0))
         if algo == "Ray Tracing":
-            self._glWidget = RayTracingWidget.RayTracingWidget(self)
+            self._glWidget = RayTracingWidget(self)
         else:
-            self._glWidget = OpenGLWidget.OpenGLWidget(self._scene[scene]["obj-liste"],algo,self)
+            self._glWidget = OpenGLWidget(self._scene[scene]["obj-liste"],algo,self)
         self._replaceRightWidget(self._glWidget)
-
         self._setStatusReady()
 
     def showHelp(self):
         """ Set the right widget in the splitpane as help """
         self._setStatusComputing()
-
         self._replaceRightWidget(self._helpWidget)
         self._glWidget = None
-
         self._setStatusReady()
 
     def reload(self):
         """ """
         self._setStatusComputing()
-        
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
             algo = self._glWidget.getChosenAlgoName()
-            self._glWidget = OpenGLWidget.OpenGLWidget(obj,algo,self)
+            self._glWidget = OpenGLWidget(obj,algo,self)
             self._replaceRightWidget(self._glWidget)
         else:
             print("[WARNING] Unable to reload : no OpenGLWidget loaded!")
             QtGui.QMessageBox.error(self, "Erreur", "Unable to reload this OpenGl")
-
         self._setStatusReady()
 
     def addLight(self, light):

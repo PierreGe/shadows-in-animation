@@ -7,7 +7,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import * 
 from PyQt4.QtCore import * 
 
-import Light
+from GLShadow.Light import Light, LIGHT_POSSIBILITY, COLOR_POSSIBILITY
 
 
 class AddLightPanel(QtGui.QWidget):
@@ -25,9 +25,9 @@ class AddLightPanel(QtGui.QWidget):
 
         choiceLabel = QtGui.QLabel("Choississez un type de lampe :", self)
         self.layout.addWidget(choiceLabel)
-        self._choiceType = Light.LIGHT_POSSIBILITY[0]
+        self._choiceType = LIGHT_POSSIBILITY[0]
         combo = QtGui.QComboBox(self)
-        for possibility in Light.LIGHT_POSSIBILITY:
+        for possibility in LIGHT_POSSIBILITY:
             combo.addItem(possibility)
         combo.activated[str].connect(self.onTypeSelection)
         self.layout.addWidget(combo)
@@ -35,9 +35,9 @@ class AddLightPanel(QtGui.QWidget):
 
         choiceLabel = QtGui.QLabel("Choississez une couleur de lampe :", self)
         self.layout.addWidget(choiceLabel)
-        self._choiceColor = Light.COLOR_POSSIBILITY[0]
+        self._choiceColor = COLOR_POSSIBILITY[0]
         combo = QtGui.QComboBox(self)
-        for possibility in Light.COLOR_POSSIBILITY:
+        for possibility in COLOR_POSSIBILITY:
             combo.addItem(possibility)
         combo.activated[str].connect(self.onColorSelection)
         self.layout.addWidget(combo)
@@ -155,7 +155,7 @@ class AddLightPanel(QtGui.QWidget):
 
     def buttonClicked(self):
         """ """
-        newLight = Light.Light()
+        newLight = Light()
 
         intensity = float(self._lightIntensity) / 100
         color = [1,1,1]

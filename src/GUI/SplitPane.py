@@ -3,8 +3,8 @@
 
 from PyQt4 import QtGui, QtCore
 
-import TreeWidget
-import HelpWidget
+from GUI.TreeWidget import TreeWidget
+from  GUI.HelpWidget import HelpWidget
 
 
 class SplitPane(QtGui.QWidget):
@@ -28,7 +28,7 @@ class SplitPane(QtGui.QWidget):
         """ this method will intiate the splitpane"""
         hbox = QtGui.QHBoxLayout(self)
 
-        self.left = TreeWidget.TreeWidget(self._controller)
+        self.left = TreeWidget(self._controller)
 
         self.splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
 
@@ -45,7 +45,7 @@ class SplitPane(QtGui.QWidget):
 
         self.show()
 
-        #self.replaceRightChild(OpenGLWidgetv2.OpenGLWidget())
+        # self.replaceRightChild(OpenGLWidgetv2.OpenGLWidget())
 
     def _resize(self):
         """ set a proportion """

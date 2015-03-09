@@ -1,7 +1,7 @@
 from OpenGL.GLUT import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
-# from OpenGL.GL.framebufferobjects import *
+# from OpenGL.GLShadow.framebufferobjects import *
 
 angle = 0
 shadowMapSize = 512

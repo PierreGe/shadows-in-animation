@@ -4,18 +4,17 @@
 from PyQt4 import QtCore, QtGui, QtOpenGL
 from OpenGL import GL,GLU
 from vispy.geometry import *
+from vispy import gloo
 from threading import Thread, Lock
-
-from ObjParser import ObjParser
-from Camera import Camera
-from Light import Light
-from Algorithms import *  
-from SceneObject import SceneObject
-
 import numpy
 import time
 
-import AutoRotateCamera
+from GLShadow.ObjParser import ObjParser
+from GLShadow.Camera import Camera
+from GLShadow.Light import Light
+from GLShadow.Algorithms import ShadowMapAlgorithm,ShadowVolumeAlgorithm,NoShadowAlgorithm,SelfShadowAlgorithm
+from GLShadow.SceneObject import SceneObject
+from GLShadow.AutoRotateCamera import AutoRotateCamera
 
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
@@ -26,7 +25,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._controller = controller
         self._algorithms = {
             "Shadow Mapping": ShadowMapAlgorithm(),
-            "Shadow Volume" : ShadowVolumeAlgorithm(),
+            "Shadow Volume": ShadowVolumeAlgorithm(),
             "Aucune Ombre": NoShadowAlgorithm(),
             "Auto-Ombre": SelfShadowAlgorithm()
         }
@@ -170,7 +169,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self._loadObjects()
 
         self._chosenAlgo.init(self._objects, self._camera, self._controller.getLightCollection())
-        self._cameraRotation = AutoRotateCamera.AutoRotateCamera(self._camera,1)
+        self._cameraRotation = AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
 

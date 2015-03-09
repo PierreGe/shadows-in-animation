@@ -8,7 +8,7 @@ from OpenGL.GLU import *
 class OpenGlVersionHelper(object):
     """Check the hardware compatibility"""
     def __init__(self):
-        # init GL
+        # init GLShadow
         glutInit([])
         window = glutCreateWindow("version")
         glutHideWindow()

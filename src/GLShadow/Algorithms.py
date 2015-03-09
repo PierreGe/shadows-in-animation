@@ -8,7 +8,7 @@ from vispy.io import imread
 from operator import add
 from vispy.geometry import *
 from ctypes import *
-libvolume = cdll.LoadLibrary("GL/shadow_volume.so")
+libvolume = cdll.LoadLibrary("GLShadow/shadow_volume.so")
 
 from Camera import Camera
 from Light import Light
@@ -250,7 +250,7 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
             self.draw()
 
             # draw shadowmap as minimap
-            # GL.glViewport(0,0,228,128)
+            # GLShadow.glViewport(0,0,228,128)
             # self._shadowMap.draw('triangles', self._indices)
             GL.glViewport(0,0,1366,768)
 

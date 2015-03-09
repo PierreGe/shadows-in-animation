@@ -138,7 +138,7 @@ class TestContext( BaseContext ):
         into which to render.  Note that on Win32 we would *still* be considered 
         incomplete if we didn't define a color buffer.'''
         glDrawBuffer( GL_NONE )
-        '''This function in the OpenGL.GL.framebufferobjects wrapper will
+        '''This function in the OpenGL.GLShadow.framebufferobjects wrapper will
         raise an OpenGL.error.GLError if the FBO is not properly configured.'''
         try:
             checkFramebufferStatus( )

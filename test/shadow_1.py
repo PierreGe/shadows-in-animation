@@ -80,7 +80,7 @@ class TestContext( BaseContext ):
     check for extensions which *only* define new constants.
     '''
     def OnInit( self ):
-        """Initialize the context with GL active"""
+        """Initialize the context with GLShadow active"""
         if not glInitShadowARB() or not glInitDepthTextureARB():
             print 'Missing required extensions!'
             sys.exit( testingcontext.REQUIRED_EXTENSION_MISSING )
@@ -385,7 +385,7 @@ class TestContext( BaseContext ):
         )
         '''This is a bit wasteful, as we've already loaded our
         projection and model-view matrices for our view-platform into
-        the GL.  Real-world implementations would normally do the
+        the GLShadow.  Real-world implementations would normally do the
         light-rendering pass before doing their world-view setup.
         We'll restore the platform values later on.
         '''
@@ -593,18 +593,18 @@ class TestContext( BaseContext ):
     This rendering pass is where the magic of the shadow-texture algorithm
     happens.  Our process looks like this:
 
-        * configure the GL to synthesize texture coordinates in
+        * configure the GLShadow to synthesize texture coordinates in
           eye-linear space (the camera's eye coordinate space)
         * load our texture matrix into the "eye planes" of the texture
           coordinate pipeline, there they serve to transform the
           texture coordinates into the clip-space coordinates of the
           depth texture
-        * configure the GL to generate an "alpha" value by comparing
+        * configure the GLShadow to generate an "alpha" value by comparing
           the "R" (Z) component of the generated texture coordinates
           to the Z component stored in the depth-texture.  That is,
           generate a 1.0 alpha where the camera-Z component is
           less-than-or-equal-to the depth in the depth texture.
-        * configure the GL to only pass fragments where the alpha is
+        * configure the GLShadow to only pass fragments where the alpha is
           greater than .99
     '''
     def renderDiffuse( self, light, texture, textureMatrix, mode, id=0 ):

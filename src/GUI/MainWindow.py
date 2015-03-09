@@ -7,10 +7,10 @@ import os
 from PyQt4 import QtGui, QtCore
 from OpenGL import GL
 
-import SplitPane
-import Controller
-import LightPanel
-import HelpWidget
+from GUI.SplitPane import SplitPane
+from GUI.Controller import Controller
+from GUI.LightPanel import AddLightPanel,RemoveLightPanel
+from GUI.HelpWidget import HelpWidget
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -19,7 +19,7 @@ class MainWindow(QtGui.QMainWindow):
         """Constructor of the class MainWindow"""
         super(MainWindow, self).__init__()
         # The GUI controller
-        self._controller = Controller.Controller(self)
+        self._controller = Controller(self)
         # init the GUI
         self.initUI()
         
@@ -37,7 +37,7 @@ class MainWindow(QtGui.QMainWindow):
         self._statusBar.showMessage('Welcome!')
         self._controller.initStatusBar(self._statusBar)
 
-        ex = SplitPane.SplitPane(self._controller)
+        ex = SplitPane(self._controller)
         self.setCentralWidget(ex)
 
         self.initToolsBar()
@@ -88,11 +88,11 @@ class MainWindow(QtGui.QMainWindow):
 
     def addALight(self):
         """ """
-        self.l = LightPanel.AddLightPanel(self._controller)
+        self.l = AddLightPanel(self._controller)
 
     def removeALight(self):
         """ """
-        self.l = LightPanel.RemoveLightPanel(self._controller)
+        self.l = RemoveLightPanel(self._controller)
 
 
     def animateLight(self):
@@ -114,7 +114,7 @@ class MainWindow(QtGui.QMainWindow):
         if isinstance(shadingVersion, str) and isinstance(openglVersion, str):
             QtGui.QMessageBox.information(self,"Materiel graphique","Vendeur : " + vendor + "\n" + "Renderer : " + renderer + "\n" + "OpenGL : " + openglVersion + "\n" + "GLSL : " + shadingVersion)
         else:
-            print("GL not initialized")
+            print("GLShadow not initialized")
 
     def onTypeSelection(self):
         """ """
