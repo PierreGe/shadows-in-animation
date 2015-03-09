@@ -2,12 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
-import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import * 
-from PyQt4.QtCore import * 
-
-import  GLShadow.Light
+from PyQt4.QtCore import *
 
 
 class AlgoPanel(QtGui.QWidget):

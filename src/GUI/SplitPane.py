@@ -4,7 +4,6 @@
 from PyQt4 import QtGui, QtCore
 
 from GUI.TreeWidget import TreeWidget
-from  GUI.HelpWidget import HelpWidget
 
 
 class SplitPane(QtGui.QWidget):
@@ -16,7 +15,6 @@ class SplitPane(QtGui.QWidget):
 
         self._controller = controller
         self._controller.initSplitPane(self)
-
         
         self.splitter = None
         self.right = None

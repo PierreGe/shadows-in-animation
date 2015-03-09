@@ -1,7 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 
-from operator import add
 from vispy import gloo
 from vispy.geometry import *
 import numpy

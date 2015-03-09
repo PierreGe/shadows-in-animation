@@ -7,11 +7,9 @@ from vispy.geometry import *
 from vispy import gloo
 from threading import Thread, Lock
 import numpy
-import time
 
 from GLShadow.ObjParser import ObjParser
 from GLShadow.Camera import Camera
-from GLShadow.Light import Light
 from GLShadow.Algorithms import ShadowMapAlgorithm,ShadowVolumeAlgorithm,NoShadowAlgorithm,SelfShadowAlgorithm
 from GLShadow.SceneObject import SceneObject
 from GLShadow.AutoRotateCamera import AutoRotateCamera

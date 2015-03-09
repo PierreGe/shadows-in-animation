@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import * 
 from PyQt4.QtCore import * 

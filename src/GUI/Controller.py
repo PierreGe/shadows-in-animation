@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 
 import json
-import io
 import os
 import psutil
 
@@ -14,7 +13,8 @@ from GUI.HelpWidget import HelpWidget
 from GUI.OpenGLWidget import OpenGLWidget
 from GUI.RayTracingWidget import RayTracingWidget
 from GLShadow.LightCollection import LightCollection
-from  GLShadow.OpenGlVersionHelper import OpenGlVersionHelper
+from GLShadow.OpenGlVersionHelper import OpenGlVersionHelper
+
 
 class Controller(object):
     """Controller will controll :

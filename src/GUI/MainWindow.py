@@ -1,16 +1,13 @@
 #!/usr/bin/python2
 # -*- coding: utf8 -*-
 
-import sys
 import os
 
 from PyQt4 import QtGui, QtCore
-from OpenGL import GL
 
 from GUI.SplitPane import SplitPane
 from GUI.Controller import Controller
 from GUI.LightPanel import AddLightPanel,RemoveLightPanel
-from GUI.HelpWidget import HelpWidget
 
 
 class MainWindow(QtGui.QMainWindow):

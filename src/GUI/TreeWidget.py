@@ -1,9 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf8 -*-
 
-
-
-import sys
 from PyQt4 import QtCore, QtGui
 
 

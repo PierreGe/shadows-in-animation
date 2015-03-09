@@ -3,7 +3,6 @@
 
 import threading
 import math
-import numpy
 
 class Camera(object):
     RATIO_DEGREE_RADIAN = 57.2957795
