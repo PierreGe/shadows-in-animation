@@ -8,15 +8,14 @@ from vispy.io import imread
 from operator import add
 from vispy.geometry import *
 from ctypes import *
-libvolume = cdll.LoadLibrary("GLShadow/shadow_volume.so")
-
-from Camera import Camera
-from Light import Light
-from Utils import *
-from SceneObject import SceneObject
-
 import numpy
 import time
+libvolume = cdll.LoadLibrary("GLShadow/shadow_volume.so")
+
+from GLShadow.Camera import Camera
+from GLShadow.Light import Light
+from GLShadow.Utils import *
+from GLShadow.SceneObject import SceneObject
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 DEFAULT_SHAPE = (768,1366)
