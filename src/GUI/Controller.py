@@ -125,9 +125,9 @@ class Controller(object):
         p = psutil.Process(os.getpid())
         msg = "Frame per second (fps) : " 
         msg += (str(fps)) #.zfill(4).replace("0"," ")
-        msg += "  |  "
-        msg += "CPU usage : "
-        msg += str(round(p.cpu_percent(interval=0.5),1))
+        #msg += "  |  "
+        #msg += "CPU usage : "
+        #msg += str(round(p.cpu_percent(interval=0.5),1))
         msg += "  |  "
         msg += "Memoire usage : "
         msg += str(round(p.memory_percent(),1))
