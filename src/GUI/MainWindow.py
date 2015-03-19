@@ -8,6 +8,7 @@ from PyQt4 import QtGui, QtCore
 from GUI.SplitPane import SplitPane
 from GUI.Controller import Controller
 from GUI.LightPanel import AddLightPanel,RemoveLightPanel
+from GUI.AlgoPanel import AlgoPanel
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -86,6 +87,9 @@ class MainWindow(QtGui.QMainWindow):
     def addALight(self):
         """ """
         self.l = AddLightPanel(self._controller)
+
+    def algoOption(self):
+        self.o = AlgoPanel(self._controller)
 
     def removeALight(self):
         """ """
@@ -224,6 +228,14 @@ class MainWindow(QtGui.QMainWindow):
         sliderY.valueChanged.connect(self._controller.lightPercentY)
         sliderY.setSliderPosition(99)
         self.toolbar.addWidget(sliderY)
+
+
+        self.toolbar.addSeparator()
+        algoOptionAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/configure.png"), "Light+", self)
+        algoOptionAction.setShortcut("Ctrl+L")
+        algoOptionAction.setStatusTip("Ajouter une lampe")
+        algoOptionAction.triggered.connect(self.algoOption)
+        self.toolbar.addAction(algoOptionAction)
 
         # un espace blanc
         textWidget = QtGui.QLabel(self)

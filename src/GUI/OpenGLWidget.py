@@ -250,3 +250,6 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ """
         if self._cameraRotation:
             self._cameraRotation.stop()
+
+    def setOption(self,option):
+        print(option)

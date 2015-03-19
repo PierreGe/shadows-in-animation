@@ -46,6 +46,10 @@ class Controller(object):
         self._splitPane = splitPane
         self._setStatusReady()
 
+    def setOption(self,option):
+        if self._glWidget:
+            self._glWidget.setOption(option)
+
     def showGL(self, item):
         """ Set the right widget in the splitpane as the gl widget """
         self._setStatusComputing()
@@ -163,6 +167,8 @@ class Controller(object):
             self._glWidget.killThreads()
         if self._lightCollection:
             self._lightCollection.killThreads()
+        if self._performanceIndication:
+            self._performanceIndication.stop()
 
     def lightPercentX(self,x):
         """ """
