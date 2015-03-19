@@ -392,6 +392,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         # for each object
         lightPosition = range(len(self._objects))
         for i in range(len(self._objects)):
+            time_beg = time.time()
             model = numpy.eye(4, dtype=numpy.float32)
             translate(model, *self._objects[i].getPosition())
             light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
@@ -402,31 +403,33 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             size = self.C_nb_edges[i].contents.value
             for j in range(size):
                 edge = self.C_contour_edges[i][j]
-                retEdges.append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
-            
+                retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
+            # print (time.time() - time_beg)
             self.drawShadowTriangles(retEdges, i)
 
     def drawShadowTriangles(self, contour_edges, index):
+        time_beg = time.time()
         model = numpy.eye(4, dtype=numpy.float32)
-        lightPosition = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
+        lightPosition = numpy.array(numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model)).tolist()[:-1])
         extrudeMagnitude = 20
-        shadow_triangles = []
+        vertices = []
+        total = 0
         for edge in contour_edges:
             a = edge[0]
             b = edge[1]
-            c = numpy.add(numpy.append(edge[1], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[1], [0]), lightPosition)).tolist()
-            d = numpy.add(numpy.append(edge[0], [0]), extrudeMagnitude * numpy.subtract(numpy.append(edge[0], [0]), lightPosition)).tolist()
-            shadow_triangles.append([a, b, c])
-            shadow_triangles.append([a, c, d])
-        vertices = []
-        for triangle in shadow_triangles:
-            for vertex in triangle:
-                vertices.append([vertex[0], vertex[1], vertex[2]])
+            time_beg2 = time.time()
+            c = numpy.add(edge[1], extrudeMagnitude * numpy.subtract(edge[1], lightPosition))
+            d = numpy.add(edge[0], extrudeMagnitude * numpy.subtract(edge[0], lightPosition))
+            total += time.time() - time_beg2
+            vertices.extend([a,b,c,d])
         self._programs[index]['position'] = gloo.VertexBuffer(vertices)
         self._programs[index]['u_model'] = model
         self._programs[index]['u_view'] = self._createViewMatrix()
         self._programs[index]['u_projection'] = self._projection
         self._programs[index].draw('triangles')
+        # print (time.time() - time_beg)
+        print index
+        print total
 
 
     def update(self):
