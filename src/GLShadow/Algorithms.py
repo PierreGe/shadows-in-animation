@@ -335,7 +335,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     def init(self, objects, camera, lights):
         AbstractAlgorithm.init(self, objects, camera, lights)
-        del self._objects[0]
+        # del self._objects[0]
 
         # shape=(1366,768)
         # self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
@@ -399,10 +399,11 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
             retEdges = []
             size = self.C_nb_edges[i].contents.value
+            print size
             for j in range(size):
                 edge = self.C_contour_edges[i][j]
                 retEdges.append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
-            return self.drawShadowTriangles(retEdges)
+            self.drawShadowTriangles(retEdges)
 
     def drawShadowTriangles(self, contour_edges):
         model = numpy.eye(4, dtype=numpy.float32)
