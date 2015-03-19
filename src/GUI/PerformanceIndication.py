@@ -32,7 +32,6 @@ class PerformanceIndication(object):
         alive = self._alive
         self.lock.release()
         while alive:
-            print("lol")
             cpu = str(round(self._p.cpu_percent(interval=1),1))
             self.lock.acquire()
             self._cpu = cpu
