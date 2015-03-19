@@ -379,7 +379,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
             self.C_size_indices[i] = c_int(len(self._objects[i].getIndices()))
 
-            self.C_contour_edges[i] = Edge * len(self._objects[i].getVertices())
+            len_edges = len(self._objects[i].getVertices()) * 3
+            self.C_contour_edges[i] = Edge * len_edges
             self.C_contour_edges[i] = self.C_contour_edges[i]()
 
             self.C_nb_edges[i] = pointer(c_int(0))
@@ -399,13 +400,13 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
             retEdges = []
             size = self.C_nb_edges[i].contents.value
-            print size
             for j in range(size):
                 edge = self.C_contour_edges[i][j]
                 retEdges.append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
-            self.drawShadowTriangles(retEdges)
+            
+            self.drawShadowTriangles(retEdges, i)
 
-    def drawShadowTriangles(self, contour_edges):
+    def drawShadowTriangles(self, contour_edges, index):
         model = numpy.eye(4, dtype=numpy.float32)
         lightPosition = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
         extrudeMagnitude = 20
@@ -421,12 +422,11 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         for triangle in shadow_triangles:
             for vertex in triangle:
                 vertices.append([vertex[0], vertex[1], vertex[2]])
-        self._programs[0]['position'] = gloo.VertexBuffer(vertices)
-        self._programs[0]['u_model'] = model
-        self._programs[0]['u_view'] = self._createViewMatrix()
-        self._programs[0]['u_projection'] = self._projection
-        self._programs[0]['u_color'] = DEFAULT_COLOR
-        self._programs[0].draw('triangles')
+        self._programs[index]['position'] = gloo.VertexBuffer(vertices)
+        self._programs[index]['u_model'] = model
+        self._programs[index]['u_view'] = self._createViewMatrix()
+        self._programs[index]['u_projection'] = self._projection
+        self._programs[index].draw('triangles')
 
 
     def update(self):

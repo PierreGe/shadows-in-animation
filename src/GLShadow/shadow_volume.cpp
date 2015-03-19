@@ -145,7 +145,7 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 				if (edgesSet.erase(edges[i]) != 0) {
 					erased = true;
 				}
-				if (not erased and edgesSet.erase(reverseEdges[i]) != 0) {
+				if (edgesSet.erase(reverseEdges[i]) != 0) {
 					erased = true;
 				}
 				if (not erased) {
