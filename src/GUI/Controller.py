@@ -86,11 +86,13 @@ class Controller(object):
         """ """
         self._lightCollection.addLight(light)
         self._mainWindow.updateToolsBar()
+        self.reload()
 
     def deleteLight(self, lightIndex):
         """ """
         self._lightCollection.deleteLight(lightIndex)
         self._mainWindow.updateToolsBar()
+        self.reload()
 
     def getLightCollection(self):
         """ """
