@@ -3,13 +3,15 @@
 #include <set>
 #include <vector>
 #include <iostream>
+#include <ctime>
+#include <unordered_set>
 
 class Vector {
 public:
 	float x;
 	float y;
 	float z;
-	bool operator==(const Vector& other) {
+	bool operator==(const Vector& other) const {
 		return this->x == other.x and this->y == other.y and this->z == other.z;
 	}
 	Vector(){}
@@ -20,21 +22,41 @@ public:
 	}
 };
 
+namespace std
+{
+	template<>
+	struct hash<Vector> {
+	    size_t operator()(const Vector &vec) const {
+	        return std::hash<float>()(vec.x) ^ std::hash<float>()(vec.y) ^ std::hash<float>()(vec.z);
+	    }
+	};
+}
+
 class Edge {
 public:
 	Vector one;
 	Vector two;
-	bool operator==(const Edge& other) {
+	bool operator==(const Edge& other) const {
 		return this->one == other.one and this->two == other.two;
 	}
 };
+
+namespace std
+{
+	template<>
+	struct hash<Edge> {
+		size_t operator()(const Edge &edge) const {
+			return std::hash<Vector>()(edge.one) ^ std::hash<Vector>()(edge.two);
+		}
+	};
+}
 
 class Triangle {
 public:
 	Vector one;
 	Vector two;
 	Vector three;
-	bool operator==(const Triangle& other) {
+	bool operator==(const Triangle& other) const {
 		return this->one == other.one and this->two == other.two and this->three == other.three;
 	}
 };
@@ -51,6 +73,7 @@ std::ostream& operator<<(std::ostream& out, const Edge& edge) {
 
 std::ostream& operator<<(std::ostream& out, const Triangle& triangle) {
 	out << "[" << triangle.one << "," << triangle.two << "," << triangle.three << "]";
+	return out;
 }
 
 void subtract(Vector* vector1, Vector* vector2, Vector* res) {
@@ -83,28 +106,18 @@ void computeAverageTrianglePosition(Triangle* triangle, Vector* ret) {
 	ret->z = sumZ/3;
 }
 
-bool erase(std::vector<Edge>& edges, Edge& edge1, Edge& edge2) {
-	int size_vec = edges.size();
-	bool ret = false;
-	for (int i = 0; i < size_vec; ++i) {
-		if (edges[i] == edge1 or edges[i] == edge2) {
-			edges.erase(edges.begin()+i);
-			ret = true;
-		}
-	}
-	return ret;
-}
-
 void findContourEdges2(Vector* positions, int* indices, Vector* normals, 
 					   int sizeIndices, Vector lightPosition, Edge* returnEdges, int* returnSize) {
+	std::unordered_set<Edge> edgesSet;
+	float total_iter = 0, total_erase = 0;
 	int index_indices;
 	Triangle triangle;
 	Vector averageTrianglePos;
 	Vector lightDir;
 	Vector triangleDir1, triangleDir2;
 	Vector triangleNormal;
-	std::vector<Edge> returnVec;
 	for (index_indices = 0; index_indices < sizeIndices; index_indices+=3) {
+		clock_t time_iter = clock();
 		int a = indices[index_indices], b = indices[index_indices+1], c = indices[index_indices+2];
 		triangle.one = positions[a];
 		triangle.two = positions[b];
@@ -129,19 +142,33 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 			reverseEdges[1].one = triangle.three;
 			reverseEdges[2].two = triangle.two;
 			reverseEdges[2].one = triangle.three;
-			for (int i = 0; i < 3; ++i){ // for each edge
-				if (not erase(returnVec, edges[i], reverseEdges[i])) {
-					returnVec.push_back(edges[i]);
+			float end_iter = ((float)(clock() - time_iter))/CLOCKS_PER_SEC;
+			total_iter += end_iter;
+			clock_t time_erase = clock();
+			for (int i = 0; i < 3; ++i){
+				bool erased = false;
+				if (edgesSet.erase(edges[i]) != 0) {
+					erased = true;
+				}
+				if (not erased and edgesSet.erase(reverseEdges[i]) != 0) {
+					erased = true;
+				}
+				if (not erased) {
+					edgesSet.insert(edges[i]);
 				}
 			}
+			float end_erase = ((float)(clock() - time_erase))/CLOCKS_PER_SEC;
+			total_erase += end_erase;
 		}
 	}
-	std::vector<Edge>::iterator it;
+	std::unordered_set<Edge>::iterator it;
 	int i = 0;
-	for (it = returnVec.begin(); it != returnVec.end(); ++it) {
+	for (it = edgesSet.begin(); it != edgesSet.end(); ++it) {
 		returnEdges[i++] = *it;
 	}
-	*returnSize = returnVec.size();
+	*returnSize = edgesSet.size();
+	std::cout << "Total iter : " << total_iter << std::endl;
+	std::cout << "Total erase : " << total_erase << std::endl;
 }
 	        // positions = self._objects[index].getVertices()
 	        // indices = self._objects[index].getIndices()
@@ -171,7 +198,7 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 
 
 extern "C" {
-	Edge* findContourEdges(Vector* positions, int* indices, Vector* normals,
+	void findContourEdges(Vector* positions, int* indices, Vector* normals,
 					       int sizeIndices, Vector lightPosition, Edge* returnEdges, int* returnSize)
 	{
 		findContourEdges2(positions, indices, normals, sizeIndices, lightPosition, returnEdges, returnSize);
