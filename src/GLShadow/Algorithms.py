@@ -344,58 +344,63 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         # self._frame_buffer = gloo.FrameBuffer(self._color_buffer,
                                                 # self._depth_buffer,
                                                 # self._stencil_buffer)
-        self.active = True
-
-    # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
-    def drawVolumes(self):
-        # for each object
-        positions = [None for _ in range(len(self._objects))]
-        indices = [None for _ in range(len(self._objects))]
-        normals = [None for _ in range(len(self._objects))]
-        size_indices = [None for _ in range(len(self._objects))]
-        lightPosition = [None for _ in range(len(self._objects))]
-        contour_edges = [None for _ in range(len(self._objects))]
-        nb_edges = [None for _ in range(len(self._objects))]
+        initVec = [None for _ in range(len(self._objects))]
+        self.C_positions = [None for _ in range(len(self._objects))]
+        self.C_indices = [None for _ in range(len(self._objects))]
+        self.C_normals = [None for _ in range(len(self._objects))]
+        self.C_size_indices = [None for _ in range(len(self._objects))]
+        self.C_contour_edges = [None for _ in range(len(self._objects))]
+        self.C_nb_edges = [None for _ in range(len(self._objects))]
         for i in range(len(self._objects)):
-            model = numpy.eye(4, dtype=numpy.float32)
-            translate(model, *self._objects[i].getPosition())
-            positions[i] = (Vector * len(self._objects[i].getVertices()))
+            self.C_positions[i] = (Vector * len(self._objects[i].getVertices()))
             j = 0
-            positions[i] = positions[i]()
-            for pos in positions[i]:
+            self.C_positions[i] = self.C_positions[i]()
+            for pos in self.C_positions[i]:
                 pos.x = self._objects[i].getVertices()[j][0]
                 pos.y = self._objects[i].getVertices()[j][1]
                 pos.z = self._objects[i].getVertices()[j][2]
                 j += 1
 
-            indices[i] = c_int * len(self._objects[i].getIndices())
+            self.C_indices[i] = c_int * len(self._objects[i].getIndices())
             k = 0
-            indices[i] = indices[i]()
-            for index in indices[i]:
-                indices[i][k] = self._objects[i].getIndices()[k]
+            self.C_indices[i] = self.C_indices[i]()
+            for index in self.C_indices[i]:
+                self.C_indices[i][k] = self._objects[i].getIndices()[k]
                 k += 1
 
-            normals[i] = Vector * len(self._objects[i].getNormals())
+            self.C_normals[i] = Vector * len(self._objects[i].getNormals())
             l = 0
-            normals[i] = normals[i]()
-            for normal in normals[i]:
+            self.C_normals[i] = self.C_normals[i]()
+            for normal in self.C_normals[i]:
                 normal.x = self._objects[i].getNormals()[l][0]
                 normal.y = self._objects[i].getNormals()[l][1]
                 normal.z = self._objects[i].getNormals()[l][2]
                 l += 1
 
-            size_indices[i] = c_int(len(self._objects[i].getIndices()))
+            self.C_size_indices[i] = c_int(len(self._objects[i].getIndices()))
+
+            self.C_contour_edges[i] = Edge * len(self._objects[i].getVertices())
+            self.C_contour_edges[i] = self.C_contour_edges[i]()
+
+            self.C_nb_edges[i] = pointer(c_int(0))
+        self.active = True
+            
+
+    # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
+    def drawVolumes(self):
+        # for each object
+        lightPosition = range(len(self._objects))
+        for i in range(len(self._objects)):
+            model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *self._objects[i].getPosition())
             light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
             lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
 
-            contour_edges[i] = Edge * len(self._objects[i].getVertices())
-            contour_edges[i] = contour_edges[i]()
-
-            nb_edges[i] = pointer(c_int(0))
-
-            libvolume.findContourEdges(positions[i], indices[i], normals[i], size_indices[i],lightPosition[i], contour_edges[i], nb_edges[i])
+            libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
             retEdges = []
-            for edge in contour_edges[i]:
+            size = self.C_nb_edges[i].contents.value
+            for j in range(size):
+                edge = self.C_contour_edges[i][j]
                 retEdges.append([[vec.x, vec.y, vec.z] for vec in [edge.one, edge.two]])
             return self.drawShadowTriangles(retEdges)
 

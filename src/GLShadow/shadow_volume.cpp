@@ -109,7 +109,6 @@ void computeAverageTrianglePosition(Triangle* triangle, Vector* ret) {
 void findContourEdges2(Vector* positions, int* indices, Vector* normals, 
 					   int sizeIndices, Vector lightPosition, Edge* returnEdges, int* returnSize) {
 	std::unordered_set<Edge> edgesSet;
-	float total_iter = 0, total_erase = 0;
 	int index_indices;
 	Triangle triangle;
 	Vector averageTrianglePos;
@@ -117,7 +116,6 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 	Vector triangleDir1, triangleDir2;
 	Vector triangleNormal;
 	for (index_indices = 0; index_indices < sizeIndices; index_indices+=3) {
-		clock_t time_iter = clock();
 		int a = indices[index_indices], b = indices[index_indices+1], c = indices[index_indices+2];
 		triangle.one = positions[a];
 		triangle.two = positions[b];
@@ -142,9 +140,6 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 			reverseEdges[1].one = triangle.three;
 			reverseEdges[2].two = triangle.two;
 			reverseEdges[2].one = triangle.three;
-			float end_iter = ((float)(clock() - time_iter))/CLOCKS_PER_SEC;
-			total_iter += end_iter;
-			clock_t time_erase = clock();
 			for (int i = 0; i < 3; ++i){
 				bool erased = false;
 				if (edgesSet.erase(edges[i]) != 0) {
@@ -157,8 +152,6 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 					edgesSet.insert(edges[i]);
 				}
 			}
-			float end_erase = ((float)(clock() - time_erase))/CLOCKS_PER_SEC;
-			total_erase += end_erase;
 		}
 	}
 	std::unordered_set<Edge>::iterator it;
@@ -167,8 +160,6 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 		returnEdges[i++] = *it;
 	}
 	*returnSize = edgesSet.size();
-	std::cout << "Total iter : " << total_iter << std::endl;
-	std::cout << "Total erase : " << total_erase << std::endl;
 }
 	        // positions = self._objects[index].getVertices()
 	        // indices = self._objects[index].getIndices()
