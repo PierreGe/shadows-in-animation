@@ -160,14 +160,12 @@ class MainWindow(QtGui.QMainWindow):
         self.toolbar.addSeparator()
 
         addLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBublePlus.png"), "Light+", self)
-        addLightAction.setShortcut("Ctrl+L")
         addLightAction.setStatusTip("Ajouter une lampe")
         addLightAction.triggered.connect(self.addALight)
         self.toolbar.addAction(addLightAction)
 
 
         removeLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBubleMinus.png"), "Light-", self)
-        #removeLightAction.setShortcut("Ctrl+L")
         removeLightAction.setStatusTip("Retirer une lampe")
         removeLightAction.triggered.connect(self.removeALight)
         self.toolbar.addAction(removeLightAction)
@@ -231,8 +229,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
         self.toolbar.addSeparator()
-        algoOptionAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/configure.png"), "Light+", self)
-        algoOptionAction.setShortcut("Ctrl+L")
+        algoOptionAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/configure.png"), "Option algo", self)
         algoOptionAction.setStatusTip("Ajouter une lampe")
         algoOptionAction.triggered.connect(self.algoOption)
         self.toolbar.addAction(algoOptionAction)
