@@ -117,9 +117,9 @@ class MainWindow(QtGui.QMainWindow):
         else:
             print("GLShadow not initialized")
 
-    def onTypeSelection(self):
+    def onTypeSelection(self,lampe):
         """ """
-        pass
+        self._controller.getLightCollection().setSelection((int(lampe[-1])-1))
 
 
     def initToolsBar(self):
