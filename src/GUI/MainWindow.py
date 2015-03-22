@@ -134,14 +134,14 @@ class MainWindow(QtGui.QMainWindow):
 
         reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)
         reloadAction.setShortcut("Ctrl+R")
-        reloadAction.setStatusTip("Recharge l'application")
+        reloadAction.setStatusTip("Recharge l'algorithme")
         reloadAction.triggered.connect(self.reloadOpenGl)
         self.toolbar.addAction(reloadAction)
 
         self.toolbar.addSeparator()
 
         hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
-        hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
+        hardwareHelpAction.setStatusTip("Caractéristiques de la machine")
         hardwareHelpAction.triggered.connect(self.showHardwareVersion)
         self.toolbar.addAction(hardwareHelpAction)
 
@@ -230,7 +230,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.toolbar.addSeparator()
         algoOptionAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/configure.png"), "Option algo", self)
-        algoOptionAction.setStatusTip("Ajouter une lampe")
+        algoOptionAction.setStatusTip("Options de l'algorithme")
         algoOptionAction.triggered.connect(self.algoOption)
         self.toolbar.addAction(algoOptionAction)
 
