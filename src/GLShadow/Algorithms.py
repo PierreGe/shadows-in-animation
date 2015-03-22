@@ -404,37 +404,39 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def drawVolumes(self):
-        # for each object
-        lightPosition = range(len(self._objects))
-        for i in range(len(self._objects)):
-            model = numpy.eye(4, dtype=numpy.float32)
-            translate(model, *self._objects[i].getPosition())
-            light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
-            lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
+        if self._lights[0].wasModified():
+            # for each object
+            lightPosition = range(len(self._objects))
+            for i in range(len(self._objects)):
+                model = numpy.eye(4, dtype=numpy.float32)
+                translate(model, *self._objects[i].getPosition())
+                light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
+                lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
 
-            libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
-            retEdges = []
-            size = self.C_nb_edges[i].contents.value
-            for j in range(size):
-                edge = self.C_contour_edges[i][j]
-                retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
-            self.drawShadowTriangles(retEdges, i)
-        with self._frame_buffer:
-            data = GL.glReadPixels(0,0, 1024,1024, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
-        text = gloo.Texture2D(data)
-        # data2 = numpy.empty(shape=(1024,1024,3), dtype=numpy.float32)
-        # for i in range(len(data)):
-        #     for j in range(len(data[i])):
-        #         data2[i][j] = [data[i][j], 0, 0]
-        # imsave("test.jpg", data.astype(numpy.float32))
-        # inc = 0
-        # for i in range(len(data)):
-        #     for j in range(len(data[i])):
-        #         if data[i][j] != 0:
-        #             print i, j
-        # print inc
-        for prog in self._programs:
-            prog['u_stencil_buffer'] = text
+                libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
+                retEdges = []
+                size = self.C_nb_edges[i].contents.value
+                for j in range(size):
+                    edge = self.C_contour_edges[i][j]
+                    retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
+                self.drawShadowTriangles(retEdges, i)
+            with self._frame_buffer:
+                data = GL.glReadPixels(0,0, 1024,1024, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
+            text = gloo.Texture2D(data)
+            # data2 = numpy.empty(shape=(1024,1024,3), dtype=numpy.float32)
+            # for i in range(len(data)):
+            #     for j in range(len(data[i])):
+            #         data2[i][j] = [data[i][j], 0, 0]
+            # imsave("test.jpg", data.astype(numpy.float32))
+            # inc = 0
+            # for i in range(len(data)):
+            #     for j in range(len(data[i])):
+            #         if data[i][j] != 0:
+            #             print i, j
+            # print inc
+            for prog in self._programs:
+                prog['u_stencil_buffer'] = text
+            self._lights[0].setModified(False)
 
     def drawShadowTriangles(self, contour_edges, index):
         model = numpy.eye(4, dtype=numpy.float32)

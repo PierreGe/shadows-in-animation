@@ -30,6 +30,8 @@ class Light(object):
         self._color = [1,1,1]
         self._type = "Point"
 
+        self.modified = False
+
         self._verticalAngle = 45  # 0 vers le bas, 180 vers le plafond
         self._horizontalAngle = 0 # tourne sur lui meme
 
@@ -51,6 +53,7 @@ class Light(object):
         "light with a custom position"
         self.lock.acquire()
         self._position = list(position)
+        self.modified = True
         self.lock.release()
 
 
@@ -66,6 +69,14 @@ class Light(object):
         """ """
         self._color = color
 
+    def setModified(self, state):
+        """ """
+        self.modified = state
+
+    def wasModified(self):
+        """ """
+        return self.modified
+
     def getType(self):
         """ """
         return self._type
@@ -77,6 +88,7 @@ class Light(object):
     def setVerticalAngle(self,angle):
         """ """
         self._verticalAngle = angle
+        self.modified = True
 
     def getVerticalAngle(self):
         """ """
@@ -102,21 +114,25 @@ class Light(object):
         z = self._zInterval[0] + (float(positionPercent[2])/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
         #print("{0}, {1}, {2}".format(x,y,z))
         self.setPosition([x,y,z])
+        self.modified = True
 
     def setLightsRatioX(self,positionPercent):
         "light with a custom position"
         x = self._xInterval[0] + (float(positionPercent)/100 * ( abs(self._xInterval[0]) + abs(self._xInterval[1])))
         self._position[0] = x
+        self.modified = True
 
     def setLightsRatioY(self,positionPercent):
         "light with a custom position"
         y = self._yInterval[0] + (float(positionPercent)/100 * ( abs(self._yInterval[0]) + abs(self._yInterval[1])))
         self._position[1] = y
+        self.modified = True
 
     def setLightsRatioZ(self,positionPercent):
         "light with a custom position"
         z = self._zInterval[0] + (float(positionPercent)/100 * ( abs(self._zInterval[0]) + abs(self._zInterval[1])))
         self._position[2] = z
+        self.modified = True
 
     def _normalizeAngle(self, angle):
         """ Keep the angle between 0 and 360"""
@@ -137,6 +153,7 @@ class Light(object):
             theta = math.asin(self._position[2]/self._rayon) * Light.RATIO_DEGREE_RADIAN
 
         self._theta = theta
+        self.modified = True
 
     def incrementeRotate(self,plus):
         """ Increment Y value by plus, for rotation of the plane"""
