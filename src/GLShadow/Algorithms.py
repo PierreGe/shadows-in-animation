@@ -4,7 +4,7 @@
 from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *
-from vispy.io import imread
+from vispy.io import imread, imsave
 from vispy.scene import Image
 from operator import add
 from vispy.geometry import *
@@ -421,6 +421,11 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         with self._frame_buffer:
             data = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
         text = gloo.Texture2D(data,format='luminance')
+        data2 = numpy.empty(shape=(1366,768,1), dtype=numpy.float32)
+        for i in range(len(data)):
+            for j in range(len(data[i])):
+                data2[i][j] = [data[i][j]]
+        imsave("test.jpg", data2)
         # inc = 0
         # for i in range(len(data)):
         #     for j in range(len(data[i])):
@@ -448,7 +453,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             self._volumePrograms[index]['u_view'] = self._createViewMatrix()
             gloo.set_state(None, cull_face=True)
             gloo.set_state(None, stencil_test=True)
-            gloo.set_stencil_func('always', 0, 0)
+            gloo.set_stencil_func('always', 0, ~0)
             self._stencil_buffer.activate()
             # step 3 : draw front faces, depth test and stencil buffer increment
             gloo.set_stencil_op('keep', 'incr', 'keep')
@@ -470,8 +475,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             # gloo.set_stencil_func('equal', 0, 0)
             # gloo.set_stencil_op('keep', 'keep', 'keep')
             # self._stencil_buffer.deactivate()
-            for obj in self._objects:
-                self.draw()
+            # for obj in self._objects:
+            self.draw()
             # # draw scene
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             # self._program['u_normal'] = normal
