@@ -69,8 +69,7 @@ class AbstractAlgorithm:
         return self._fps
 
     def update(self):
-        if len(self._lights) != self._old_light_number:
-            self._loadShaders()
+        pass
 
     def draw(self):
         view = self._createViewMatrix()
@@ -440,6 +439,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     def drawShadowTriangles(self, contour_edges, index):
         model = numpy.eye(4, dtype=numpy.float32)
+        translate(model, *self._objects[index].getPosition())
         lightPosition = numpy.array(numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model)).tolist()[:-1])
         extrudeMagnitude = 20
         vertices = []
