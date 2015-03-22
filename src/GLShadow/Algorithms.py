@@ -396,6 +396,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
             self._volumePrograms[i] = gloo.Program(vertex_str, fragment_str)
             self._volumePrograms[i]['u_projection'] = self._projection
+            # ortho(-5, +5, -5, +5, 10, 50)
             self._volumePrograms[i]['u_color'] = DEFAULT_COLOR
 
         self.active = True
@@ -419,13 +420,13 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                 retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
             self.drawShadowTriangles(retEdges, i)
         with self._frame_buffer:
-            data = GL.glReadPixels(0,0, 1024,1024, GL.GL_STENCIL_INDEX, GL.GL_BYTE).astype(numpy.float32)
+            data = GL.glReadPixels(0,0, 1024,1024, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
         text = gloo.Texture2D(data)
         # data2 = numpy.empty(shape=(1024,1024,3), dtype=numpy.float32)
         # for i in range(len(data)):
         #     for j in range(len(data[i])):
         #         data2[i][j] = [data[i][j], 0, 0]
-        # imsave("test.jpg", data)
+        # imsave("test.jpg", data.astype(numpy.float32))
         # inc = 0
         # for i in range(len(data)):
         #     for j in range(len(data[i])):

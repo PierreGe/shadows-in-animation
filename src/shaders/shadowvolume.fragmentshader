@@ -7,8 +7,8 @@ varying vec4 v_position;
 
 void main() {
 	$COLOR_CODE$
-	gl_FragColor = vec4(1,1,1,1) - texture2D(u_stencil_buffer, v_position.xy);
-	// if (texture2D(u_stencil_buffer, v_position.xy).x == 0.0) {
+	gl_FragColor = vec4(1,1,1,1) - texture2D(u_stencil_buffer, gl_FragCoord.yx/1024.0);
+	// if (texture2D(u_stencil_buffer, gl_FragCoord.xy/1024.0).x == 0.0) {
 	// 	gl_FragColor = vec4(1,1,1,1);
 	// }
 	// else {
