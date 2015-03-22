@@ -25,13 +25,14 @@ class AbstractAlgorithm:
     def __init__(self):
         pass
 
-    def init(self, objects, camera, lights):
+    def init(self, objects, camera, lights, options):
         self._objects = objects
         self._positions = gloo.VertexBuffer(self._concatPositions())
         self._indices = gloo.IndexBuffer(numpy.array(self._concatIndices()))
         self._normals = gloo.VertexBuffer(self._concatNormals())
         self._camera = camera
         self._lights = lights
+        self._options = options
         vertex_str, fragment_str = self._loadShaders()
         vertex_texture, fragment_texture = self._loadShaders(texture=True)
 
@@ -138,6 +139,11 @@ class AbstractAlgorithm:
             fragment_str = fragment_str.replace("$COLOR_VARIABLES$", "varying vec4 v_color;\n")
             fragment_str = fragment_str.replace("$COLOR_CODE$", "");
 
+        if (self._options):
+            for key, value in iter(self._options):
+                vertex_str = vertex_str.replace("$"+key+"$", value)
+                fragment_str = fragment_str.replace("$"+key+"$", value)
+
         fragment.close()
         vertex.close()
         self._old_light_number = light_number
@@ -201,9 +207,9 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
         self._shadowProgram = gloo.Program("shaders/shadowmap.vertexshader",
                                         "shaders/shadowmap.fragmentshader")
 
-    def init(self, objects, camera, lights):
+    def init(self, objects, camera, lights, options):
         """ Method that initialize the algorithm """
-        AbstractAlgorithm.init(self, objects, camera, lights)
+        AbstractAlgorithm.init(self, objects, camera, lights, options)
 
         for i in range(len(self._programs)):
             obj = self._objects[i]
@@ -261,7 +267,7 @@ class RayTracingAlgorithm:
     def __init__(self):
         self.program = gloo.Program("shaders/raytracingalgo.vertexshader", "shaders/raytracingalgo.fragmentshader")
 
-    def init(self, objects, camera, lightList):
+    def init(self, objects, camera, lightList, options):
         self.program['a_position'] = [(-1., -1.), (-1., +1.),
                                       (+1., -1.), (+1., +1.)]
 
@@ -289,8 +295,8 @@ class NoShadowAlgorithm(AbstractAlgorithm):
     def __init__(self):
         AbstractAlgorithm.__init__(self)
 
-    def init(self, objects, camera, lights):
-        AbstractAlgorithm.init(self, objects, camera, lights)
+    def init(self, objects, camera, lights, options):
+        AbstractAlgorithm.init(self, objects, camera, lights, options)
 
     def update(self):
         if self.active:
@@ -302,8 +308,8 @@ class SelfShadowAlgorithm(AbstractAlgorithm):
     def __init__(self):
         AbstractAlgorithm.__init__(self)
 
-    def init(self, objects, camera, lights):
-        AbstractAlgorithm.init(self, objects, camera, lights)
+    def init(self, objects, camera, lights, options):
+        AbstractAlgorithm.init(self, objects, camera, lights, options)
 
         for i in range(len(self._programs)):
             obj = self._objects[i]
@@ -337,8 +343,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
     def __init__(self):
         AbstractAlgorithm.__init__(self)
 
-    def init(self, objects, camera, lights):
-        AbstractAlgorithm.init(self, objects, camera, lights)
+    def init(self, objects, camera, lights, options):
+        AbstractAlgorithm.init(self, objects, camera, lights, options)
 
         shape=(1024,1024)
         self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))

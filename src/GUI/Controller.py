@@ -29,6 +29,7 @@ class Controller(object):
         self._scene = {} # nom : obj-liste  (from assets/scene/)
         self._parseAllScene() #
         self._lightCollection = LightCollection()
+        self._options = {}
 
         self._glWidget = None
         self._helpWidget = HelpWidget()
@@ -46,9 +47,9 @@ class Controller(object):
         self._splitPane = splitPane
         self._setStatusReady()
 
-    def setOption(self,option):
-        if self._glWidget:
-            self._glWidget.setOption(option)
+    def setOption(self,options):
+        self._options = options
+        self.reload()
 
     def showGL(self, item):
         """ Set the right widget in the splitpane as the gl widget """
@@ -75,7 +76,7 @@ class Controller(object):
         if self._glWidget:
             obj = self._glWidget.getObjectNames()
             algo = self._glWidget.getChosenAlgoName()
-            self._glWidget = OpenGLWidget(obj,algo,self)
+            self._glWidget = OpenGLWidget(obj,algo,self,options)
             self._replaceRightWidget(self._glWidget)
         else:
             print("[WARNING] Unable to reload : no OpenGLWidget loaded!")

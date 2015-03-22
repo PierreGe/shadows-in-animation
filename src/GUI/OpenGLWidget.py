@@ -17,7 +17,7 @@ from GLShadow.AutoRotateCamera import AutoRotateCamera
 
 class OpenGLWidget(QtOpenGL.QGLWidget):
     """ The main openGL widget """
-    def __init__(self, objectNames, algoName, controller,  parent=None):
+    def __init__(self, objectNames, algoName, controller, options=None, parent=None):
         """ docstring """
         QtOpenGL.QGLWidget.__init__(self, parent)
         self._controller = controller
@@ -29,6 +29,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         }
         self.setObjects(objectNames)
         self.setAlgo(algoName)
+        self._options = options
         self._mutex = Lock()
 
         self.timer = QtCore.QTimer(self)
@@ -166,7 +167,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         # self._makeSphere((0,3,0))
         self._loadObjects()
 
-        self._chosenAlgo.init(self._objects, self._camera, self._controller.getLightCollection())
+        self._chosenAlgo.init(self._objects, self._camera, self._controller.getLightCollection(), self._options)
         self._cameraRotation = AutoRotateCamera(self._camera,1)
 
         self._mutex.release()
@@ -250,6 +251,3 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         """ """
         if self._cameraRotation:
             self._cameraRotation.stop()
-
-    def setOption(self,option):
-        print(option)
