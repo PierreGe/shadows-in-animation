@@ -23,6 +23,7 @@ class AlgoPanel(QtGui.QMainWindow):
 
         
         self.text = QtGui.QTextEdit(self)
+        self.text.setText("Shadow map: \nanti alisasing 2 4 8 16 \nspreading 300 500 700 1000 \nbiais 0.01 0.02 0.1 \n")
         
         self.setCentralWidget(self.text)
         self.setGeometry(300,300,300,300)
