@@ -23,7 +23,7 @@ class AlgoPanel(QtGui.QMainWindow):
 
         
         self.text = QtGui.QTextEdit(self)
-        self.text.setText("Shadow map: \nanti alisasing 2 4 8 16 \nspreading 300 500 700 1000 \nbiais 0.01 0.02 0.1 \n")
+        self.text.setText("Anti aliasing : 2 4 8 16 \nspreading : 300 500 700 1000 \nbiais : 0.01 0.02 0.1 \n")
         
         self.setCentralWidget(self.text)
         self.setGeometry(300,300,300,300)
@@ -31,7 +31,16 @@ class AlgoPanel(QtGui.QMainWindow):
         self.show()
         
     def send(self):
-        self._controler.setOption(self.text.toPlainText())
+        dico = {}
+        string = str(self.text.toPlainText())
+        list = string.split("\n")
+        for line in list:
+            try:
+                key,value = line.split(":")
+                dico[key.strip()] = value.strip()
+            except:
+                pass
+        self._controler.setOption(dico)
         self.close()
 
         
