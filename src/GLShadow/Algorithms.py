@@ -418,6 +418,17 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                 edge = self.C_contour_edges[i][j]
                 retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
             self.drawShadowTriangles(retEdges, i)
+        with self._frame_buffer:
+            data = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
+        text = gloo.Texture2D(data,format='luminance')
+        # inc = 0
+        # for i in range(len(data)):
+        #     for j in range(len(data[i])):
+        #         if data[i][j] != 0:
+        #             print i, j
+        # print inc
+        for prog in self._programs:
+            prog['u_stencil_buffer'] = text
 
     def drawShadowTriangles(self, contour_edges, index):
         model = numpy.eye(4, dtype=numpy.float32)
@@ -447,10 +458,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             gloo.set_stencil_op('keep', 'decr', 'keep')
             gloo.set_cull_face('back')
             self._volumePrograms[index].draw('triangles')
-            data = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
-            text = gloo.Texture2D(data,format='luminance')
-            # print text
-            self._programs[index]['u_stencil_buffer'] = text
 
     def update(self):
         if self.active:
@@ -463,7 +470,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             # gloo.set_stencil_func('equal', 0, 0)
             # gloo.set_stencil_op('keep', 'keep', 'keep')
             # self._stencil_buffer.deactivate()
-            self.draw()
+            for obj in self._objects:
+                self.draw()
             # # draw scene
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             # self._program['u_normal'] = normal
