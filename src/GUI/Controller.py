@@ -12,6 +12,7 @@ from os.path import isfile, join
 from GUI.HelpWidget import HelpWidget
 from GUI.OpenGLWidget import OpenGLWidget
 from GUI.RayTracingWidget import RayTracingWidget
+from GUI.PerformanceIndication import PerformanceIndication
 from GLShadow.LightCollection import LightCollection
 from GLShadow.OpenGlVersionHelper import OpenGlVersionHelper
 
@@ -32,6 +33,7 @@ class Controller(object):
         self._glWidget = None
         self._helpWidget = HelpWidget()
         self._openGlVersionHelper = OpenGlVersionHelper()
+        self._performanceIndication = PerformanceIndication()
 
     def initStatusBar(self,statusBar):
         """ """
@@ -43,6 +45,10 @@ class Controller(object):
         self._setStatusComputing()
         self._splitPane = splitPane
         self._setStatusReady()
+
+    def setOption(self,option):
+        if self._glWidget:
+            self._glWidget.setOption(option)
 
     def showGL(self, item):
         """ Set the right widget in the splitpane as the gl widget """
@@ -80,11 +86,13 @@ class Controller(object):
         """ """
         self._lightCollection.addLight(light)
         self._mainWindow.updateToolsBar()
+        self.reload()
 
     def deleteLight(self, lightIndex):
         """ """
         self._lightCollection.deleteLight(lightIndex)
         self._mainWindow.updateToolsBar()
+        self.reload()
 
     def getLightCollection(self):
         """ """
@@ -123,15 +131,15 @@ class Controller(object):
     def setFPS(self, fps):
         """ """
         p = psutil.Process(os.getpid())
-        msg = "Frame per second (fps) : " 
-        msg += (str(fps)) #.zfill(4).replace("0"," ")
-        #msg += "  |  "
-        #msg += "CPU usage : "
-        #msg += str(round(p.cpu_percent(interval=0.5),1))
+        msg = "Frame par second (fps) : "
+        msg += (str(fps))
         msg += "  |  "
-        msg += "Memoire usage : "
-        msg += str(round(p.memory_percent(),1))
-        msg += "  |  "
+        msg += "Utilisation processeur : "
+        msg += self._performanceIndication.getCpuPercent()
+        msg += "%  |  "
+        msg += "Utilisation memoire : "
+        msg += self._performanceIndication.getMemoryPercent()
+        msg += "%  |  "
         msg += "Nombre de lampe : "
         msg += str(len(self._lightCollection))
             
@@ -161,6 +169,8 @@ class Controller(object):
             self._glWidget.killThreads()
         if self._lightCollection:
             self._lightCollection.killThreads()
+        if self._performanceIndication:
+            self._performanceIndication.stop()
 
     def lightPercentX(self,x):
         """ """

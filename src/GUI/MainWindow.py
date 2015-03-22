@@ -8,6 +8,7 @@ from PyQt4 import QtGui, QtCore
 from GUI.SplitPane import SplitPane
 from GUI.Controller import Controller
 from GUI.LightPanel import AddLightPanel,RemoveLightPanel
+from GUI.AlgoPanel import AlgoPanel
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -51,11 +52,11 @@ class MainWindow(QtGui.QMainWindow):
 
     def displayHelp(self):
         """ """
-        QtGui.QMessageBox.information(self, "Aide", "Printemps des sciences 2015")
+        QtGui.QMessageBox.information(self, "Aide", "Pour utiliser le programme, veuillez choisir une scene dans la vue en arbre de gauche et un algorithme compatible.")
 
     def displayAbout(self):
         """ Display some info"""
-        QtGui.QMessageBox.information(self, "A propos", "- Pierre Gerard, Bruno Rocha Pereira, Antoine Carpentier" + "\n" + "- Dans ce projet nous examinons le domaine des algorithmes de rendu d'ombre et nous en comparerons quelques-uns dans un environnement de simulation 3D comme le OpenGL. Le but est de tester leurs aspects positifs et négatifs et de voir les conditions dans lesquelles ils donnent le meilleur rendu.")
+        QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015" + "\n\n" + "Pierre Gerard, Bruno Rocha Pereira, Antoine Carpentier" + "\n\n" + "Dans ce projet nous examinons le domaine des algorithmes de rendu d'ombre et nous en comparerons quelques-uns dans un environnement de simulation 3D comme le OpenGL. Le but est de tester leurs aspects positifs et négatifs et de voir les conditions dans lesquelles ils donnent le meilleur rendu.")
 
     def initMenu(self):
         """ This method will initate the menu """
@@ -86,6 +87,9 @@ class MainWindow(QtGui.QMainWindow):
     def addALight(self):
         """ """
         self.l = AddLightPanel(self._controller)
+
+    def algoOption(self):
+        self.o = AlgoPanel(self._controller)
 
     def removeALight(self):
         """ """
@@ -130,14 +134,14 @@ class MainWindow(QtGui.QMainWindow):
 
         reloadAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/system-reload.png"), "Reload", self)
         reloadAction.setShortcut("Ctrl+R")
-        reloadAction.setStatusTip("Recharge l'application")
+        reloadAction.setStatusTip("Recharge l'algorithme")
         reloadAction.triggered.connect(self.reloadOpenGl)
         self.toolbar.addAction(reloadAction)
 
         self.toolbar.addSeparator()
 
         hardwareHelpAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/hwinfo.png"), "Montre la version du hardware graphique", self)
-        hardwareHelpAction.setStatusTip("Montre la version du hardware graphique")
+        hardwareHelpAction.setStatusTip("Caractéristiques de la machine")
         hardwareHelpAction.triggered.connect(self.showHardwareVersion)
         self.toolbar.addAction(hardwareHelpAction)
 
@@ -156,14 +160,12 @@ class MainWindow(QtGui.QMainWindow):
         self.toolbar.addSeparator()
 
         addLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBublePlus.png"), "Light+", self)
-        addLightAction.setShortcut("Ctrl+L")
         addLightAction.setStatusTip("Ajouter une lampe")
         addLightAction.triggered.connect(self.addALight)
         self.toolbar.addAction(addLightAction)
 
 
         removeLightAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/lightBubleMinus.png"), "Light-", self)
-        #removeLightAction.setShortcut("Ctrl+L")
         removeLightAction.setStatusTip("Retirer une lampe")
         removeLightAction.triggered.connect(self.removeALight)
         self.toolbar.addAction(removeLightAction)
@@ -224,6 +226,13 @@ class MainWindow(QtGui.QMainWindow):
         sliderY.valueChanged.connect(self._controller.lightPercentY)
         sliderY.setSliderPosition(99)
         self.toolbar.addWidget(sliderY)
+
+
+        self.toolbar.addSeparator()
+        algoOptionAction = QtGui.QAction(QtGui.QIcon(os.getcwd() + "/assets/" +"images/configure.png"), "Option algo", self)
+        algoOptionAction.setStatusTip("Options de l'algorithme")
+        algoOptionAction.triggered.connect(self.algoOption)
+        self.toolbar.addAction(algoOptionAction)
 
         # un espace blanc
         textWidget = QtGui.QLabel(self)
