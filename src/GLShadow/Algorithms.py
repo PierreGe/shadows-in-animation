@@ -447,16 +447,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             gloo.set_stencil_op('keep', 'decr', 'keep')
             gloo.set_cull_face('back')
             self._volumePrograms[index].draw('triangles')
-            pixels = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_UNSIGNED_BYTE)
-            tmp = []
-            i = 0
-            for i in range(1366):
-                tmp.append(map(ord, pixels[i*768:(i+1)*768]))
-            # for i in range(len(tmp)):
-            #     for j in range(len(tmp[i])):
-            #         print i, j, tmp[i][j]
-            data = numpy.array(tmp, dtype=numpy.uint8)
-            # print data
+            data = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
             text = gloo.Texture2D(data,format='luminance')
             # print text
             self._programs[index]['u_stencil_buffer'] = text
