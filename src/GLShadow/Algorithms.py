@@ -341,7 +341,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
     def init(self, objects, camera, lights):
         AbstractAlgorithm.init(self, objects, camera, lights)
 
-        shape=(1024,1024)
+        shape=(1366,768)
         self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
         self._depth_buffer = gloo.DepthBuffer(shape=(shape + (4,)))
         self._stencil_buffer = gloo.StencilBuffer(shape=(shape + (4,)))
@@ -421,10 +421,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         with self._frame_buffer:
             data = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
         text = gloo.Texture2D(data,format='luminance')
-        data2 = numpy.empty(shape=(1366,768,1), dtype=numpy.float32)
+        data2 = numpy.empty(shape=(1366,768,3), dtype=numpy.float32)
         for i in range(len(data)):
             for j in range(len(data[i])):
-                data2[i][j] = [data[i][j]]
+                data2[i][j] = [data[i][j], 0, 0]
         imsave("test.jpg", data2)
         # inc = 0
         # for i in range(len(data)):
@@ -454,7 +454,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             gloo.set_state(None, cull_face=True)
             gloo.set_state(None, stencil_test=True)
             gloo.set_stencil_func('always', 0, ~0)
-            self._stencil_buffer.activate()
             # step 3 : draw front faces, depth test and stencil buffer increment
             gloo.set_stencil_op('keep', 'incr', 'keep')
             gloo.set_cull_face('front')
