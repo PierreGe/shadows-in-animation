@@ -30,10 +30,10 @@ void main()
   poissonDisk[13] = vec2( -0.81409955, 0.91437590 );
   poissonDisk[14] = vec2( 0.19984126, 0.78641367 );
   poissonDisk[15] = vec2( 0.14383161, -0.14100790);
-  int antialiasing_level = 4;
-  float antialiasing_level_float = 4.0;
+  int antialiasing_level = $anti-aliasing-int$;
+  float antialiasing_level_float = $anti-aliasing-float$;
   float shadow_precision = 1.0 / antialiasing_level_float / $LIGHT_NUMBER_FLOAT$;
-  float spreading = 700.0;
+  float spreading = $spreading$;
 
   float visibility = 1.0;
   gl_FragColor = vec4(0,0,0,0);
@@ -60,7 +60,7 @@ void main()
     //  - Looking elsewhere -> < 1
     float cosAlpha = clamp( dot( n,r ), 0,1 );
 
-    float bias = 0.05*tan(acos(cosTheta));
+    float bias = $bias$*tan(acos(cosTheta));
     bias = clamp(bias, 0,0.01);
 
     for (int i = 0; i < antialiasing_level; ++i)

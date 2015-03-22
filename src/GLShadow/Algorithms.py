@@ -33,6 +33,11 @@ class AbstractAlgorithm:
         self._camera = camera
         self._lights = lights
         self._options = options
+        if not self._options:
+            self._options = {"anti-aliasing-int" : "4", 
+                             "anti-aliasing-float" : "4.0",
+                             "spreading" : "700.0",
+                             "bias" : "0.05"}
         vertex_str, fragment_str = self._loadShaders()
         vertex_texture, fragment_texture = self._loadShaders(texture=True)
 
@@ -140,9 +145,9 @@ class AbstractAlgorithm:
             fragment_str = fragment_str.replace("$COLOR_CODE$", "");
 
         if (self._options):
-            for key, value in iter(self._options):
-                vertex_str = vertex_str.replace("$"+key+"$", value)
-                fragment_str = fragment_str.replace("$"+key+"$", value)
+            for key, value in self._options.iteritems():
+                vertex_str = vertex_str.replace('$'+key+'$', value)
+                fragment_str = fragment_str.replace('$'+key+'$', value)
 
         fragment.close()
         vertex.close()
