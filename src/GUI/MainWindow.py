@@ -52,11 +52,11 @@ class MainWindow(QtGui.QMainWindow):
 
     def displayHelp(self):
         """ """
-        QtGui.QMessageBox.information(self, "Aide", "Printemps des sciences 2015")
+        QtGui.QMessageBox.information(self, "Aide", "Pour utiliser le programme, veuillez choisir une scene dans la vue en arbre de gauche et un algorithme compatible.")
 
     def displayAbout(self):
         """ Display some info"""
-        QtGui.QMessageBox.information(self, "A propos", "- Pierre Gerard, Bruno Rocha Pereira, Antoine Carpentier" + "\n" + "- Dans ce projet nous examinons le domaine des algorithmes de rendu d'ombre et nous en comparerons quelques-uns dans un environnement de simulation 3D comme le OpenGL. Le but est de tester leurs aspects positifs et négatifs et de voir les conditions dans lesquelles ils donnent le meilleur rendu.")
+        QtGui.QMessageBox.information(self, "A propos", "Printemps des sciences 2015" + "\n\n" + "Pierre Gerard, Bruno Rocha Pereira, Antoine Carpentier" + "\n\n" + "Dans ce projet nous examinons le domaine des algorithmes de rendu d'ombre et nous en comparerons quelques-uns dans un environnement de simulation 3D comme le OpenGL. Le but est de tester leurs aspects positifs et négatifs et de voir les conditions dans lesquelles ils donnent le meilleur rendu.")
 
     def initMenu(self):
         """ This method will initate the menu """

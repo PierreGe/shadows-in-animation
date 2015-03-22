@@ -131,15 +131,15 @@ class Controller(object):
     def setFPS(self, fps):
         """ """
         p = psutil.Process(os.getpid())
-        msg = "Frame per second (fps) : " 
+        msg = "Frame par second (fps) : "
         msg += (str(fps))
         msg += "  |  "
-        msg += "CPU usage : "
+        msg += "Utilisation processeur : "
         msg += self._performanceIndication.getCpuPercent()
-        msg += "  |  "
-        msg += "Memoire usage : "
+        msg += "%  |  "
+        msg += "Utilisation memoire : "
         msg += self._performanceIndication.getMemoryPercent()
-        msg += "  |  "
+        msg += "%  |  "
         msg += "Nombre de lampe : "
         msg += str(len(self._lightCollection))
             
