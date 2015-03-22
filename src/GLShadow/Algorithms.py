@@ -341,7 +341,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
     def init(self, objects, camera, lights):
         AbstractAlgorithm.init(self, objects, camera, lights)
 
-        shape=(1366,768)
+        shape=(1024,1024)
         self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
         self._depth_buffer = gloo.DepthBuffer(shape=(shape + (4,)))
         self._stencil_buffer = gloo.StencilBuffer(shape=(shape + (4,)))
@@ -419,13 +419,13 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                 retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
             self.drawShadowTriangles(retEdges, i)
         with self._frame_buffer:
-            data = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
-        text = gloo.Texture2D(data,format='luminance')
-        data2 = numpy.empty(shape=(1366,768,3), dtype=numpy.float32)
-        for i in range(len(data)):
-            for j in range(len(data[i])):
-                data2[i][j] = [data[i][j], 0, 0]
-        imsave("test.jpg", data2)
+            data = GL.glReadPixels(0,0, 1024,1024, GL.GL_STENCIL_INDEX, GL.GL_BYTE).astype(numpy.float32)
+        text = gloo.Texture2D(data)
+        # data2 = numpy.empty(shape=(1024,1024,3), dtype=numpy.float32)
+        # for i in range(len(data)):
+        #     for j in range(len(data[i])):
+        #         data2[i][j] = [data[i][j], 0, 0]
+        # imsave("test.jpg", data)
         # inc = 0
         # for i in range(len(data)):
         #     for j in range(len(data[i])):
@@ -470,7 +470,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
             # gloo.set_depth_func('equal')
             gloo.set_state(None, cull_face=False)
-            gloo.set_state(None, stencil_test=False)
+            # gloo.set_state(None, stencil_test=True)
             # gloo.set_stencil_func('equal', 0, 0)
             # gloo.set_stencil_op('keep', 'keep', 'keep')
             # self._stencil_buffer.deactivate()

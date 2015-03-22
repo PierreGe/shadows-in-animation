@@ -175,7 +175,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintGL(self):
         """ docstring """
         self._mutex.acquire()
-        gloo.clear(color=True, depth=True)
+        gloo.clear(color=True, depth=True,stencil=True)
         self._chosenAlgo.timedUpdate()
         self._mutex.release()
 
