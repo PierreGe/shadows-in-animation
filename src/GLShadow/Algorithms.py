@@ -5,6 +5,7 @@ from OpenGL import GL, GLU
 from vispy import gloo
 from vispy.util.transforms import *
 from vispy.io import imread
+from vispy.scene import Image
 from operator import add
 from vispy.geometry import *
 from ctypes import *
@@ -111,14 +112,18 @@ class AbstractAlgorithm:
     def _createProjectionMatrix(self):
         return perspective(60, 16.0/9.0, 0.1, 200)
 
-    def _loadShaders(self, texture=False):
+    def _loadShaders(self, texture=False, vertex_filename=None, fragment_filename=None):
+        if not vertex_filename:
+            vertex_filename = self.VERTEX_SHADER_FILENAME
+        if not fragment_filename:
+            fragment_filename = self.FRAGMENT_SHADER_FILENAME
         light_number = len(self._lights)
         light_number_float = float(light_number)
-        fragment = open(self.FRAGMENT_SHADER_FILENAME, 'r')
+        fragment = open(fragment_filename, 'r')
         fragment_str = fragment.read()
         fragment_str = fragment_str.replace("$LIGHT_NUMBER$", str(light_number))
         fragment_str = fragment_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
-        vertex = open(self.VERTEX_SHADER_FILENAME, 'r')
+        vertex = open(vertex_filename, 'r')
         vertex_str = vertex.read()
         vertex_str = vertex_str.replace("$LIGHT_NUMBER$", str(light_number))
         vertex_str = vertex_str.replace("$LIGHT_NUMBER_FLOAT$", str(light_number_float))
@@ -335,15 +340,15 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     def init(self, objects, camera, lights):
         AbstractAlgorithm.init(self, objects, camera, lights)
-        # del self._objects[0]
 
-        # shape=(1366,768)
-        # self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
-        # self._depth_buffer = gloo.DepthBuffer(shape=(shape + (4,)))
-        # self._stencil_buffer = gloo.StencilBuffer(shape=(shape + (4,)))
-        # self._frame_buffer = gloo.FrameBuffer(self._color_buffer,
-                                                # self._depth_buffer,
-                                                # self._stencil_buffer)
+        shape=(1024,1024)
+        self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
+        self._depth_buffer = gloo.DepthBuffer(shape=(shape + (4,)))
+        self._stencil_buffer = gloo.StencilBuffer(shape=(shape + (4,)))
+        self._frame_buffer = gloo.FrameBuffer(self._color_buffer,
+                                                self._depth_buffer,
+                                                self._stencil_buffer)
+
         initVec = [None for _ in range(len(self._objects))]
         self.C_positions = [None for _ in range(len(self._objects))]
         self.C_indices = [None for _ in range(len(self._objects))]
@@ -351,6 +356,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         self.C_size_indices = [None for _ in range(len(self._objects))]
         self.C_contour_edges = [None for _ in range(len(self._objects))]
         self.C_nb_edges = [None for _ in range(len(self._objects))]
+        self._volumePrograms = [None for _ in range(len(self._objects))]
+        vertex_str, fragment_str = \
+            self._loadShaders(vertex_filename=NoShadowAlgorithm.VERTEX_SHADER_FILENAME,\
+                              fragment_filename=NoShadowAlgorithm.FRAGMENT_SHADER_FILENAME)
         for i in range(len(self._objects)):
             self.C_positions[i] = (Vector * len(self._objects[i].getVertices()))
             j = 0
@@ -384,6 +393,11 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             self.C_contour_edges[i] = self.C_contour_edges[i]()
 
             self.C_nb_edges[i] = pointer(c_int(0))
+
+            self._volumePrograms[i] = gloo.Program(vertex_str, fragment_str)
+            self._volumePrograms[i]['u_projection'] = self._projection
+            self._volumePrograms[i]['u_color'] = DEFAULT_COLOR
+
         self.active = True
             
 
@@ -417,18 +431,49 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             c = numpy.add(edge[1], extrudeMagnitude * numpy.subtract(edge[1], lightPosition))
             d = numpy.add(edge[0], extrudeMagnitude * numpy.subtract(edge[0], lightPosition))
             vertices.extend([a,b,c,d])
-        self._programs[index]['position'] = gloo.VertexBuffer(vertices)
-        self._programs[index]['u_model'] = model
-        self._programs[index]['u_view'] = self._createViewMatrix()
-        self._programs[index]['u_projection'] = self._projection
-        self._programs[index].draw('triangles')
+        with self._frame_buffer:
+            self._volumePrograms[index]['position'] = gloo.VertexBuffer(vertices)
+            self._volumePrograms[index]['u_model'] = model
+            self._volumePrograms[index]['u_view'] = self._createViewMatrix()
+            gloo.set_state(None, cull_face=True)
+            gloo.set_state(None, stencil_test=True)
+            gloo.set_stencil_func('always', 0, 0)
+            self._stencil_buffer.activate()
+            # step 3 : draw front faces, depth test and stencil buffer increment
+            gloo.set_stencil_op('keep', 'incr', 'keep')
+            gloo.set_cull_face('front')
+            self._volumePrograms[index].draw('triangles')
+            # step 4 : draw back faces, depth test and stencil buffer decrement
+            gloo.set_stencil_op('keep', 'decr', 'keep')
+            gloo.set_cull_face('back')
+            self._volumePrograms[index].draw('triangles')
+            pixels = GL.glReadPixels(0,0, 1366,768, GL.GL_STENCIL_INDEX, GL.GL_UNSIGNED_BYTE)
+            tmp = []
+            i = 0
+            for i in range(1366):
+                tmp.append(map(ord, pixels[i*768:(i+1)*768]))
+            # for i in range(len(tmp)):
+            #     for j in range(len(tmp[i])):
+            #         print i, j, tmp[i][j]
+            data = numpy.array(tmp, dtype=numpy.uint8)
+            # print data
+            text = gloo.Texture2D(data,format='luminance')
+            # print text
+            self._programs[index]['u_stencil_buffer'] = text
 
     def update(self):
         if self.active:
             #create shadow volumes
             self._volumes = self.drawVolumes()
 
-            # draw scene
+            # gloo.set_depth_func('equal')
+            gloo.set_state(None, cull_face=False)
+            gloo.set_state(None, stencil_test=False)
+            # gloo.set_stencil_func('equal', 0, 0)
+            # gloo.set_stencil_op('keep', 'keep', 'keep')
+            # self._stencil_buffer.deactivate()
+            self.draw()
+            # # draw scene
             # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
             # self._program['u_normal'] = normal
             # self._program['u_light_position'] = self._light.getPosition()

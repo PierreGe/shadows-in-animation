@@ -1,8 +1,18 @@
 $COLOR_VARIABLES$
 uniform vec3 u_light_color;
 uniform vec3 u_light_position;
+uniform sampler2D u_stencil_buffer;
+
+varying vec4 v_position;
 
 void main() {
 	$COLOR_CODE$
-	gl_FragColor = vec4(v_color);
+	vec2 real_pos = vec2(v_position.x, 1.0-(v_position.y));
+	// gl_FragColor = vec4(1,1,1,1) - texture2D(u_stencil_buffer, real_pos);
+	if (texture2D(u_stencil_buffer, real_pos).x == 0.0) {
+		gl_FragColor = vec4(1,1,1,1);
+	}
+	else {
+		gl_FragColor = vec4(0,0,0,0);
+	}
 }
