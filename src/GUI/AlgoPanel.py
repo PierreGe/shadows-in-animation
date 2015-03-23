@@ -23,7 +23,11 @@ class AlgoPanel(QtGui.QMainWindow):
 
         
         self.text = QtGui.QTextEdit(self)
-        self.text.setText("Anti aliasing : 2 4 8 16 \nspreading : 300 500 700 1000 \nbiais : 0.01 0.02 0.1 \n")
+        self.text.setText("""
+            anti-aliasing-int : 4
+            anti-aliasing-float : 4.0
+            spreading : 700.0
+            bias : 0.05""")
         
         self.setCentralWidget(self.text)
         self.setGeometry(300,300,300,300)

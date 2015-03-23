@@ -35,7 +35,6 @@ void main()
   float shadow_precision = 1.0 / antialiasing_level_float / $LIGHT_NUMBER_FLOAT$;
   float spreading = $spreading$;
 
-  float visibility = 1.0;
   gl_FragColor = vec4(0,0,0,0);
 
   $COLOR_CODE$
@@ -63,7 +62,8 @@ void main()
     float bias = $bias$*tan(acos(cosTheta));
     bias = clamp(bias, 0,0.01);
 
-    for (int i = 0; i < antialiasing_level; ++i)
+    float visibility = 1.0;
+    for (int j = 0; j < antialiasing_level; ++j)
     {
       if ( texture2D( u_shadow_maps[i], v_shadow_coords[i].xy + poissonDisk[i]/spreading).z  <  (v_shadow_coords[i].z-bias)){
           visibility -= shadow_precision;

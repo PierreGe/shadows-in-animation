@@ -10,7 +10,7 @@ import numpy
 
 from GLShadow.ObjParser import ObjParser
 from GLShadow.Camera import Camera
-from GLShadow.Algorithms import ShadowMapAlgorithm,ShadowVolumeAlgorithm,NoShadowAlgorithm,SelfShadowAlgorithm
+from GLShadow.Algorithms import ShadowMapAlgorithm,ShadowVolumeAlgorithm,NoShadowAlgorithm,SelfShadowAlgorithm,DEFAULT_SHAPE
 from GLShadow.SceneObject import SceneObject
 from GLShadow.AutoRotateCamera import AutoRotateCamera
 
@@ -176,6 +176,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
     def paintGL(self):
         """ docstring """
         self._mutex.acquire()
+        GL.glViewport(0,0,DEFAULT_SHAPE[1],DEFAULT_SHAPE[0])
         gloo.clear(color=True, depth=True,stencil=True)
         self._chosenAlgo.timedUpdate()
         self._mutex.release()

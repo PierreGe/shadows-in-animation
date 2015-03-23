@@ -19,7 +19,7 @@ from GLShadow.Utils import *
 from GLShadow.SceneObject import SceneObject
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
-DEFAULT_SHAPE = (768,1366)
+DEFAULT_SHAPE = (1080,1920)
 
 class AbstractAlgorithm:
     def __init__(self):
@@ -266,7 +266,6 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
             # draw shadowmap as minimap
             # GLShadow.glViewport(0,0,228,128)
             # self._shadowMap.draw('triangles', self._indices)
-            GL.glViewport(0,0,1366,768)
 
 class RayTracingAlgorithm:
     def __init__(self):
