@@ -35,7 +35,7 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
         self.timer = QtCore.QTimer(self)
         self.timer.setSingleShot(False)
         self.timer.timeout.connect(self.timerUpdate)
-        self._timerfps = 24
+        self._timerfps = 60
         self.timer.start(int(1000/self._timerfps))
         self._lightRotation = None
         self._cameraRotation = None

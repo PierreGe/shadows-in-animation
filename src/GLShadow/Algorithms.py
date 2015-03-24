@@ -257,7 +257,6 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
             for prog in self._programs:
                 for i in range(len(self._lights)):
                     prog['u_lights_intensity[%d]' % i] = self._lights[i].getIntensity()
-                for i in range(len(self._lights)):
                     prog['u_lights_position[%d]' % i] = self._lights[i].getPosition()
                 for i in range(len(self._shadowMaps)):
                     prog['u_shadow_maps[%d]' % i] = self._shadowMaps[i]
