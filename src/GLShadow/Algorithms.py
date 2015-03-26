@@ -17,6 +17,7 @@ from GLShadow.Camera import Camera
 from GLShadow.Light import Light
 from GLShadow.Utils import *
 from GLShadow.SceneObject import SceneObject
+from GLShadow.ObjParser import ObjParser
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
 DEFAULT_SHAPE = (800,600)
@@ -157,8 +158,8 @@ class AbstractAlgorithm:
     def _createLightObjects(self):
         objects = []
         for light in self._lights:
-            sphere = create_sphere(36,36)
-            newObj = SceneObject(sphere.vertices(), sphere.faces(), sphere.vertex_normals(), light.getPosition(), [1,1,1])
+            sphere = ObjParser("assets/obj/spotlight/spotlight.obj")
+            newObj = SceneObject(sphere.getVertices(), sphere.getFaces(), sphere.getNormals(), light.getPosition(), [0.5,0.5,0.5])
             objects.append(newObj)
         return objects
 
