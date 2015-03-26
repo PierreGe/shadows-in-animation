@@ -360,7 +360,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                                                 self._depth_buffer,
                                                 self._stencil_buffer)
 
-        initVec = [None for _ in range(len(self._objects))]
         self.C_positions = [None for _ in range(len(self._objects))]
         self.C_indices = [None for _ in range(len(self._objects))]
         self.C_normals = [None for _ in range(len(self._objects))]
@@ -455,7 +454,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         lightPosition = numpy.array(numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model)).tolist()[:-1])
         extrudeMagnitude = 20
         vertices = []
-        total = 0
         for edge in contour_edges:
             a = edge[0]
             b = edge[1]
