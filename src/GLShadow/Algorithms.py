@@ -19,7 +19,7 @@ from GLShadow.Utils import *
 from GLShadow.SceneObject import SceneObject
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
-DEFAULT_SHAPE = (1080,1920)
+DEFAULT_SHAPE = (1366,768)
 
 class AbstractAlgorithm:
     def __init__(self):
@@ -227,7 +227,7 @@ class ShadowMapAlgorithm(AbstractAlgorithm):
         self._shadowMaps = []
         self._frameBuffers = []
         for light in self._lights:
-            shadowMap = gloo.Texture2D(shape=(DEFAULT_SHAPE + (4,)), dtype=numpy.float32)
+            shadowMap = gloo.Texture2D(shape=(DEFAULT_SHAPE[1], DEFAULT_SHAPE[0], 4), dtype=numpy.float32)
             self._shadowMaps.append(shadowMap)
             self._frameBuffers.append(gloo.FrameBuffer(shadowMap))
 
@@ -349,10 +349,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
     def init(self, objects, camera, lights, options):
         AbstractAlgorithm.init(self, objects, camera, lights, options)
 
-        shape=(1024,1024)
+        shape=DEFAULT_SHAPE
         self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
-        self._depth_buffer = gloo.DepthBuffer(shape=(shape + (4,)))
-        self._stencil_buffer = gloo.StencilBuffer(shape=(shape + (4,)))
+        self._depth_buffer = gloo.DepthBuffer(shape=shape)
+        self._stencil_buffer = gloo.StencilBuffer(shape=shape)
         self._frame_buffer = gloo.FrameBuffer(self._color_buffer,
                                                 self._depth_buffer,
                                                 self._stencil_buffer)
@@ -412,6 +412,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def drawVolumes(self):
+        self._lights[0].setModified(True)
         if self._lights[0].wasModified():
             # for each object
             lightPosition = range(len(self._objects))
@@ -429,13 +430,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                     retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
                 self.drawShadowTriangles(retEdges, i)
             with self._frame_buffer:
-                data = GL.glReadPixels(0,0, 1024,1024, GL.GL_STENCIL_INDEX, GL.GL_BYTE)
+                data = GL.glReadPixels(0,0, DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_STENCIL_INDEX, GL.GL_BYTE)
             text = gloo.Texture2D(data)
-            # data2 = numpy.empty(shape=(1024,1024,3), dtype=numpy.float32)
-            # for i in range(len(data)):
-            #     for j in range(len(data[i])):
-            #         data2[i][j] = [data[i][j], 0, 0]
-            # imsave("test.jpg", data.astype(numpy.float32))
+            # print len(data), len(data[0])
+            imsave("test.jpg", data.astype(numpy.float32))
             # inc = 0
             # for i in range(len(data)):
             #     for j in range(len(data[i])):
