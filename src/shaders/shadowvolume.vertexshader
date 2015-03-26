@@ -9,6 +9,6 @@ uniform mat4 bias_matrix;
 
 void main() {
 	$COLOR_CODE$
-	v_position = u_projection * u_view * u_model * vec4(position, 1.0);
+	v_position = u_model * vec4(position, 1.0);
 	gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
 }

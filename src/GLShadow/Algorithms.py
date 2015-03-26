@@ -19,7 +19,7 @@ from GLShadow.Utils import *
 from GLShadow.SceneObject import SceneObject
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
-DEFAULT_SHAPE = (1366,768)
+DEFAULT_SHAPE = (800,600)
 
 class AbstractAlgorithm:
     def __init__(self):
@@ -350,12 +350,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         AbstractAlgorithm.init(self, objects, camera, lights, options)
 
         shape=DEFAULT_SHAPE
-        self._color_buffer = gloo.ColorBuffer(shape=(shape + (4,)))
         self._depth_buffer = gloo.DepthBuffer(shape=shape)
         self._stencil_buffer = gloo.StencilBuffer(shape=shape)
-        self._frame_buffer = gloo.FrameBuffer(self._color_buffer,
-                                                self._depth_buffer,
-                                                self._stencil_buffer)
+        self._frame_buffer = gloo.FrameBuffer(depth=self._depth_buffer,
+                                                stencil=self._stencil_buffer)
 
         initVec = [None for _ in range(len(self._objects))]
         self.C_positions = [None for _ in range(len(self._objects))]
@@ -411,9 +409,11 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             
 
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
-    def drawVolumes(self):
+    def createVolumes(self):
         self._lights[0].setModified(True)
         if self._lights[0].wasModified():
+            with self._frame_buffer:
+                gloo.clear(stencil=True, depth=True, color=True)
             # for each object
             lightPosition = range(len(self._objects))
             for i in range(len(self._objects)):
@@ -428,23 +428,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
                 for j in range(size):
                     edge = self.C_contour_edges[i][j]
                     retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
-                self.drawShadowTriangles(retEdges, i)
-            with self._frame_buffer:
-                data = GL.glReadPixels(0,0, DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_STENCIL_INDEX, GL.GL_BYTE)
-            text = gloo.Texture2D(data)
-            # print len(data), len(data[0])
-            imsave("test.jpg", data.astype(numpy.float32))
-            # inc = 0
-            # for i in range(len(data)):
-            #     for j in range(len(data[i])):
-            #         if data[i][j] != 0:
-            #             print i, j
-            # print inc
-            for prog in self._programs:
-                prog['u_stencil_buffer'] = text
+                self.createShadowTriangles(retEdges, i)
             self._lights[0].setModified(False)
 
-    def drawShadowTriangles(self, contour_edges, index):
+    def createShadowTriangles(self, contour_edges, index):
         model = numpy.eye(4, dtype=numpy.float32)
         translate(model, *self._objects[index].getPosition())
         lightPosition = numpy.array(numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model)).tolist()[:-1])
@@ -457,80 +444,33 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             c = numpy.add(edge[1], extrudeMagnitude * numpy.subtract(edge[1], lightPosition))
             d = numpy.add(edge[0], extrudeMagnitude * numpy.subtract(edge[0], lightPosition))
             vertices.extend([a,b,c,d])
-        with self._frame_buffer:
-            self._volumePrograms[index]['position'] = gloo.VertexBuffer(vertices)
-            self._volumePrograms[index]['u_model'] = model
-            self._volumePrograms[index]['u_view'] = self._createViewMatrix()
-            gloo.set_state(None, cull_face=True)
-            gloo.set_state(None, stencil_test=True)
-            gloo.set_stencil_func('always', 0, ~0)
-            # step 3 : draw front faces, depth test and stencil buffer increment
-            gloo.set_stencil_op('keep', 'incr', 'keep')
-            gloo.set_cull_face('front')
-            self._volumePrograms[index].draw('triangles')
-            # step 4 : draw back faces, depth test and stencil buffer decrement
-            gloo.set_stencil_op('keep', 'decr', 'keep')
-            gloo.set_cull_face('back')
-            self._volumePrograms[index].draw('triangles')
+        self._volumePrograms[index]['position'] = gloo.VertexBuffer(vertices)
+        self._volumePrograms[index]['u_model'] = model
+        self._volumePrograms[index]['u_view'] = self._createViewMatrix()
+
+    def drawVolumes(self):
+        for prog in self._volumePrograms:
+            with self._frame_buffer:
+                gloo.set_state(None, cull_face=True)
+                gloo.set_state(None, stencil_test=True)
+                gloo.set_stencil_func('always', 0, ~0)
+                # step 3 : draw front faces, depth test and stencil buffer increment
+                gloo.set_stencil_op('keep', 'incr', 'keep')
+                gloo.set_cull_face('front')
+                prog.draw('triangles')
+                # step 4 : draw back faces, depth test and stencil buffer decrement
+                gloo.set_stencil_op('keep', 'decr', 'keep')
+                gloo.set_cull_face('back')
+                prog.draw('triangles')
 
     def update(self):
         if self.active:
             #create shadow volumes
-            self._volumes = self.drawVolumes()
-
-            # gloo.set_depth_func('equal')
-            gloo.set_state(None, cull_face=False)
-            # gloo.set_state(None, stencil_test=True)
-            # gloo.set_stencil_func('equal', 0, 0)
-            # gloo.set_stencil_op('keep', 'keep', 'keep')
-            # self._stencil_buffer.deactivate()
-            # for obj in self._objects:
-            self.draw()
-            # # draw scene
-            # normal = numpy.array(numpy.matrix(numpy.dot(view, model)).I.T)
-            # self._program['u_normal'] = normal
-            # self._program['u_light_position'] = self._light.getPosition()
-            # self._program['u_light_color'] = self._light.getColor()
-            # self._program['u_model'] = self._model
-            # self._program['u_view'] = self._view
-            # self._program['u_projection'] = self._projection
-            # self._program['u_color'] = (0.5, 0.5, 0.8)
-            # # shadow volumes creation
-            # # http://archive.gamedev.net/archive/reference/articles/article1990.html
-            # with self._frame_buffer:
-            #     # step 1 : render scene with lights turned off
-            #     self._color_buffer.activate()
-            #     self._depth_buffer.activate()
-            #     self._program['u_light_color'] = (0,0,0)
-            #     self._program.draw('triangles', self._indices)
-            #     self._program['u_light_color'] = self._light.getColor()
-            #     # step 2 : turn off color and depth buffers
-            #     self._color_buffer.deactivate()
-            #     self._depth_buffer.deactivate()
-            #     self._stencil_buffer.activate()
-            #     gloo.set_state(None, cull_face=True)
-            #     gloo.set_state(None, stencil_test=True)
-            #     # step 3 : draw front faces, depth test and stencil buffer increment
-            #     gloo.set_stencil_func('always', 0, 0)
-            #     gloo.set_stencil_op('keep', 'incr', 'keep')
-            #     gloo.set_cull_face('front')
-            #     self._program.draw('triangles', self._indices) # SHOULD DRAW SHADOW VOLUMES
-            #     # step 4 : draw back faces, depth test and stencil buffer decrement
-            #     gloo.set_stencil_op('keep', 'decr', 'keep')
-            #     gloo.set_cull_face('back')
-            #     self._program.draw('triangles', self._indices) # SHOULD DRAW SHADOW VOLUMES
-            # self._color_buffer.activate()
-            # self._depth_buffer.activate()
-            # # step 5 : turn on color and depth buffers
-            # gloo.set_depth_func('equal')
-            # gloo.set_state(None, stencil_test=True)
-            # gloo.set_stencil_func('equal', 0, 0)
-            # gloo.set_stencil_op('keep', 'keep', 'keep')
-            # # step 6 : draw scene with lights turned on where stencil buffer is 0
-
-
-            # # draw scene
-            # self._program.draw('triangles', self._indices)
+            self.createVolumes()
+            self.drawVolumes()
+            with self._frame_buffer:
+                data = GL.glReadPixels(0,0, DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_STENCIL_INDEX, GL.GL_BYTE)
+            GL.glDrawPixels(DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_RED,GL.GL_BYTE, data)
 
     def terminate(self):
         self.active = False
