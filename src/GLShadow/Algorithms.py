@@ -404,7 +404,10 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             self._volumePrograms[i] = gloo.Program(vertex_str, fragment_str)
             self._volumePrograms[i]['u_projection'] = self._projection
             # ortho(-5, +5, -5, +5, 10, 50)
-            self._volumePrograms[i]['u_color'] = DEFAULT_COLOR
+            if self._objects[i].getColor():
+                self._volumePrograms[i]['u_color'] = self._objects[i].getColorAlpha()
+            else:
+                self._volumePrograms[i]['u_color'] = DEFAULT_COLOR
 
         self.active = True
             
@@ -413,8 +416,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
     def createVolumes(self):
         self._lights[0].setModified(True)
         if self._lights[0].wasModified():
-            with self._frame_buffer:
-                gloo.clear(stencil=True, depth=True, color=True)
             # for each object
             lightPosition = range(len(self._objects))
             for i in range(len(self._objects)):
@@ -450,36 +451,50 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         self._volumePrograms[index]['u_view'] = self._createViewMatrix()
 
     def drawVolumes(self):
+        # gloo.clear(color=True, depth=True, stencil=True)
+        gloo.set_state(None, stencil_test=True, cull_face=True)
+        gloo.set_stencil_func('always', 0, ~0)
+        # step 3 : draw front faces, depth test and stencil buffer increment
+        gloo.set_stencil_op('keep', 'incr', 'keep')
+        gloo.set_cull_face('front')
         for prog in self._volumePrograms:
-            with self._frame_buffer:
-                gloo.set_state(None, cull_face=True)
-                gloo.set_state(None, stencil_test=True)
-                gloo.set_stencil_func('always', 0, ~0)
-                # step 3 : draw front faces, depth test and stencil buffer increment
-                gloo.set_stencil_op('keep', 'incr', 'keep')
-                gloo.set_cull_face('front')
-                prog.draw('triangles')
-                # step 4 : draw back faces, depth test and stencil buffer decrement
-                gloo.set_stencil_op('keep', 'decr', 'keep')
-                gloo.set_cull_face('back')
-                prog.draw('triangles')
+            prog.draw('triangles')
+        # step 4 : draw back faces, depth test and stencil buffer decrement
+        gloo.set_stencil_op('keep', 'decr', 'keep')
+        gloo.set_cull_face('back')
+        for prog in self._volumePrograms:
+            prog.draw('triangles')
 
     def update(self):
         if self.active:
-            #create shadow volumes
             self.createVolumes()
-            self.drawVolumes()
-            with self._frame_buffer:
-                data = GL.glReadPixels(0,0, DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_STENCIL_INDEX, GL.GL_BYTE)
-            GL.glDrawPixels(DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_RED,GL.GL_BYTE, data)
+            GL.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT | GL.GL_LIGHTING_BIT | GL.GL_STENCIL_BUFFER_BIT);
+            for prog in self._programs:
+                prog['u_light_color'] = [0,0,0]
+            self.draw()
+            for prog in self._programs:
+                prog['u_light_color'] = self._lights[0].getColor()
+            #create shadow volumes
+            # with self._frame_buffer:
+            GL.glPushAttrib(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_POLYGON_BIT | GL.GL_STENCIL_BUFFER_BIT);
 
-    def terminate(self):
-        self.active = False
-        self._positions = []
-        self._indices = []
-        self._normals = []
-        self._camera = None
-        self._light = None
+            GL.glColorMask(0, 0, 0, 0); # do not write to the color buffer
+            GL.glDepthMask(0); # do not write to the depth (Z) buffer
+            self.drawVolumes()
+            GL.glPopAttrib()
+            # with self._frame_buffer:
+            #     data = GL.glReadPixels(0,0, DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_STENCIL_INDEX, GL.GL_BYTE)
+            # GL.glDrawPixels(DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_RED,GL.GL_BYTE, data)
+            # text = gloo.Texture2D(data)
+            # for prog in self._programs:
+            #     prog['u_stencil_buffer'] = text
+            # self._stencil_buffer.activate()
+            gloo.set_depth_func('equal')
+            gloo.set_state(None, stencil_test=True)
+            gloo.set_stencil_func('equal', 0, ~0)
+            gloo.set_stencil_op('keep','keep','keep')
+            self.draw()
+            GL.glPopAttrib()
 
 
 if __name__ == '__main__':
