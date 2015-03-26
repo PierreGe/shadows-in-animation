@@ -62,14 +62,13 @@ void main()
     float bias = $bias$*tan(acos(cosTheta));
     bias = clamp(bias, 0,0.01);
 
-    float visibility = 1.0;
+    float visibility = 1.0 / $LIGHT_NUMBER_FLOAT$;
     for (int j = 0; j < antialiasing_level; ++j)
     {
-      if ( texture2D( u_shadow_maps[i], v_shadow_coords[i].xy + poissonDisk[i]/spreading).z  <  (v_shadow_coords[i].z-bias)){
+      if ( texture2D( u_shadow_maps[i], v_shadow_coords[i].xy + poissonDisk[j]/spreading).z  <  (v_shadow_coords[i].z-bias)){
           visibility -= shadow_precision;
       }
     }
-    gl_FragColor += visibility * v_color * cosTheta * vec4(u_lights_intensity[i], 1) / $LIGHT_NUMBER_FLOAT$ + 
-    visibility * v_color * pow(cosAlpha, 5) * vec4(u_lights_intensity[i], 1) / $LIGHT_NUMBER_FLOAT$;
+    gl_FragColor += visibility * v_color * (cosTheta + pow(cosAlpha, 5)) * vec4(u_lights_intensity[i], 1);
   }
 }
