@@ -364,8 +364,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         self.C_nb_edges = [None for _ in range(len(self._objects))]
         self._volumePrograms = [None for _ in range(len(self._objects))]
         vertex_str, fragment_str = \
-            self._loadShaders(vertex_filename=NoShadowAlgorithm.VERTEX_SHADER_FILENAME,\
-                              fragment_filename=NoShadowAlgorithm.FRAGMENT_SHADER_FILENAME)
+            self._loadShaders(vertex_filename="shaders/shadowvolumealgo.vertexshader",\
+                              fragment_filename="shaders/shadowvolumealgo.fragmentshader")
         for i in range(len(self._objects)):
             self.C_positions[i] = (Vector * len(self._objects[i].getVertices()))
             j = 0
@@ -402,6 +402,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
             self._volumePrograms[i] = gloo.Program(vertex_str, fragment_str)
             self._volumePrograms[i]['u_projection'] = self._projection
+            self._volumePrograms[i]['u_bias_matrix'] = ShadowMapAlgorithm.BIAS_MATRIX
             # ortho(-5, +5, -5, +5, 10, 50)
             if self._objects[i].getColor():
                 self._volumePrograms[i]['u_color'] = self._objects[i].getColorAlpha()
@@ -413,7 +414,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def createVolumes(self):
-        self._lights[0].setModified(True)
+        # self._lights[0].setModified(True)
         if self._lights[0].wasModified():
             # for each object
             lightPosition = range(len(self._objects))
@@ -445,8 +446,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             d = numpy.add(edge[0], extrudeMagnitude * numpy.subtract(edge[0], lightPosition))
             vertices.extend([a,b,c,d])
         self._volumePrograms[index]['position'] = gloo.VertexBuffer(vertices)
-        self._volumePrograms[index]['u_model'] = model
-        self._volumePrograms[index]['u_view'] = self._createViewMatrix()
 
     def drawVolumes(self):
         # gloo.clear(color=True, depth=True, stencil=True)
@@ -455,18 +454,30 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         # step 3 : draw front faces, depth test and stencil buffer increment
         gloo.set_stencil_op('keep', 'incr', 'keep')
         gloo.set_cull_face('front')
-        for prog in self._volumePrograms:
+        for i in range(len(self._objects)):
+            prog = self._volumePrograms[i]
+            obj = self._objects[i]
+            model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *obj.getPosition())
+            prog['u_model'] = model
+            prog['u_view'] = self._createViewMatrix()
             prog.draw('triangles')
         # step 4 : draw back faces, depth test and stencil buffer decrement
         gloo.set_stencil_op('keep', 'decr', 'keep')
         gloo.set_cull_face('back')
-        for prog in self._volumePrograms:
+        for i in range(len(self._objects)):
+            prog = self._volumePrograms[i]
+            obj = self._objects[i]
+            model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *obj.getPosition())
+            prog['u_model'] = model
+            prog['u_view'] = self._createViewMatrix()
             prog.draw('triangles')
 
     def update(self):
         if self.active:
             self.createVolumes()
-            GL.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT | GL.GL_LIGHTING_BIT | GL.GL_STENCIL_BUFFER_BIT);
+            GL.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
             for prog in self._programs:
                 prog['u_light_color'] = [0,0,0]
             self.draw()
@@ -475,20 +486,12 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             #create shadow volumes
             # with self._frame_buffer:
             GL.glPushAttrib(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_POLYGON_BIT | GL.GL_STENCIL_BUFFER_BIT);
-
             GL.glColorMask(0, 0, 0, 0); # do not write to the color buffer
             GL.glDepthMask(0); # do not write to the depth (Z) buffer
             self.drawVolumes()
             GL.glPopAttrib()
-            # with self._frame_buffer:
-            #     data = GL.glReadPixels(0,0, DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_STENCIL_INDEX, GL.GL_BYTE)
-            # GL.glDrawPixels(DEFAULT_SHAPE[0], DEFAULT_SHAPE[1], GL.GL_RED,GL.GL_BYTE, data)
-            # text = gloo.Texture2D(data)
-            # for prog in self._programs:
-            #     prog['u_stencil_buffer'] = text
-            # self._stencil_buffer.activate()
             gloo.set_depth_func('equal')
-            gloo.set_state(None, stencil_test=True)
+            gloo.set_state(None, stencil_test=True, cull_face = False)
             gloo.set_stencil_func('equal', 0, ~0)
             gloo.set_stencil_op('keep','keep','keep')
             self.draw()
