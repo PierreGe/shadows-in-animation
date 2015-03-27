@@ -20,7 +20,7 @@ from GLShadow.SceneObject import SceneObject
 from GLShadow.ObjParser import ObjParser
 
 DEFAULT_COLOR = (0.7, 0.7, 0.7, 1)
-DEFAULT_SHAPE = (800,600)
+DEFAULT_SHAPE = (1920,1080)
 
 class AbstractAlgorithm:
     def __init__(self):
@@ -351,10 +351,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         AbstractAlgorithm.init(self, objects, camera, lights, options)
 
         shape=DEFAULT_SHAPE
-        self._depth_buffer = gloo.DepthBuffer(shape=shape)
-        self._stencil_buffer = gloo.StencilBuffer(shape=shape)
-        self._frame_buffer = gloo.FrameBuffer(depth=self._depth_buffer,
-                                                stencil=self._stencil_buffer)
 
         self.C_positions = [None for _ in range(len(self._objects))]
         self.C_indices = [None for _ in range(len(self._objects))]
@@ -402,42 +398,37 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
             self._volumePrograms[i] = gloo.Program(vertex_str, fragment_str)
             self._volumePrograms[i]['u_projection'] = self._projection
-            self._volumePrograms[i]['u_bias_matrix'] = ShadowMapAlgorithm.BIAS_MATRIX
             # ortho(-5, +5, -5, +5, 10, 50)
-            if self._objects[i].getColor():
-                self._volumePrograms[i]['u_color'] = self._objects[i].getColorAlpha()
-            else:
-                self._volumePrograms[i]['u_color'] = DEFAULT_COLOR
+            self._volumePrograms[i]['u_bias_matrix'] = ShadowMapAlgorithm.BIAS_MATRIX
+        self.createVolumes()
 
         self.active = True
             
 
     # http://nuclear.mutantstargoat.com/articles/volume_shadows_tutorial_nuclear.pdf
     def createVolumes(self):
-        # self._lights[0].setModified(True)
-        if self._lights[0].wasModified():
-            # for each object
-            lightPosition = range(len(self._objects))
-            for i in range(len(self._objects)):
-                model = numpy.eye(4, dtype=numpy.float32)
-                translate(model, *self._objects[i].getPosition())
-                light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
-                lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
+        # for each object
+        lightPosition = range(len(self._objects))
+        for i in range(len(self._objects)):
+            model = numpy.eye(4, dtype=numpy.float32)
+            translate(model, *self._objects[i].getPosition())
+            light = numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model))
+            lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
 
-                libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
-                retEdges = []
-                size = self.C_nb_edges[i].contents.value
-                for j in range(size):
-                    edge = self.C_contour_edges[i][j]
-                    retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
-                self.createShadowTriangles(retEdges, i)
-            self._lights[0].setModified(False)
+            libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
+            retEdges = []
+            size = self.C_nb_edges[i].contents.value
+            for j in range(size):
+                edge = self.C_contour_edges[i][j]
+                retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
+            self.createShadowTriangles(retEdges, i)
+        self._lights[0].setModified(False)
 
     def createShadowTriangles(self, contour_edges, index):
         model = numpy.eye(4, dtype=numpy.float32)
         translate(model, *self._objects[index].getPosition())
         lightPosition = numpy.array(numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model)).tolist()[:-1])
-        extrudeMagnitude = 20
+        extrudeMagnitude = 100
         vertices = []
         for edge in contour_edges:
             a = edge[0]
@@ -452,7 +443,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         gloo.set_state(None, stencil_test=True, cull_face=True)
         gloo.set_stencil_func('always', 0, ~0)
         # step 3 : draw front faces, depth test and stencil buffer increment
-        gloo.set_stencil_op('keep', 'incr', 'keep')
+        gloo.set_stencil_op('keep', 'keep', 'decr')
         gloo.set_cull_face('front')
         for i in range(len(self._objects)):
             prog = self._volumePrograms[i]
@@ -463,7 +454,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             prog['u_view'] = self._createViewMatrix()
             prog.draw('triangles')
         # step 4 : draw back faces, depth test and stencil buffer decrement
-        gloo.set_stencil_op('keep', 'decr', 'keep')
+        gloo.set_stencil_op('keep', 'keep', 'incr')
         gloo.set_cull_face('back')
         for i in range(len(self._objects)):
             prog = self._volumePrograms[i]
@@ -476,7 +467,8 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
 
     def update(self):
         if self.active:
-            self.createVolumes()
+            if self._lights[0].wasModified():
+                self.createVolumes()
             GL.glPushAttrib(GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
             for prog in self._programs:
                 prog['u_light_color'] = [0,0,0]
@@ -491,7 +483,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             self.drawVolumes()
             GL.glPopAttrib()
             gloo.set_depth_func('equal')
-            gloo.set_state(None, stencil_test=True, cull_face = False)
+            gloo.set_state(None, stencil_test=True)
             gloo.set_stencil_func('equal', 0, ~0)
             gloo.set_stencil_op('keep','keep','keep')
             self.draw()
