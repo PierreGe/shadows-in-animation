@@ -443,8 +443,6 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         gloo.set_state(None, stencil_test=True, cull_face=True)
         gloo.set_stencil_func('always', 0, ~0)
         # step 3 : draw front faces, depth test and stencil buffer increment
-        gloo.set_stencil_op('keep', 'keep', 'decr')
-        gloo.set_cull_face('front')
         for i in range(len(self._objects)):
             prog = self._volumePrograms[i]
             obj = self._objects[i]
@@ -452,18 +450,21 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             translate(model, *obj.getPosition())
             prog['u_model'] = model
             prog['u_view'] = self._createViewMatrix()
+            gloo.set_stencil_op('keep', 'keep', 'decr')
+            gloo.set_cull_face('front')
+            prog.draw('triangle_strip')
+            gloo.set_stencil_op('keep', 'keep', 'incr')
+            gloo.set_cull_face('back')
             prog.draw('triangle_strip')
         # step 4 : draw back faces, depth test and stencil buffer decrement
-        gloo.set_stencil_op('keep', 'keep', 'incr')
-        gloo.set_cull_face('back')
-        for i in range(len(self._objects)):
-            prog = self._volumePrograms[i]
-            obj = self._objects[i]
-            model = numpy.eye(4, dtype=numpy.float32)
-            translate(model, *obj.getPosition())
-            prog['u_model'] = model
-            prog['u_view'] = self._createViewMatrix()
-            prog.draw('triangle_strip')
+        # for i in range(len(self._objects)):
+        #     prog = self._volumePrograms[i]
+        #     obj = self._objects[i]
+        #     model = numpy.eye(4, dtype=numpy.float32)
+        #     translate(model, *obj.getPosition())
+        #     prog['u_model'] = model
+        #     prog['u_view'] = self._createViewMatrix()
+        #     prog.draw('triangle_strip')
 
     def update(self):
         if self.active:
