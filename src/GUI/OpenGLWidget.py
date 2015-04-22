@@ -202,8 +202,8 @@ class OpenGLWidget(QtOpenGL.QGLWidget):
             diff1 = numpy.subtract(prev, curr)
             diff2 = numpy.subtract(next, curr)
             normals.append(numpy.cross(diff2, diff1))
-        I = [0,1,2, 0,2,3,  0,3,4, 0,4,5,  0,5,6, 0,6,1,
-             1,6,7, 1,7,2,  7,4,3, 7,3,2,  4,7,6, 4,6,5]
+        I = [0,1,2, 0,2,3, 0,3,4, 7,4,3, 0,4,5, 0,5,1,
+                      2,1,5, 2,5,6, 7,3,2, 7,2,6, 6,5,4, 6,4,7]
         # O = [0,1, 1,2, 2,3, 3,0,
         #      4,7, 7,6, 6,5, 5,4,
         #      0,5, 1,6, 2,7, 3,4 ]
