@@ -76,10 +76,22 @@ std::ostream& operator<<(std::ostream& out, const Triangle& triangle) {
 	return out;
 }
 
+void add(Vector* vector1, Vector* vector2, Vector* res) {
+	res->x = vector1->x + vector2->x;
+	res->y = vector1->y + vector2->y;
+	res->z = vector1->z + vector2->z;
+}
+
 void subtract(Vector* vector1, Vector* vector2, Vector* res) {
 	res->x = vector1->x - vector2->x;
 	res->y = vector1->y - vector2->y;
 	res->z = vector1->z - vector2->z;
+}
+
+void divide(Vector* vector, float divi) {
+	vector->x /= divi;
+	vector->y /= divi;
+	vector->z /= divi;
 }
 
 void cross(Vector* vector1, Vector* vector2, Vector* res) {
@@ -92,7 +104,17 @@ float dot(Vector* vector1, Vector* vector2) {
 	return vector1->x * vector2->x + vector1->y * vector2->y + vector1->z * vector2->z;
 }
 
-void computeAverageTrianglePosition(Triangle* triangle, Vector* ret) {
+
+bool counterclockwise(Vector* vector1, Vector* vector2, Vector* center, Vector* normal) {
+	Vector first, second, crossProd;
+	subtract(vector1, center, &first);
+	subtract(vector2, center, &second);
+	cross(&first, &second, &crossProd);
+	return dot(normal, &crossProd) >= 0;
+}
+
+
+void computeTriangleCenter(Triangle* triangle, Vector* ret) {
 	int sumX = 0, sumY = 0, sumZ = 0;
 	int i;
 	Vector* triangleXYZ = (Vector*) triangle;
@@ -111,7 +133,7 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 	std::unordered_set<Edge> edgesSet;
 	int index_indices;
 	Triangle triangle;
-	Vector averageTrianglePos;
+	Vector triangleCenter;
 	Vector lightDir;
 	Vector triangleDir1, triangleDir2;
 	Vector triangleNormal;
@@ -122,8 +144,8 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 		triangle.one = positions[a];
 		triangle.two = positions[b];
 		triangle.three = positions[c];
-		computeAverageTrianglePosition(&triangle, &averageTrianglePos);
-		subtract(&averageTrianglePos, &lightPosition, &lightDir);
+		computeTriangleCenter(&triangle, &triangleCenter);
+		subtract(&triangleCenter, &lightPosition, &lightDir);
 		subtract(&triangle.two, &triangle.one, &triangleDir1);
 		subtract(&triangle.three, &triangle.one, &triangleDir2);
 		cross(&triangleDir1, &triangleDir2, &triangleNormal);
@@ -170,32 +192,6 @@ void findContourEdges2(Vector* positions, int* indices, Vector* normals,
 	}
 	*returnSize = edgesSet.size();
 }
-	        // positions = self._objects[index].getVertices()
-	        // indices = self._objects[index].getIndices()
-	        // normals = self._objects[index].getNormals()
-	        // ret = trianglenumpy.array([])
-	        // lightPosition = numpy.dot(self._light.getPosition() + [0], numpy.linalg.inv(self._model))
-	        // for i in range(0,len(indices), 3):
-	        //     a = indices[i]
-	        //     b = indices[i+1]
-	        //     c = indices[i+2]
-	        //     triangle = numpy.array([positions[a], positions[b], positions[c]])
-	        //     averageTrianglePos = numpy.array([sum([x[0] for x in triangle])/3.0,
-	        //                           sum([x[1] for x in triangle])/3.0,
-	        //                           sum([x[2] for x in triangle])/3.0, 0.0])
-        	//     lightDir = numpy.subtract(averageTrianglePos, lightPosition)
-        	//     triangleNormal = numpy.append(numpy.cross(numpy.subtract(triangle[1], triangle[0]), numpy.subtract(triangle[2], triangle[0])), numpy.array([1]))
-        	//     if numpy.dot(lightDir, triangleNormal) >= 0:
-        	//         for edge in numpy.nditer(numpy.array([[positions[a], positions[b]],[positions[a], positions[c]],[positions[b], positions[c]]])):
-        	//             if edge in ret.tolist() or [edge[1], edge[0]] in ret.tolist():
-        	//                 try:
-        	//                     ret.remove(edge)
-        	//                 except Exception, e:
-        	//                     ret.remove([edge[1], edge[0]])
-        	//             else:
-        	//                 numpy.append(ret,edge)
-        	// return ret
-
 
 extern "C" {
 	void findContourEdges(Vector* positions, int* indices, Vector* normals,

@@ -348,6 +348,7 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
         AbstractAlgorithm.__init__(self)
 
     def init(self, objects, camera, lights, options):
+        # del objects[1]
         AbstractAlgorithm.init(self, objects, camera, lights, options)
 
         shape=DEFAULT_SHAPE
@@ -416,27 +417,42 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             lightPosition[i] = Vector(x=light[0],y=light[1],z=light[2])
 
             libvolume.findContourEdges(self.C_positions[i], self.C_indices[i], self.C_normals[i], self.C_size_indices[i],lightPosition[i], self.C_contour_edges[i], self.C_nb_edges[i])
-            retEdges = []
+            vertices = []
             size = self.C_nb_edges[i].contents.value
             for j in range(size):
                 edge = self.C_contour_edges[i][j]
-                retEdges.append([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
-            self.createShadowTriangles(retEdges, i)
+                vertices.extend([numpy.array([vec.x, vec.y, vec.z]) for vec in [edge.one, edge.two]])
+            light = numpy.array([light[0], light[1], light[2]])
+
+            center = [sum(v[j] for v in vertices)/(size*2) for j in range(3)]
+            lightDir = numpy.subtract(light, center)
+
+            def clockwise(v1, v2):
+                return numpy.dot(lightDir, numpy.cross(numpy.subtract(v1, center), numpy.subtract(v2, center))) >= 0
+
+            for j in range(0, len(vertices), 2):
+                if not clockwise(vertices[j], vertices[j+1]):
+                    tmp = vertices[j]
+                    vertices[j] = vertices[j+1]
+                    vertices[j+1] = tmp
+
+            self.createShadowTriangles(vertices, i)
         self._lights[0].setModified(False)
 
-    def createShadowTriangles(self, contour_edges, index):
+    def createShadowTriangles(self, vertices, index):
         model = numpy.eye(4, dtype=numpy.float32)
         translate(model, *self._objects[index].getPosition())
         lightPosition = numpy.array(numpy.dot(self._lights[0].getPosition() + [0], numpy.linalg.inv(model)).tolist()[:-1])
         extrudeMagnitude = 100
-        vertices = []
-        for edge in contour_edges:
-            a = edge[0]
-            b = edge[1]
-            c = numpy.add(edge[1], extrudeMagnitude * numpy.subtract(edge[1], lightPosition))
-            d = numpy.add(edge[0], extrudeMagnitude * numpy.subtract(edge[0], lightPosition))
-            vertices.extend([a,b,c,d])
-        self._volumePrograms[index]['position'] = gloo.VertexBuffer(vertices)
+        newVertices = []
+        for i in range(0, len(vertices), 2):
+            a = vertices[i]
+            b = vertices[i+1]
+            c = numpy.add(b, extrudeMagnitude * numpy.subtract(b, lightPosition))
+            d = numpy.add(a, extrudeMagnitude * numpy.subtract(a, lightPosition))
+            newVertices.extend([a,b,c])
+            newVertices.extend([a,c,d])
+        self._volumePrograms[index]['position'] = gloo.VertexBuffer(newVertices)
 
     def drawVolumes(self):
         # gloo.clear(color=True, depth=True, stencil=True)
@@ -450,12 +466,12 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             translate(model, *obj.getPosition())
             prog['u_model'] = model
             prog['u_view'] = self._createViewMatrix()
-            gloo.set_stencil_op('keep', 'keep', 'decr')
-            gloo.set_cull_face('front')
-            prog.draw('triangle_strip')
             gloo.set_stencil_op('keep', 'keep', 'incr')
             gloo.set_cull_face('back')
-            prog.draw('triangle_strip')
+            prog.draw('triangles')
+            gloo.set_stencil_op('keep', 'keep', 'decr')
+            gloo.set_cull_face('front')
+            prog.draw('triangles')
         # step 4 : draw back faces, depth test and stencil buffer decrement
         # for i in range(len(self._objects)):
         #     prog = self._volumePrograms[i]
@@ -489,6 +505,21 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             gloo.set_stencil_op('keep','keep','keep')
             self.draw()
             GL.glPopAttrib()
+
+
+            # gloo.set_state(None, cull_face=True)
+            # gloo.set_cull_face('back')
+            # for prog in self._volumePrograms:
+            #     prog['u_model'] = numpy.eye(4, dtype=numpy.float32)
+            #     prog['u_view'] = self._createViewMatrix()
+            #     prog['u_color'] = [1,0,0,1]
+            #     prog.draw('triangles')
+            # gloo.set_cull_face('front')
+            # for prog in self._volumePrograms:
+            #     prog['u_model'] = numpy.eye(4, dtype=numpy.float32)
+            #     prog['u_view'] = self._createViewMatrix()
+            #     prog['u_color'] = [0,0,1,1]
+            #     prog.draw('triangles')
 
 
 if __name__ == '__main__':
