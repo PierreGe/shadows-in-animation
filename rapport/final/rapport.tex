@@ -160,7 +160,7 @@ Nous avons utilisé OpenGL pour créer des scènes 3D, animer une/des caméra(s)
 
 Nous avons utilisé dans la mesure du possible un maximum les fonctions modernes d'OpenGl majoritairement présente dans les jeux et animations d'aujourd'hui. Le code propre a la 3D sera donc des shaders.
 
-Nous avons aussi choisi de ne pas utilisé de moteur de rendu 3D pour car utiliser à la place directement le langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque pas les opérations qui sont faites ce qui facilite a la comparaison des algorithmes.
+Nous avons aussi choisi de ne pas utilisé de moteur de rendu 3D pour car utiliser à la place directement le langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque pas les opérations qui sont faites ce qui facilite la comparaison des algorithmes.
 
 \subsection{Langages et bibliothèques utilisés}
 
@@ -169,17 +169,17 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 \begin{itemize}
 \item{Nous avons utilisé Python 2.7 comme langage de programmation car il permet un développement rapide et possède des bindings vers les bibliothèques OpenGL, OpenCL, numPy etc... écrites en C/C++. Il permet donc d'allier la rapidité d'écriture des langages de scripts à la rapidité d'exécution des langages compilés. Nous avons aussi utilisé des package du Python Package Index pour nous faciliter la t\^ache.}
 
-\item{Nous avons utilisé pyQt comme librairie qui s'interfacera avec la célèbre bibliothèque Qt 5. Nous avons utilisé cette interface graphique étant donnée sa facilité d'utilisation et son caractère complet. De plus nous avions pour la plupart déjà utilisée cette dernière durant notre cursus.}
+\item{Nous avons utilisé pyQt comme bibliothèque qui s'interfacera avec la célèbre bibliothèque Qt 5. Nous avons utilisé cette interface graphique étant donnée sa facilité d'utilisation et son caractère complet. De plus nous avions pour la plupart déjà utilisée cette dernière durant notre cursus.}
 
 \item{Nous comptions utiliser OpenCL pour profiter de puissance de calcul des cartes graphiques modernes. Nous ne l'avons finalement pas utilisé car nous nous sommes redirigés vers la puissance de calcul de numpy associée avec quelques parties d'implémentation en C++}
 
-\item{Nous avons enfin utilisé vispy, librairie de visualisation 3D basée sur OpenGL qui permet d'utiliser les avantages d'OpenGL moderne et d'utiliser des shaders avec une certaine abstraction. Ceci permet d'effectuer les calculs de rendu graphique directement sur le GPU, ce qui accroit la vitesse d'exécution et donc les performances.
+\item{Nous avons enfin utilisé vispy, bibliothèque de visualisation 3D basée sur OpenGL qui permet d'utiliser les avantages d'OpenGL moderne et d'utiliser des shaders avec une certaine abstraction. Ceci permet d'effectuer les calculs de rendu graphique directement sur le GPU, ce qui accro\^it la vitesse d'exécution et donc les performances.
 }
 \end{itemize}
 
 \subsection{Scènes présentées}
 
-Plusieurs scènes ont été utilisées pour présenter et mettre en application les différents algorithmes. 
+Plusieurs scènes ont été créées pour présenter et mettre en application les différents algorithmes. 
 
 \begin{figure}[H]
 \includegraphics[scale=0.31]{images/exemple-scene.png}
@@ -190,46 +190,46 @@ Plusieurs scènes ont été utilisées pour présenter et mettre en application 
 \subsubsection{Création des scènes}
 Il est intéressant de pouvoir placer des modèles en hauteur, à différents endroits. Ceci permet de démontrer que lorsque les ombres sont absentes, on ne peut percevoir les informations relatives ni à la hauteur, ni au relief.
 
-Pour cela nous avons utiliser deux ressources :
+Pour cela nous avons utilisé deux ressources :
 
 \begin{enumerate}
   \item Des fichiers de configuration de la scène en JSON,
   \item Des modèles 3D au format libre OBJ.
 \end{enumerate}
 
-Un dossier prédéfinit contient un certain nombre de fichier JSON qui eux contiennent toutes les informations nécessaires a la création d'une scène. Ils contiennent :
+Un dossier prédéfini contient un certain nombre de fichier JSON contenant toutes les informations nécessaires a la création d'une scène :
 
 \begin{enumerate}
   \item Le nom de la scène,
   \item Une courte description de la scène,
-  \item Quels modèles 3D sont inclus à la scène,
+  \item Une liste de modèles 3D,
   \item Les algorithmes compatibles avec la scène,
-  \item La position de ces modèles 3D.
+  \item La position et la couleur ou texture de ces modèles 3D.
 \end{enumerate}
 
-Les modèle 3D au format OBJ proviennent de site internet proposant des modèles libres de droit et sont très divers de manière à pouvoir réaliser beaucoup de test différents : vélo, fractal de menger, mario et luigi, arbres, ...
+Les modèle 3D au format OBJ proviennent de sites internet proposant des modèles libres de droit et sont très divers de manière à pouvoir réaliser beaucoup de tests différents : vélo, fractal de menger, mario et luigi, arbres, ...
 
 \subsubsection{Lumières}
 
 Les lumières ont bien évidemment une importance capitale dans notre environnement de test.
 
-Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les mettre à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres ou des glitch pourrait apparaitre.
+Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les placer à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres où des anomalies pourraient apparaitre.
 
 
 \subsubsection{Animations}
 
-Pour rendre le programme plus interactif et pour pouvoir mieux observé les ombres, nous avons implémenté deux animations différentes.
+Pour rendre le programme plus interactif et pouvoir mieux observer les ombres, nous avons implémenté deux animations différentes qui peuvent s'activer et se désactiver indépendemment l'une de l'autre.
 
-Une première qui consiste a faire tourner de manière régulière la caméra autour du centre de la scène.
+Une première qui consiste à faire tourner de manière circulaire la caméra autour du centre de la scène.
 
-une deuxième qui consiste a faire tourner la lampe sélectionner dans la barre d'outils.
+une deuxième qui consiste à faire tourner la lampe sélectionnée dans la barre d'outils.
 
-\subsection{Metrics utilisé}
+\subsection{Metrics utilisés}
 
-Pour mesurer la performance d'un algorithme nous avons utilisé différentes mesures.
+Pour mesurer la performance d'un algorithme nous avons utilisé différentes unités de mesure.
 \subsubsection{Image par seconde}
-Le nombre d'image par seconde ou Frame par second (FPS) en anglais est une mesure indiquant le nombre d'image affiché par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
-La méthode de calcul utilisé est la suivante :
+Le nombre d'images par seconde ou Frame Per Second (FPS) en anglais est une mesure indiquant le nombre d'images affichées par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
+La méthode de calcul utilisée est la suivante :
 
 $nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
 
@@ -237,10 +237,10 @@ $nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
 Pour obtenir un résultat stable, une moyenne est faite sur un échantillon d'une durée de 1 seconde.
 
 \subsubsection{CPU}
-Une librairie python permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une haute utilisation indique un algorithme peu performant.
+Une bibliothèque Python permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une haute utilisation indique un algorithme peu performant.
 \subsubsection{Mémoire}
 
-Une librairie python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une haute utilisation indique un algorithme peu performant.
+Une bibliothèque Python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une haute utilisation indique un algorithme peu performant.
 
 \section{Algorithmes implémentés} 
 
@@ -249,11 +249,11 @@ Une librairie python permet de mesurer le nombre de megabytes de mémoire vive u
 \begin{figure}[H]
 \includegraphics[scale=0.5]{images/shadow_volume.png}
 \centering
-\captionsource{Shadown volume}{https://hal.inria.fr/inria-00281388}
+\captionsource{Shadow volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
 L'algorithme de shadow volume peut être divisé en deux étapes.
 
-Tout d'abord, il s'agit de trouver les contours de chaque objet chargé dans la scène depuis le point de vue de la lumière. 
+Tout d'abord, il s'agit de trouver les contours de chaque objet de la scène depuis le point de vue de la lumière. 
 Puisque le point de vue se trouve à la position de la lumière, les contours à trouver sont toutes les arêtes communes à un triangle se trouvant dans la lumière et un triangle se trouvant dans l'ombre. 
 L'algorithme fonctionne en ajoutant les ar\^etes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
 De cette manière, seules les arêtes qui ne sont pas communes à deux triangles dans l'ombre (donc qui sont communes à un triangle dans l'ombre et un dans la lumière) sont conservées.
