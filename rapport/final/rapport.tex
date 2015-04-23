@@ -43,7 +43,7 @@
 \end{titlepage}
 
 \begin{abstract}
-Ce rapport présente les différentes techniques de rendu d'ombre par ordinateurs, les résultats obtenues lors l'implémentation et les perspectives de ces dernières.
+Les ombres sont devenues un élément important dans le réalisme de scènes de films d'animation ainsi que de jeux vidéo. Nous nous intéressons dans cette étude aux différentes techniques d'implémentation de rendu d'ombre par ordinateurs, les résultats obtenus lors de l'implémentation et les perspectives de ces derniers. Les trois principaux types d'algorithmes seront ici comparés pour déterminer les cas d'utilisation de chacun et les différences du point de vue des performances et de qualité de rendu des ombres.
 \end{abstract}
 
 
@@ -63,7 +63,7 @@ Nous avons, lors de ce projet d'année, étudié l'impact des ombres sur le réa
 Nous nous sommes intéressés plus particulièrement aux algorithmes en temps réel car ceux-ci sont plus intéressants et plus attractifs pour une présentation pour le Printemps des Sciences\footnote{http://www.printempsdessciences.be}.
 
 Deux types d'ombres peuvent être distingués : les \textit{soft shadows} et les \textit{hard shadows}. Les premières ont des bords diffus et les secondes ont des bords nets. Plus la source de lumière est proche d'un objet, plus les bords d'une ombre réaliste sont diffus et inversément.
-Dans ce projet, nous nous sommes intéressés uniquement aux algorithmes de génération des \textit{soft shadows} car ils permettent également de générer des \textit{hard shadows}.
+Dans ce projet, nous nous somme intéressé uniquement aux algorithmes de génération des \textit{soft shadows} car ils permettent également de générer des \textit{hard shadows}.
 
 Nous avons testé les différents aspects et effets des ombres dans différents scénarios que nous avons mis en application. Nous avons fait varier les objets, les sources lumineuses, leur nombre et leur mouvement afin de présenter des situations se rapprochant de la réalité.
 
@@ -80,7 +80,7 @@ Au fil du temps, différents types d'algorithmes permettant de générer ces omb
 \item les \textit{Hard Shadow},
 \item les \textit{Soft Shadow}.
 \end{itemize}
-Les ombres de type \textit{Hard Shadow} ont été moins considérées ici car elles sont moins réalistes. En effet, ces ombres sont uniformément noires et ne représentent que l'ombre générée par un point lumineux. D'un autre côté, les ombres de type \textit{Soft Shadow} sont beaucoup plus réalistes et sont celles qui sont les plus utilisées. Les algorithmes permettant de faire des ombres de type Soft Shadow seront donc ceux qui seront le plus étudiés ici.
+Les ombres de type \textit{Hard Shadow} ont été moins considérés ici car elles sont moins réalistes. En effet, ces ombres sont uniformément noires et ne représentent que l'ombre générée par un point lumineux. D'un autre côté, les ombres de type \textit{Soft Shadow} sont beaucoup plus réalistes et sont celles qui sont les plus utilisées. Les algorithmes permettant de faire des ombres de type Soft Shadow seront donc ceux qui seront le plus étudiés ici.
 
 Il existe plusieurs types de \textit{Soft Shadow algorithms}, les principaux sont ceux de:
 \begin{itemize}
@@ -255,10 +255,10 @@ L'algorithme de shadow volume peut être divisé en deux étapes.
 
 Tout d'abord, il s'agit de trouver les contours de chaque objet chargé dans la scène depuis le point de vue de la lumière. 
 Puisque le point de vue se trouve à la position de la lumière, les contours à trouver sont toutes les arêtes communes à un triangle se trouvant dans la lumière et un triangle se trouvant dans l'ombre. 
-L'algorithme fonctionne en ajoutant les ar\^etes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
+L'algorithme fonctionne en ajoutant les are\^tes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
 De cette manière, seules les arêtes qui ne sont pas communes à deux triangles dans l'ombre (donc qui sont communes à un triangle dans l'ombre et un dans la lumière) sont conservées.
-Pour déterminer si un triangle est dans l'ombre ou la lumière, on calcule le vecteur normal de ce triangle et on fait le produit scalaire de ce vecteur avec le vecteur de direction de la lumière. Si le résultat est positif, le triangle est dirigé dans le même sens que la lumière et donc se trouve sur le c\^oté opposé à la lumière.
-Une fois que les ar\^etes définissant les contours sont déterminées, on les projette à l'infini dans la direction opposée à la lumière ce qui crée une homothétie du contour. Le contour de l'objet et son homothétie délimitent alors un volume, appelé shadow volume ou volume d'ombre. 
+Pour déterminer si un triangle est dans l'ombre ou la lumière, on calcule le vecteur normal de ce triangle et on fait le produit scalaire de ce vecteur avec le vecteur de direction de la lumière. Si le résultat est positif, le triangle est dirigé dans le même sens que la lumière et donc se trouve sur le co\^té opposé à la lumière.
+Une fois que les are\^tes définissant les contours sont déterminées, on les projette à l'infini dans la direction opposée à la lumière ce qui crée une homothétie du contour. Le contour de l'objet et son homothétie délimitent alors un volume, appelé shadow volume ou volume d'ombre. 
 Nous avons commencé par implémenter cette étape en Python avant de nous rendre compte que la puissance de calcul nécessaire était trop grande.
 Cette étape est donc implémentée dans une fonction en C++ appelée depuis le code Python.
 
@@ -321,7 +321,6 @@ Après avoir ajouté uniquement l'ombre que les objets et personnages créent su
 
 \section{Les différents types d'ombre}
 
-\todo{ICI ICI ICI. NON PAS LA. ICI!!}
 D'après nos résultats subjectif, les algorithmes hard shadow
 
 \section{Résultats de chaque algorithme}
@@ -342,7 +341,7 @@ D'après nos résultats subjectif, les algorithmes hard shadow
 \end{table}
 
 \subsection{Shadow volume}
-Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne ma\^itrisons pas encore bien.
+Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne mai\^trisons pas encore bien.
 Nous pouvons donc évaluer les performances de cet algorithme mais pas son réalisme.
 L'étape la plus lente est de créer les shadows volumes mais, ne dépendant pas de la position de la caméra, cette étape est réalisée uniquement quand le nombre ou la position des lumières est modifiée.
 Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mais suffisant pour que l'image soit fluide.
@@ -353,8 +352,7 @@ Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mai
 
 Comme prévu, cet algorithme est le plus efficace des trois algorithmes considérés. Le résultat obtenu obtient un nombre de \textit{fps} plus que correct. Le réalisme offert dépend en grande partie de la résolution imposée de la shadow map. Une grande shadow map implique une grande précision mais également un plus grand nombre de calculs à réaliser. Cette approche apporte donc une ombre correcte et donc l'apport d'information qui en dépend. La résolution de la shadow map, influençant la précision de l'ombre peut toutefois être changée, pour offrir une ombre plus ou moins pixelisée. Puisque la shadow map est calculée du point de vue de la lumière, plus celle-ci est loin de la scène, plus la résolution nécessaire pour obtenir une bonne précision est grande.
 Les ombres sont crénelées à cause de la résolution limitée de la shadow map. Pour résoudre ce problème, on peut ajouter un biais lors du sampling dans la shadow map mais si ce biais devient trop grand, les ombres "flottent".
-On peut également ajouter du réalisme en modifiant la répartition du disque de Poisson de manière à flouter les contours mais en diminuant trop la répartition, on voit apparaître des nuages de points dans l'ombre. Quand on augmente trop la répartition, le floutage dispara\^it.
-Cet algorithme doit donc \^etre adapté au type de scène (objets sphériques, parallélipipèdiques,...) et de lumière.
+De la même manière on peut ajouter du réalisme en modifiant la répartition du disque de Poisson mais en augmentant la répartition de trop, on voit apparaître des nuages de points dans l'ombre.
 
 \todo{PLUS DE DETAILS ICI VOILA VOILA}
 
@@ -372,7 +370,7 @@ Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réu
 Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes. La technique du ray tracing peut reproduit de manières exact des phénomènes physique comme la refraction et la reflexion et des phénomènes optiques tels que les caustiques, l'illumination globale ou encore la dispersion lumineuse.
 
 Sans surprise, la scène sans aucune ombre offre les plus grandes performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
-Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
+Les scènes sans ombres peuvent e\^tre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
 
 L'algorithme d'auto-ombre ne diminue pas beaucoup les performances par rapport à l'algorithme sans ombre car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes.
 
@@ -406,9 +404,9 @@ Moins précis que le ray-tracing mais également plus performant et plus adapté
 
 \chapter{Conclusion et perspectives}
 
-Conformément aux informations qui avaient été extraites de la littérature scientifique, les ombres apportent des informations quant à la position des différents éléments d'une scène 3D, ainsi qu'un apport de réalisme nécessaire aux animations et aux jeux vidéo. Sans ombre, il n'y a pas non plus de perception de relief pour une scène 3D. Le relief est pourtant crucial dans une animation ou un jeu vidéo car sans lui, la 3D ne sera pas perçue. 
+Conformément aux informations qui avaient été extraites de la littérature scientifiques , les ombres apportent des informations quant à la position des différents éléments d'une scène 3D, ainsi qu'un apport de réalisme nécessaire aux animations et aux jeux vidéos. Sans ombre, il n'y a pas non plus de perception de relief pour une scène 3D. Le relief est pourtant crucial dans une animation ou un jeu vidéo car sans lui, la 3D ne sera pas perçue. 
 
-Les deux types d'ombres existant ont été considérés dans cette étude. Les hard shadows comme les soft shadows. Les premières sont les ombres qui sont celles dues à une seule source lumineuse ponctuelle. Elles sont donc quasi inexistantes dans la nature. En comparaison avec celles-ci, les soft shadows, ombres diffuses, sont abondamment plus réalistes. En effet, elles sont le résultat d'éléments placés dans un environnement illuminé de force sources lumineuses ponctuelles, comme retrouvés dans la nature.
+Les deux types d'ombres ont été considérés dans cette étude., les hard shadows comme les soft shadows. Les premieres sont les ombres qui sont celles dues à une seule source lumineuse ponctuelle. Elles sont donc quasi inexistantes dans la nature. En comparaison avec celles-ci, les soft shadows, ombres diffuses, sont abondamment plus réalistes. En effet, elles sont le résultat d'éléments placés dans un environnement illuminé de force source lumineuses ponctuelles, comme retrouvés dans la nature.
 Au fil du temps, les sociétés d'animation et de développement de jeux vidéos se sont tournés des hard shadows vers les soft shadows lorsque le matériel le permettait, dans le but d'obtenir une hausse de réalisme.
 
 Nous avons ici implémenté et comparé 3 différents algorithmes d'implémentation d'ombres de manière informatisée. Le premier type d'algorithme est le ray tracing. Celui-ci est le plus intuitif car il consiste à réaliser des calculs relatifs aux ombres pour chaque pixel vu par la caméra. Le second type d'algorithme considéré ici est celui du shadow volume. Celui-ci approche le problème différemment. En effet, il crée, en extrudant les contours des éléments de la scène, des volumes dans lesquels tout point est alors considéré dans l'ombre, alors que tout point n'étant pas dans un volume est considéré comme illuminé. Enfin, nous avons étudié ici le shadow mapping. Ce dernier est constitué de deux principales étapes. Lors de la première étape, une shadow map est créée. Celle-ci est en fait une carte de profondeur, sur laquelle est indiquée la profondeur de chaque partie de la scène depuis la lumière. Avec cette carte de profondeur, la profondeur des différentes parties de la scène peut alors être comparée et il est alors possible de déterminer la position relative de ces parties.
