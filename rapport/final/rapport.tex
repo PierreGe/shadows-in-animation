@@ -361,6 +361,13 @@ D'après nos résultats subjectif, les algorithmes hard shadow
 \end{table}
 
 \subsection{Shadow volume}
+
+\begin{figure}[H]
+\includegraphics[scale=0.4]{images/shadowvolume.png}
+\centering
+\caption{Scène avec shadow volume}
+\end{figure}
+
 Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne mai\^trisons pas encore bien.
 Nous pouvons donc évaluer les performances de cet algorithme mais pas son réalisme.
 L'étape la plus lente est de créer les shadows volumes mais, ne dépendant pas de la position de la caméra, cette étape est réalisée uniquement quand le nombre ou la position des lumières est modifiée.
