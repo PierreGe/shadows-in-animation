@@ -230,25 +230,23 @@ Pour rendre le programme plus interactif et pour pouvoir mieux observé les ombr
 Pour mesurer la performance d'un algorithme nous avons utilisé différentes mesures du taux d'utilisation des ressources machines.
 \subsubsection{Image par seconde}
 Le nombre d'image par seconde ou Frame par second (FPS) en anglais est une mesure indiquant le nombre d'image affiché par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
-La méthode de calcul utilisé est la suivante :
 
-$nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
-
+La méthode de calcul utilisé est la suivante : $nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
 
 Pour obtenir un résultat stable, une moyenne est faite sur un échantillon d'une durée de 1 seconde.
 
 \subsubsection{CPU}
-Une librairie python permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une haute utilisation indique un algorithme peu performant.
+La bibliothèque python psutil permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une indication d'une haute utilisation indique un algorithme peu performant.
 \subsubsection{Mémoire}
 
-Une librairie python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une haute utilisation indique un algorithme peu performant.
+Une librairie python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une indication d'une utilisation de beaucoup de megabytes indique un algorithme peu performant.
 
 \section{Algorithmes implémentés} 
 
 \subsection{Shadow volume}
 
 \begin{figure}[H]
-\includegraphics[scale=0.5]{images/shadow_volume.png}
+\includegraphics[scale=0.32]{images/shadow_volume.png}
 \centering
 \captionsource{Shadown volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
