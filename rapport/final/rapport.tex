@@ -290,11 +290,7 @@ Un apport a été effectué pour approcher d'une soft shadow en utilisant une m�
 \captionsource{Ray Tracing}{wikipedia.org}
 \end{figure}
 
-Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
-
-On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
-
-Cependant, l'environnement de test est trop lourd et complexe pour du temps réel avec cet algorithme et nous avons donc créer une scène spécial non interactif avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).
+Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.Cependant, l'environnement de test est trop lourd et complexe pour du temps réel avec cet algorithme et nous avons donc créé une scène spéciale non interactive avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).Nous nous sommes aussi limité aux ombres des objets sur le sol. L'ombre de la première bille n'est donc pas visible sur la deuxième et inversement.
 
 
 \chapter{Résultats expérimentaux}
@@ -347,11 +343,7 @@ Cet algorithme doit donc e\^tre adapté au type de scène (objets sphériques, p
 
 \subsection{Ray tracing}
 
-Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendemment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en mesurer correctement les performances car il ne s'agit pas à proprement parler d'une scène interactive. Pour implémenter du ray tracing interactivement, il faudrait un matériel très performant.
-
-\todo{qqun sait rajouter qque chose ici ?}
-
-
+Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendemment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithme car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme se débrouille bien pour une scène simple et semble précis.
 
 
 \chapter{Discussion}
