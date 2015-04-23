@@ -8,11 +8,11 @@ applications.
 
 
 ## Contenu du dossier
-
+```
   /rapport contient les différents rapports
   /references les reference envoyés par mail au début
   /src contient le code source
-
+```
 ## Requirement
 
 **ATTENTION** Ce projet nécessite des drivers de carte graphique récent. Il ne fonctionnera donc pas dans Oracle Virtualbox dont le driver est périmé. Il a été testé sur HD4000 (Année : 2012)
