@@ -466,11 +466,11 @@ class ShadowVolumeAlgorithm(AbstractAlgorithm):
             translate(model, *obj.getPosition())
             prog['u_model'] = model
             prog['u_view'] = self._createViewMatrix()
-            gloo.set_stencil_op('keep', 'keep', 'incr')
-            gloo.set_cull_face('back')
-            prog.draw('triangles')
             gloo.set_stencil_op('keep', 'keep', 'decr')
             gloo.set_cull_face('front')
+            prog.draw('triangles')
+            gloo.set_stencil_op('keep', 'keep', 'incr')
+            gloo.set_cull_face('back')
             prog.draw('triangles')
         # step 4 : draw back faces, depth test and stencil buffer decrement
         # for i in range(len(self._objects)):
