@@ -357,9 +357,6 @@ Cet algorithme étant le plus gourmand en ressources de calculs, il n'a été im
 
 Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réussi à faire en sorte qu'il crée l'ombre en temps réel dans notre environnement de test. Ceci n'est pas étonnant sachant qu'il fait un très grand nombre de calcul.Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes pour des logiciels d'édition d'image.
 
-Moins précis que ce dernier mais également plus performant et plus adapté aux représentations en temps réel, l'algorithme de Shadow Volume offre quant à lui une excellent rapport entre performances et précision. 
-
-\todo{Ceci est une discussion par un résultat imho}C'est pour cette raison que cet algorithme est utilisé dans des logiciels d'animation nécéssitant du temps réel, comme le logiciel utilisé chez Pixar, \textit{PhotoRealistic RenderMan}.
 
 Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map.
 
@@ -377,6 +374,9 @@ D'après la littérature, il n'existe pas d'alternative à ces trois algorithmes
 \subsection{La précision du Ray Tracing}
 
 La précision du Ray Tracing est beaucoup utilisé pour ce qui nécessite un rendu de haute qualité comme par exemple pour l'édition d'image du logiciel Adobe Photoshop. Le nom de leur logiciel est Adobe Ray Tracer.
+\subsection{Le compromis du Shadow volume}
+
+Moins précis que le ray-tracing mais également plus performant et plus adapté aux représentations en temps réel, l'algorithme de Shadow Volume offre quant à lui une excellent rapport entre performances et précision. C'est pour cette raison que cet algorithme est utilisé dans des logiciels d'animation nécéssitant du temps réel, comme le logiciel utilisé chez Pixar, PhotoRealistic RenderMan.
 
 
 \chapter{Conclusion et perspectives}
