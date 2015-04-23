@@ -145,7 +145,6 @@ L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte, le d
 
 
 \chapter{Méthodes implémentées}
-\todo{parler plus de l'environnement, genre plusieurs lampes et tout}
 
 Dans ce chapitre, nous allons décrire les différents algorithmes implémentés et l'environnement dans lequel ils ont été testé.
 
@@ -207,7 +206,7 @@ Les modèle 3D au format OBJ proviennent de site internet proposant des modèles
 
 Les lumières ont bien évidemment une importance capitale dans notre environnement de test.
 
-Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les mettre à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres ou des glitch pourrait apparaitre.
+Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Il est par contre possible d'en mettre autant que souhaité et de changer leur position individuellement. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres ou des glitch pourrait apparaitre.
 
 
 \subsubsection{Animations}
@@ -365,7 +364,7 @@ Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les perform
 
 \todo{Auto ombre vs le reste}
 
-Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map.
+Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map. Sa performance est également très bonne et nous permet d'envisager de créer des scènes complexes sans soucis de fluidité.
 
 \todo{Shadow volume}
 
