@@ -308,13 +308,32 @@ Après avoir ajouté uniquement l'ombre que les objets et personnages créent su
 
 \section{Les différents types d'ombre}
 
+\todo{ICI ICI ICI. NON PAS LA. ICI!!}
 D'après nos résultats subjectif, les algorithmes hard shadow
 
-\section{Résultats individuels}
+\section{Résultats de chaque algorithme}
+
+\subsection{Résultats en chiffres}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|l}
+\cline{1-4}
+ & FPS  & CPU & Mémoire  &  \\ \cline{1-4}
+ Aucune ombre& 400 & 20\%  & 3,2\%  &  \\ \cline{1-4}
+ Auto ombre& 225 & 28\%  & 3,2\%  &  \\ \cline{1-4}
+ Ray tracing& ? & ?  & ?  &  \\ \cline{1-4}
+ Shadow mapping& 250  & 30\%  & 3,2\%  &  \\ \cline{1-4}
+ Shadow volume& 120  & 20\%  & 3,2\%  &  \\ \cline{1-4}
+\end{tabular}
+\end{table}
 
 \subsection{Shadow volume}
-\todo{On peut dire que on a a du mal, qu'on a du faire du c++ et tout voila}
-\todo{pourquoi c'est lent en python, pourquoi ca ne marche tjs pas (opengl...), résultats pour le moment}
+Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne mai\^trisons pas encore bien.
+Nous pouvons donc évaluer les performances de cet algorithme mais pas son réalisme.
+L'étape la plus lente est de créer les shadows volumes mais, ne dépendant pas de la position de la caméra, cette étape est réalisée uniquement quand le nombre ou la position des lumières est modifiée.
+Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mais suffisant pour que l'image soit fluide.
+
 
 
 \subsection{Shadow mapping}
@@ -330,21 +349,7 @@ De la même manière on peut ajouter du réalisme en modifiant la répartition d
 Cet algorithme étant le plus gourmand en ressources de calculs, il n'a été implémenté qu'en version non-interactive et la scène qui l'implémente ne contient qu'un mouvement continu sur 2 objets, n'appliquant pas l'ombre de l'un sur l'autre, de sorte à réduire les calculs nécessaire et avoir une scène qui pourra être utilisée pour l'observation de la qualité de l'ombre générée. Celle-ci est parfaite, étant donné le fait que l'algorithme consière chaque pixel de la scène indépendament. L'ombre va donc être appliquée sur chaque pixel un à un, et cet algorithme va donc offrir une précision au pixel près. Le ray tracing offre donc un excellent rendu d'ombre mais nécessite du matériel extrêmement puissant ou une réduction volontaire du nombre de calculs.
 
 
-\section{Comparaison des algorithmes entre eux}
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{|c|c|c|c|l}
-\cline{1-4}
- & FPS  & CPU & Mémoire  &  \\ \cline{1-4}
- Aucune ombre& 400 & 20\%  & 3,2\%  &  \\ \cline{1-4}
- Auto ombre& 225 & 28\%  & 3,2\%  &  \\ \cline{1-4}
- Ray tracing& ? & ?  & ?  &  \\ \cline{1-4}
- Shadow mapping& 250  & 30\%  & 3,2\%  &  \\ \cline{1-4}
- Shadow volume& 120  & 20\%  & 3,2\%  &  \\ \cline{1-4}
-\end{tabular}
-\end{table}
+\section{Comparaison des algorithmes}
 
 Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réussi à faire en sorte qu'il crée l'ombre en temps réel dans notre environement de test. Ceci n'est pas étonnant sachant qu'il fait un très grand nombre de calcul.Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes pour des logiciels d'édition d'image.
 
