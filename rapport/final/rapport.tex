@@ -355,6 +355,19 @@ Cet algorithme étant le plus gourmand en ressources de calculs, il n'a été im
 
 \section{Comparaison des algorithmes}
 
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|l}
+\cline{1-4}
+ & FPS  & CPU & Mémoire  &  \\ \cline{1-4}
+ Aucune ombre& 400 & 20\%  & 3,2\%  &  \\ \cline{1-4}
+ Auto ombre& 225 & 28\%  & 3,2\%  &  \\ \cline{1-4}
+ Ray tracing& ? & ?  & ?  &  \\ \cline{1-4}
+ Shadow mapping& 250  & 30\%  & 3,2\%  &  \\ \cline{1-4}
+ Shadow volume& 120  & 20\%  & 3,2\%  &  \\ \cline{1-4}
+\end{tabular}
+\end{table}
+
 Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réussi à faire en sorte qu'il crée l'ombre en temps réel dans notre environnement de test. Ceci n'est pas étonnant sachant qu'il fait un très grand nombre de calcul. Pour rappel, il lance un rayon de chaque point observé vers chaque point lumineux.
 
 Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes. La technique du ray tracing peut reproduit de manières exact des phénomènes physique comme la refraction et la reflexion et des phénomènes optiques tels que les caustiques, l'illumination globale ou encore la dispersion lumineuse.
