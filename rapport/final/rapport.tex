@@ -303,9 +303,21 @@ Le ray tracing consiste à tracer un segment de droite depuis le point de vue de
 
 \section{Les ombres sont indispensables}
 
-Dans notre environnement de test, nous avions implémenté deux mises en scènes, une sans ombre et une avec ombre.
+Dans notre environnement de test, nous avons implémenté deux mises en scènes, une sans ombre et une avec ombre.
+
+\begin{figure}[H]
+\includegraphics[scale=0.5]{images/pasombre.png}
+\centering
+\caption{Scène sans aucune ombre}
+\end{figure}
 
 Il a été remarqué que l'absence d'ombres privait non seulement de réalisme les scènes considérées mais également d'informations quant au relief et à la position des objets et des personnages que présente la scène. En effet si on prend par exemple la scène ou l'on voit un personnage le fait de ne pas avoir d'ombre semble montré au spectateur que le personnage est un dessin 2D sans relief peu esthétique.
+
+\begin{figure}[H]
+\includegraphics[scale=0.5]{images/autoombre.png}
+\centering
+\caption{Scène avec auto-ombre}
+\end{figure}
 
 Après avoir ajouté uniquement l'ombre que les objets et personnages créent sur eux-même, l'information quant au relief est apportée mais pas celle de position. Gr\^ace a cela, on a pu confirmer que c'est donc bien l'ombre d'un élément de la scène sur l'autre et non sur lui-même qui permet à l'observateur de déterminer sa position relative.
 
