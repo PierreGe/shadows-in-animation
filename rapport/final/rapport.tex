@@ -374,11 +374,9 @@ Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les perform
 Sans surprise, la scène sans aucune ombre offre les plus grandes performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
 Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
 
-L'algorithme d'auto-ombre ne diminue pas beaucoup les performances par rapport à l'algorithme sans ombre car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes.
+L'algorithme d'auto-ombre obtient de très bonnes performances, même par rapport à l'algorithme sans ombre, car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes mais l'algorithme de shadow mapping obtient presque les mêmes performances et est beaucoup plus réaliste, ce qui en fait la meilleure des solutions.
 
-Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map.
-
-\todo{Shadow volume}
+Le plus performant mais également le moins précis des trois algorithmes d'ombres que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map.
 
 \section{Cas d'utilisation des algorithmes}
 \subsection{Ray Tracing}
