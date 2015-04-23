@@ -248,7 +248,7 @@ Une librairie python permet de mesurer le nombre de megabytes de mémoire vive u
 \subsection{Shadow volume}
 
 \begin{figure}[H]
-\includegraphics[scale=0.5]{images/shadow_volume.png}
+\includegraphics[scale=0.37]{images/shadow_volume.png}
 \centering
 \captionsource{Shadown volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
@@ -256,10 +256,10 @@ L'algorithme de shadow volume peut être divisé en deux étapes.
 
 Tout d'abord, il s'agit de trouver les contours de chaque objet chargé dans la scène depuis le point de vue de la lumière. 
 Puisque le point de vue se trouve à la position de la lumière, les contours à trouver sont toutes les arêtes communes à un triangle se trouvant dans la lumière et un triangle se trouvant dans l'ombre. 
-L'algorithme fonctionne en ajoutant les are\^tes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
+L'algorithme fonctionne en ajoutant les ar\^etes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
 De cette manière, seules les arêtes qui ne sont pas communes à deux triangles dans l'ombre (donc qui sont communes à un triangle dans l'ombre et un dans la lumière) sont conservées.
-Pour déterminer si un triangle est dans l'ombre ou la lumière, on calcule le vecteur normal de ce triangle et on fait le produit scalaire de ce vecteur avec le vecteur de direction de la lumière. Si le résultat est positif, le triangle est dirigé dans le même sens que la lumière et donc se trouve sur le co\^té opposé à la lumière.
-Une fois que les are\^tes définissant les contours sont déterminées, on les projette à l'infini dans la direction opposée à la lumière ce qui crée une homothétie du contour. Le contour de l'objet et son homothétie délimitent alors un volume, appelé shadow volume ou volume d'ombre. 
+Pour déterminer si un triangle est dans l'ombre ou la lumière, on calcule le vecteur normal de ce triangle et on fait le produit scalaire de ce vecteur avec le vecteur de direction de la lumière. Si le résultat est positif, le triangle est dirigé dans le même sens que la lumière et donc se trouve sur le c\^oté opposé à la lumière.
+Une fois que les ar\^etes définissant les contours sont déterminées, on les projette à l'infini dans la direction opposée à la lumière ce qui crée une homothétie du contour. Le contour de l'objet et son homothétie délimitent alors un volume, appelé shadow volume ou volume d'ombre. 
 Nous avons commencé par implémenter cette étape en Python avant de nous rendre compte que la puissance de calcul nécessaire était trop grande.
 Cette étape est donc implémentée dans une fonction en C++ appelée depuis le code Python.
 
@@ -272,7 +272,7 @@ Un nouveau rendu est alors effectué avec la lumière uniquement aux endroits o�
 \subsection{Shadow mapping}
 
 \begin{figure}[H]
-\includegraphics[scale=0.5]{images/shadow_map.jpg}
+\includegraphics[scale=0.3]{images/shadow_map.jpg}
 \centering
 \captionsource{Shadown mapping}{wikipedia.org}
 \end{figure}
@@ -299,7 +299,7 @@ Cependant, l'environnement de test est trop lourd et complexe pour du temps rée
 
 
 \begin{figure}[H]
-\includegraphics[scale=0.5]{images/ray_tracing.png}
+\includegraphics[scale=0.22]{images/ray_tracing.png}
 \centering
 \captionsource{Ray Tracing}{wikipedia.org}
 \end{figure}
@@ -356,7 +356,7 @@ D'après nos résultats subjectif, les algorithmes hard shadow
 \end{table}
 
 \subsection{Shadow volume}
-Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne mai\^trisons pas encore bien.
+Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne ma\^itrisons pas encore bien.
 Nous pouvons donc évaluer les performances de cet algorithme mais pas son réalisme.
 L'étape la plus lente est de créer les shadows volumes mais, ne dépendant pas de la position de la caméra, cette étape est réalisée uniquement quand le nombre ou la position des lumières est modifiée.
 Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mais suffisant pour que l'image soit fluide.
@@ -410,7 +410,7 @@ Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réu
 Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes. La technique du ray tracing peut reproduit de manières exact des phénomènes physique comme la refraction et la reflexion et des phénomènes optiques tels que les caustiques, l'illumination globale ou encore la dispersion lumineuse.
 
 Sans surprise, la scène sans aucune ombre offre le plus grand niveau de performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
-Les scènes sans ombres peuvent e\^tre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
+Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
 
 L'algorithme d'auto-ombre ne diminue pas beaucoup les performances par rapport à l'algorithme sans ombre car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes.
 
@@ -446,7 +446,6 @@ Moins précis que le ray-tracing mais également plus performant et plus adapté
 
 Conformément aux informations qui avaient été extraites de la littérature scientifiques , les ombres apportent des informations quant à la position des différents éléments d'une scène 3D, ainsi qu'un apport de réalisme nécessaire aux animations et aux jeux vidéos. Sans ombre, il n'y a pas non plus de perception de relief pour une scène 3D. Le relief est pourtant crucial dans une animation ou un jeu vidéo car sans lui, la 3D ne sera pas perçue. 
 
-Les deux types d'ombres ont été considérés dans cette étude., les hard shadows comme les soft shadows. Les premières sont les ombres qui sont celles dues à une seule source lumineuse ponctuelle. Elles sont donc quasi inexistantes dans la nature. En comparaison avec celles-ci, les soft shadows, ombres diffuses, sont abondamment plus réalistes. En effet, elles sont le résultat d'éléments placés dans un environnement illuminé de force source lumineuses ponctuelles, comme retrouvés dans la nature.
 Au fil du temps, les sociétés d'animation et de développement de jeux vidéos se sont tournés des hard shadows vers les soft shadows lorsque le matériel le permettait, dans le but d'obtenir une hausse de réalisme.
 
 Nous avons ici implémenté et comparé 3 différents algorithmes d'implémentation d'ombres de manière informatisée. Le premier type d'algorithme est le ray tracing. Celui-ci est le plus intuitif car il consiste à réaliser des calculs relatifs aux ombres pour chaque pixel vu par la caméra. Le second type d'algorithme considéré ici est celui du shadow volume. Celui-ci approche le problème différemment. En effet, il crée, en extrudant les contours des éléments de la scène, des volumes dans lesquels tout point est alors considéré dans l'ombre, alors que tout point n'étant pas dans un volume est considéré comme illuminé. Enfin, nous avons étudié ici le shadow mapping. Ce dernier est constitué de deux principales étapes. Lors de la première étape, une shadow map est créée. Celle-ci est en fait une carte de profondeur, sur laquelle est indiquée la profondeur de chaque partie de la scène depuis la lumière. Avec cette carte de profondeur, la profondeur des différentes parties de la scène peut alors être comparée et il est alors possible de déterminer la position relative de ces parties.
