@@ -292,7 +292,7 @@ Un apport a été effectué pour approcher d'une soft shadow en utilisant une m�
 
 Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
 
-On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
+On peut noter que cette technique fonctionne à l'inverse de la réalité physique où le rayon lumineux part de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
 
 
 \begin{figure}[H]
@@ -303,7 +303,7 @@ On peut noter que cette technique est fonctionne a rebours de la réalité physi
 
 Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
 
-On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
+On peut noter que cette technique fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
 
 Cependant, l'environnement de test est trop lourd et complexe pour du temps réel avec cet algorithme et nous avons donc créé une scène spéciale non interactive avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).
 Nous nous sommes aussi limité aux ombres des objets sur le sol. L'ombre de la première bille n'est donc pas visible sur la deuxième et inversement.
@@ -313,7 +313,7 @@ Nous nous sommes aussi limité aux ombres des objets sur le sol. L'ombre de la p
 
 \section{Les ombres sont indispensables}
 
-Dans notre environnement de test, nous avions implémenté deux mises en scènes, une sans ombre et une avec ombre.
+Dans notre environnement de test, nous avons implémenté deux mises en scènes, une sans ombre et une avec ombre.
 
 Il a été remarqué que l'absence d'ombres privait non seulement de réalisme les scènes considérées mais également d'informations quant au relief et à la position des objets et des personnages que présente la scène. En effet si on prend par exemple la scène ou l'on voit un personnage le fait de ne pas avoir d'ombre semble montré au spectateur que le personnage est un dessin 2D sans relief peu esthétique.
 
@@ -417,7 +417,7 @@ Nous avons ici implémenté et comparé 3 différents algorithmes d'implémentat
 
 \bibliographystyle{apalike}
 
-\bibliography{mybiblio.bib}
+\bibliography{mybiblio}
 \addcontentsline{toc}{chapter}{Bibliographie}
 
 \end{document}
