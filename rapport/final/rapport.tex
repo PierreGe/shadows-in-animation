@@ -366,7 +366,7 @@ Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mai
 \begin{figure}[H]
 \includegraphics[scale=0.4]{images/shadowmap.png}
 \centering
-\caption{Scène spécial ray-tracing}
+\caption{Scène avec shadow mapping}
 \end{figure}
 
 Comme prévu, cet algorithme est le plus efficace des trois algorithmes considérés. Le résultat obtenu obtient un nombre de \textit{fps} plus que correct. Le réalisme offert dépend en grande partie de la résolution imposée de la shadow map. Une grande shadow map implique une grande précision mais également un plus grand nombre de calculs à réaliser. Cette approche apporte donc une ombre correcte et donc l'apport d'information qui en dépend. La résolution de la shadow map, influençant la précision de l'ombre peut toutefois être changée, pour offrir une ombre plus ou moins pixelisée. Puisque la shadow map est calculée du point de vue de la lumière, plus celle-ci est loin de la scène, plus la résolution nécessaire pour obtenir une bonne précision est grande.
