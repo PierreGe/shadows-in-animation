@@ -8,7 +8,6 @@
 \usepackage{float}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{mathtools}
-\usepackage{listings}
 
 \linespread{1.1}
 
@@ -145,13 +144,12 @@ L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte, le d
 
 
 \chapter{Méthodes implémentées}
-\todo{parler plus de l'environnement, genre plusieurs lampes et tout}
 
 Dans ce chapitre, nous allons décrire les différents algorithmes implémentés et l'environnement dans lequel ils ont été testé.
 
 \section{Choix de l'environnement de test}
 
-L'environnement est important. En effet, c'est sur celui ci que les différents algorithmes vont s'appliquer. En choisissant le m\^eme environnement pour tous les algorithmes nous pourront comparé leur performance en utilisant différentes \textit{metrics}.
+L'environnement est important. En effet, c'est sur celui ci que les différents algorithmes vont s'appliquer et grace au fait que celui ci est unique nous pour nous pourront comparé les performances des algorithmes en utilisant différentes \textit{metrics}. De plus un environnement ludique et attractif est un réel plus pour intéresser un jeune publique à nos travaux.
 
 \subsection{La 3D}
 
@@ -160,7 +158,7 @@ Nous avons utilisé OpenGL pour créer des scènes 3D, animer une/des caméra(s)
 
 Nous avons utilisé dans la mesure du possible un maximum les fonctions modernes d'OpenGl majoritairement présente dans les jeux et animations d'aujourd'hui. Le code propre a la 3D sera donc des shaders.
 
-Nous avons aussi choisi de ne pas utilisé de moteur de rendu 3D pour car utiliser à la place directement le langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque pas les opérations qui sont faites ce qui facilite a la comparaison des algorithmes.
+Nous avons aussi choisi de ne pas utilisé de moteur de rendu 3D car sa substitution à un langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque aucune opérations ce qui facilite a la comparaison des algorithmes.
 
 \subsection{Langages et bibliothèques utilisés}
 
@@ -169,7 +167,7 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 \begin{itemize}
 \item{Nous avons utilisé Python 2.7 comme langage de programmation car il permet un développement rapide et possède des bindings vers les bibliothèques OpenGL, OpenCL, numPy etc... écrites en C/C++. Il permet donc d'allier la rapidité d'écriture des langages de scripts à la rapidité d'exécution des langages compilés. Nous avons aussi utilisé des package du Python Package Index pour nous faciliter la t\^ache.}
 
-\item{Nous avons utilisé pyQt comme librairie qui s'interfacera avec la célèbre bibliothèque Qt 5. Nous avons utilisé cette interface graphique étant donnée sa facilité d'utilisation et son caractère complet. De plus nous avions pour la plupart déjà utilisée cette dernière durant notre cursus.}
+\item{Nous avons utilisé PyQt comme librairie qui s'interfacera avec la célèbre bibliothèque Qt 4. Nous avons utilisé cette interface graphique étant donnée sa facilité d'utilisation et son caractère complet. De plus nous avions pour la plupart déjà utilisée cette dernière durant notre cursus.}
 
 \item{Nous comptions utiliser OpenCL pour profiter de puissance de calcul des cartes graphiques modernes. Nous ne l'avons finalement pas utilisé car nous nous sommes redirigés vers la puissance de calcul de numpy associée avec quelques parties d'implémentation en C++}
 
