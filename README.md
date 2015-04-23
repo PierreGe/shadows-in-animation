@@ -34,5 +34,7 @@ applications.
 
 ## Executer le programme
 
+```
 cd src/
 python main.py
+```
