@@ -9,8 +9,30 @@ applications.
 
 ## Contenu du dossier
 
+  /rapport contient les différents rapports
+  /references les reference envoyés par mail au début
+  /src contient le code source
 
 ## Requirement
 
-** ATTENTION ** Ce projet nécessite des drivers de carte graphique récent. Il ne fonctionnera donc pas dans Oracle Virtualbox dont le driver est périmé.
+**ATTENTION** Ce projet nécessite des drivers de carte graphique récent. Il ne fonctionnera donc pas dans Oracle Virtualbox dont le driver est périmé. Il a été testé sur HD4000 (Année : 2012)
 
+ - Driver OpenGL >1.2
+ - PyOpenGL
+ - PyOpenGL_accelerate
+ - "PyVRML97==2.3.0a4"
+ - simpleparse
+ - numpy
+ - "OpenGLContext==2.2.0a3"
+ - pydispatcher
+ - pillow
+ - python-pygame
+ - PyQt4
+ - glut
+ - vispy
+ - psutil
+
+## Executer le programme
+
+  cd src/
+  python main.py
