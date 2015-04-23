@@ -11,6 +11,7 @@ applications.
 ```
   /rapport contient les différents rapports
   /references les reference envoyés par mail au début
+  /screenshot des screenshots du programme 
   /src contient le code source
 ```
 ## Requirement
