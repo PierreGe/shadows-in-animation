@@ -71,16 +71,9 @@ Nous avons testé les différents aspects et effets des ombres dans différents 
 \includegraphics[scale=0.25]{images/relativePosition.jpg}
 \centering
 \captionsource{L'importance des ombres en image }{http://maverick.inria.fr/Research/RealTimeShadows/importance.html}
-% Comment on met une source?? http://maverick.inria.fr/Research/RealTimeShadows/importance.html#
 \end{figure}
 
-
-
 \chapter{Etat de l'art}
-
-
-\todo{Il y a deux introductions avec le même contenu à la suite l une de l autre??}
-\todo{Mieux comme ça?}
 
 Au fil du temps, différents types d'algorithmes permettant de générer ces ombres ont été présentés dans la littérature scientifique. La littérature scientifique distingue donc deux grandes catégories : 
 \begin{itemize}
@@ -119,7 +112,7 @@ Les algorithmes de \textit{z-pass} ont néanmoins un défaut dans le cas où l'o
 Dans l'article \cite{lloyd2004cc}, les auteurs présentent une nouvelle technique qui utilise le \textit{Culling and Clamping (CC)} permettant d'éviter de générer des \textit{shadow volumes} qui sont eux-même dans l'ombre ou qui n'interviennent pas dans l'image finale, ce qui a pour but d'améliorer les performances et donc d'accélérer la génération des ombres dans une scène.
 \\
 
-Aila et Akenine-Molle font remarquer en 2004 \cite{aila2004hierarchical} que les performances de génération des ombres sont inversément proportionnelles à la taille des \textit{shadow volumes}. Pour remédier à cela, ils proposent un nouvel algorithme visant à réduire le temps de rastérisation. Cet algorithme est composé de deux étapes. La première étape consiste à trouver des zones de 8x8 pixels dont les bords sont soit complêtement dans l'ombre soit complêtement illuminés. La seconde étape verra s'effectuer une génération pixel par pixel de l'ombre des pixels se trouvant aux bords de l'ombre.
+Aila et Akenine-Molle font remarquer en 2004 \cite{aila2004hierarchical} que les performances de génération des ombres sont inversément proportionnelles à la taille des \textit{shadow volumes}. Pour remédier à cela, ils proposent un nouvel algorithme visant à réduire le temps de rastérisation. Cet algorithme est composé de deux étapes. La première étape consiste à trouver des zones de 8x8 pixels dont les bords sont soit compl\^etement dans l'ombre soit compl\^etement illuminés. La seconde étape verra s'effectuer une génération pixel par pixel de l'ombre des pixels se trouvant aux bords de l'ombre.
 \\
 
 En 2004, Chan et Durand\cite{chan2004efficient} utilisèrent une technique utilisant à la fois un algorithme de \textit{shadow mapping} et un algorithme de \textit{shadow volume}. Le premier est d'abord utilisé pour créer une \textit{hard shadow} et obtenir la silhouette de l'ombre. L'algorithme de \textit{shadow volume} est ensuite utilisé pour généré une ombre correcte (\textit{soft shadow}) à partir de cette silhouette.
@@ -148,7 +141,7 @@ Les seconds utilisent le \textit{Partitioning}. Cette approche permet de diviser
 Un des seuls algorithmes qui présente une précision au pixel près et qui présente des bonnes performances pour le temps réel est celui qui a été présenté par Sintorn et Assarsson\cite{sintorn2009hair}. Celui-ci se focalise sur les ombres de la pilosité, qui nécessite de la précision et obtient pourtant des résultats corrects.
 \\
 
-L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte, la dynamicité de la scène illuminée ainsi que celle de la lumière tout en gardant des excellentes performances.
+L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte, le dynamisme de la scène illuminée ainsi que celle de la lumière tout en gardant des excellentes performances.
 
 
 \chapter{Méthodes implémentées}
@@ -369,9 +362,16 @@ Le plus performant mais également le moins précis des trois algorithmes que no
 
 \chapter{Discussion}
 
+\section{Cas d'utilisation des algorithmes}
+\subsection{Ray Tracing}
+\subsection{Shadow mapping}
+\subsection{Shadow volume}
 
+\section{Alternatives}
 
-\todo{Discuter des resultats}
+D'après la littérature, il n'existe pas d'alternative a ces trois algorithmes. En effet, chaque algorithme existant se base sur un des trois utilisé ci dessus
+
+\section{Approches utilisées dans l'industrie}
 
 
 \chapter{Conclusion et perspectives}
