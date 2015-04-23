@@ -181,6 +181,12 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 
 Plusieurs scènes ont été utilisées pour présenter et mettre en application les différents algorithmes. 
 
+\begin{figure}[H]
+\includegraphics[scale=0.31]{images/exemple-scene.png}
+\centering
+\caption{Environnement de test}
+\end{figure}
+
 \subsubsection{Création des scènes}
 Il est intéressant de pouvoir placer des modèles en hauteur, à différents endroits. Ceci permet de démontrer que lorsque les ombres sont absentes, on ne peut percevoir les informations relatives ni à la hauteur, ni au relief.
 
@@ -295,6 +301,13 @@ On peut noter que cette technique est fonctionne a rebours de la réalité physi
 \captionsource{Ray Tracing}{wikipedia.org}
 \end{figure}
 
+Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
+
+On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
+
+Cependant, l'environnement de test est trop lourd et complexe pour du temps réel avec cet algorithme et nous avons donc créé une scène spéciale non interactive avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).
+Nous nous sommes aussi limité aux ombres des objets sur le sol. L'ombre de la première bille n'est donc pas visible sur la deuxième et inversement.
+
 
 \chapter{Résultats expérimentaux}
 
@@ -346,9 +359,7 @@ De la même manière on peut ajouter du réalisme en modifiant la répartition d
 
 \subsection{Ray tracing}
 
-Cet algorithme étant le plus gourmand en ressources de calculs, il n'a été implémenté qu'en version non-interactive et la scène qui l'implémente ne contient qu'un mouvement continu sur 2 objets, n'appliquant pas l'ombre de l'un sur l'autre, de sorte à réduire les calculs nécessaire et avoir une scène qui pourra être utilisée pour l'observation de la qualité de l'ombre générée. Celle-ci est parfaite, étant donné le fait que l'algorithme consière chaque pixel de la scène indépendament. L'ombre va donc être appliquée sur chaque pixel un à un, et cet algorithme va donc offrir une précision au pixel près. Le ray tracing offre donc un excellent rendu d'ombre mais nécessite du matériel extrêmement puissant ou une réduction volontaire du nombre de calculs.
-
-
+Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendamment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithme car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme n'a pas de problème de performance pour une scène simple. Les ombres affichés au sol sont précises et dénués de glitchs.
 
 
 \chapter{Discussion}
@@ -359,9 +370,10 @@ Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réu
 
 Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes. La technique du ray tracing peut reproduit de manières exact des phénomènes physique comme la refraction et la reflexion et des phénomènes optiques tels que les caustiques, l'illumination globale ou encore la dispersion lumineuse.
 
-\todo{Aucun ombre vs le reste}
+Sans surprise, la scène sans aucune ombre offre les plus grandes performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
+Les scènes sans ombres peuvent e\^tre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
 
-\todo{Auto ombre vs le reste}
+L'algorithme d'auto-ombre ne diminue pas beaucoup les performances par rapport à l'algorithme sans ombre car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes.
 
 Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map.
 
