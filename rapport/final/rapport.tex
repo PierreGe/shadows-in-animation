@@ -343,7 +343,7 @@ Cet algorithme doit donc e\^tre adapté au type de scène (objets sphériques, p
 
 \subsection{Ray tracing}
 
-Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendemment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithme car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme se débrouille bien pour une scène simple et semble précis.
+Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendamment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithme car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme n'a pas de problème de performance pour une scène simple. Les ombres affichés au sol sont précises et dénués de glitchs.
 
 
 \chapter{Discussion}
