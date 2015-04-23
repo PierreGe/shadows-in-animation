@@ -177,7 +177,7 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 
 \subsection{Scènes présentées}
 
-Plusieurs scènes ont été utilisées pour présenter et mettre en application les différents algorithmes. 
+L'environnement de test sera une scène ou sont placés des objets et des personnages. Une grande diversité de scènes ont été utilisées pour présenter et mettre en application les différents algorithmes. 
 
 \begin{figure}[H]
 \includegraphics[scale=0.31]{images/exemple-scene.png}
@@ -186,9 +186,8 @@ Plusieurs scènes ont été utilisées pour présenter et mettre en application 
 \end{figure}
 
 \subsubsection{Création des scènes}
-Il est intéressant de pouvoir placer des modèles en hauteur, à différents endroits. Ceci permet de démontrer que lorsque les ombres sont absentes, on ne peut percevoir les informations relatives ni à la hauteur, ni au relief.
 
-Pour cela nous avons utiliser deux ressources :
+Pour réaliser les scènes nous avons utiliser deux ressources :
 
 \begin{enumerate}
   \item Des fichiers de configuration de la scène en JSON,
@@ -205,26 +204,30 @@ Un dossier prédéfinit contient un certain nombre de fichier JSON qui eux conti
   \item La position de ces modèles 3D.
 \end{enumerate}
 
-Les modèle 3D au format OBJ proviennent de site internet proposant des modèles libres de droit et sont très divers de manière à pouvoir réaliser beaucoup de test différents : vélo, fractal de menger, mario et luigi, arbres, ...
+Toute ces informations sont nécessaire car il est intéressant de pouvoir placer des modèles en hauteur ou à différents endroits. Par exemple, ceci permet de démontrer que lorsque les ombres sont absentes, on ne peut percevoir les informations relatives ni à la hauteur, ni au relief.
+
+Les modèle 3D au format OBJ proviennent de site internet proposant des modèles libres de droit et sont aussi très divers de manière à pouvoir réaliser beaucoup de test différents : vélo, fractal de menger, mario et luigi, arbres, ...
 
 \subsubsection{Lumières}
 
-Les lumières ont bien évidemment une importance capitale dans notre environnement de test.
-
-Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les mettre à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres ou des glitch pourrait apparaitre.
+Les lumières sont bien évidemment d'une importance capitale dans notre environnement de test. Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les mettre à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres ou des glitch pourrait apparaitre.
+Il est aussi possible d'en rajouter ou supprimer à la volée.
 
 
 \subsubsection{Animations}
 
 Pour rendre le programme plus interactif et pour pouvoir mieux observé les ombres, nous avons implémenté deux animations différentes.
 
-Une première qui consiste a faire tourner de manière régulière la caméra autour du centre de la scène.
 
-une deuxième qui consiste a faire tourner la lampe sélectionner dans la barre d'outils.
+\begin{itemize}
+  \item Une première qui consiste a faire tourner de manière régulière la caméra autour du centre de la scène.
+  \item Une deuxième qui consiste a faire tourner la lampe sélectionner dans la barre d'outils.
+\end{itemize}
+
 
 \subsection{Metrics utilisé}
 
-Pour mesurer la performance d'un algorithme nous avons utilisé différentes mesures.
+Pour mesurer la performance d'un algorithme nous avons utilisé différentes mesures du taux d'utilisation des ressources machines.
 \subsubsection{Image par seconde}
 Le nombre d'image par seconde ou Frame par second (FPS) en anglais est une mesure indiquant le nombre d'image affiché par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
 La méthode de calcul utilisé est la suivante :
