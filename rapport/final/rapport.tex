@@ -1,5 +1,5 @@
 \documentclass[a4paper,10pt]{report}
-\usepackage[english]{babel}
+\usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[left=2.5cm,top=2cm,right=2.5cm,nohead,nofoot]{geometry}
@@ -8,6 +8,7 @@
 \usepackage{float}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{mathtools}
+\usepackage{listings}
 
 \linespread{1.1}
 
@@ -144,12 +145,13 @@ L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte, le d
 
 
 \chapter{Méthodes implémentées}
+\todo{parler plus de l'environnement, genre plusieurs lampes et tout}
 
 Dans ce chapitre, nous allons décrire les différents algorithmes implémentés et l'environnement dans lequel ils ont été testé.
 
 \section{Choix de l'environnement de test}
 
-L'environnement est important. En effet, c'est sur celui ci que les différents algorithmes vont s'appliquer et grace au fait que celui ci est unique nous pour nous pourront comparé les performances des algorithmes en utilisant différentes \textit{metrics}. De plus un environnement ludique et attractif est un réel plus pour intéresser un jeune publique à nos travaux.
+L'environnement est important. En effet, c'est sur celui ci que les différents algorithmes vont s'appliquer. En choisissant le m\^eme environnement pour tous les algorithmes nous pourront comparé leur performance en utilisant différentes \textit{metrics}.
 
 \subsection{La 3D}
 
@@ -158,7 +160,7 @@ Nous avons utilisé OpenGL pour créer des scènes 3D, animer une/des caméra(s)
 
 Nous avons utilisé dans la mesure du possible un maximum les fonctions modernes d'OpenGl majoritairement présente dans les jeux et animations d'aujourd'hui. Le code propre a la 3D sera donc des shaders.
 
-Nous avons aussi choisi de ne pas utilisé de moteur de rendu 3D car sa substitution à un langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque aucune opérations ce qui facilite a la comparaison des algorithmes.
+Nous avons aussi choisi de ne pas utilisé de moteur de rendu 3D pour car utiliser à la place directement le langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque pas les opérations qui sont faites ce qui facilite a la comparaison des algorithmes.
 
 \subsection{Langages et bibliothèques utilisés}
 
@@ -167,7 +169,7 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 \begin{itemize}
 \item{Nous avons utilisé Python 2.7 comme langage de programmation car il permet un développement rapide et possède des bindings vers les bibliothèques OpenGL, OpenCL, numPy etc... écrites en C/C++. Il permet donc d'allier la rapidité d'écriture des langages de scripts à la rapidité d'exécution des langages compilés. Nous avons aussi utilisé des package du Python Package Index pour nous faciliter la t\^ache.}
 
-\item{Nous avons utilisé PyQt comme librairie qui s'interfacera avec la célèbre bibliothèque Qt 4. Nous avons utilisé cette interface graphique étant donnée sa facilité d'utilisation et son caractère complet. De plus nous avions pour la plupart déjà utilisée cette dernière durant notre cursus.}
+\item{Nous avons utilisé pyQt comme librairie qui s'interfacera avec la célèbre bibliothèque Qt 5. Nous avons utilisé cette interface graphique étant donnée sa facilité d'utilisation et son caractère complet. De plus nous avions pour la plupart déjà utilisée cette dernière durant notre cursus.}
 
 \item{Nous comptions utiliser OpenCL pour profiter de puissance de calcul des cartes graphiques modernes. Nous ne l'avons finalement pas utilisé car nous nous sommes redirigés vers la puissance de calcul de numpy associée avec quelques parties d'implémentation en C++}
 
@@ -290,7 +292,7 @@ Un apport a été effectué pour approcher d'une soft shadow en utilisant une m�
 
 Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
 
-On peut noter que cette technique fonctionne à l'inverse de la réalité physique où le rayon lumineux part de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
+On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
 
 
 \begin{figure}[H]
@@ -301,7 +303,7 @@ On peut noter que cette technique fonctionne à l'inverse de la réalité physiq
 
 Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
 
-On peut noter que cette technique fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
+On peut noter que cette technique est fonctionne a rebours de la réalité physique ou le rayon lumineux par de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
 
 Cependant, l'environnement de test est trop lourd et complexe pour du temps réel avec cet algorithme et nous avons donc créé une scène spéciale non interactive avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).
 Nous nous sommes aussi limité aux ombres des objets sur le sol. L'ombre de la première bille n'est donc pas visible sur la deuxième et inversement.
@@ -311,21 +313,9 @@ Nous nous sommes aussi limité aux ombres des objets sur le sol. L'ombre de la p
 
 \section{Les ombres sont indispensables}
 
-Dans notre environnement de test, nous avons implémenté deux mises en scènes, une sans ombre et une avec ombre.
-
-\begin{figure}[H]
-\includegraphics[scale=0.5]{images/pasombre.png}
-\centering
-\caption{Scène sans aucune ombre}
-\end{figure}
+Dans notre environnement de test, nous avions implémenté deux mises en scènes, une sans ombre et une avec ombre.
 
 Il a été remarqué que l'absence d'ombres privait non seulement de réalisme les scènes considérées mais également d'informations quant au relief et à la position des objets et des personnages que présente la scène. En effet si on prend par exemple la scène ou l'on voit un personnage le fait de ne pas avoir d'ombre semble montré au spectateur que le personnage est un dessin 2D sans relief peu esthétique.
-
-\begin{figure}[H]
-\includegraphics[scale=0.5]{images/autoombre.png}
-\centering
-\caption{Scène avec auto-ombre}
-\end{figure}
 
 Après avoir ajouté uniquement l'ombre que les objets et personnages créent sur eux-même, l'information quant au relief est apportée mais pas celle de position. Gr\^ace a cela, on a pu confirmer que c'est donc bien l'ombre d'un élément de la scène sur l'autre et non sur lui-même qui permet à l'observateur de déterminer sa position relative.
 
@@ -360,12 +350,6 @@ Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mai
 
 \subsection{Shadow mapping}
 
-\begin{figure}[H]
-\includegraphics[scale=0.4]{images/shadowmap.png}
-\centering
-\caption{Scène avec shadow mapping}
-\end{figure}
-
 Comme prévu, cet algorithme est le plus efficace des trois algorithmes considérés. Le résultat obtenu obtient un nombre de \textit{fps} plus que correct. Le réalisme offert dépend en grande partie de la résolution imposée de la shadow map. Une grande shadow map implique une grande précision mais également un plus grand nombre de calculs à réaliser. Cette approche apporte donc une ombre correcte et donc l'apport d'information qui en dépend. La résolution de la shadow map, influençant la précision de l'ombre peut toutefois être changée, pour offrir une ombre plus ou moins pixelisée. Puisque la shadow map est calculée du point de vue de la lumière, plus celle-ci est loin de la scène, plus la résolution nécessaire pour obtenir une bonne précision est grande.
 Les ombres sont crénelées à cause de la résolution limitée de la shadow map. Pour résoudre ce problème, on peut ajouter un biais lors du sampling dans la shadow map mais si ce biais devient trop grand, les ombres "flottent".
 De la même manière on peut ajouter du réalisme en modifiant la répartition du disque de Poisson mais en augmentant la répartition de trop, on voit apparaître des nuages de points dans l'ombre.
@@ -373,12 +357,6 @@ De la même manière on peut ajouter du réalisme en modifiant la répartition d
 \todo{PLUS DE DETAILS ICI VOILA VOILA}
 
 \subsection{Ray tracing}
-
-\begin{figure}[H]
-\includegraphics[scale=0.4]{images/raytracing.png}
-\centering
-\caption{Scène spécial ray-tracing}
-\end{figure}
 
 Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendamment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithme car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme n'a pas de problème de performance pour une scène simple. Les ombres affichés au sol sont précises et dénués de glitchs.
 
