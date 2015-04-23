@@ -349,6 +349,10 @@ De la même manière on peut ajouter du réalisme en modifiant la répartition d
 Cet algorithme étant le plus gourmand en ressources de calculs, il n'a été implémenté qu'en version non-interactive et la scène qui l'implémente ne contient qu'un mouvement continu sur 2 objets, n'appliquant pas l'ombre de l'un sur l'autre, de sorte à réduire les calculs nécessaire et avoir une scène qui pourra être utilisée pour l'observation de la qualité de l'ombre générée. Celle-ci est parfaite, étant donné le fait que l'algorithme consière chaque pixel de la scène indépendament. L'ombre va donc être appliquée sur chaque pixel un à un, et cet algorithme va donc offrir une précision au pixel près. Le ray tracing offre donc un excellent rendu d'ombre mais nécessite du matériel extrêmement puissant ou une réduction volontaire du nombre de calculs.
 
 
+
+
+\chapter{Discussion}
+
 \section{Comparaison des algorithmes}
 
 Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réussi à faire en sorte qu'il crée l'ombre en temps réel dans notre environement de test. Ceci n'est pas étonnant sachant qu'il fait un très grand nombre de calcul.Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes pour des logiciels d'édition d'image.
@@ -358,9 +362,6 @@ Moins précis que ce dernier mais également plus performant et plus adapté aux
 \todo{Ceci est une discussion par un resultat imho}C'est pour cette raison que cet algorithme est utilisé dans des logiciels d'animation nécéssitant du temps réel, comme le logiciel utilisé chez Pixar, \textit{PhotoRealistic RenderMan}.
 
 Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map.
-
-
-\chapter{Discussion}
 
 \section{Cas d'utilisation des algorithmes}
 \subsection{Ray Tracing}
