@@ -158,7 +158,7 @@ Nous avons utilisé OpenGL pour créer des scènes 3D, animer une/des caméra(s)
 
 Nous avons utilisé dans la mesure du possible un maximum les fonctions modernes d'OpenGl majoritairement présente dans les jeux et animations d'aujourd'hui. Le code propre a la 3D sera donc des shaders.
 
-Nous avons aussi choisi de ne pas utiliser de moteur de rendu 3D car sa substitution par un langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètre. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque aucune opérations ce qui facilite a la comparaison des algorithmes.
+Nous avons aussi choisi de ne pas utiliser de moteur de rendu 3D car sa substitution par un langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètres. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque aucune opérations ce qui facilite a la comparaison des algorithmes.
 
 \subsection{Langages et bibliothèques utilisés}
 
@@ -171,7 +171,7 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 
 \item{Nous comptions utiliser OpenCL pour profiter de puissance de calcul des cartes graphiques modernes. Nous ne l'avons finalement pas utilisé car nous nous sommes redirigés vers la puissance de calcul de numpy associée avec quelques parties d'implémentation en C++}
 
-\item{Nous avons enfin utilisé vispy, librairie de visualisation 3D basée sur OpenGL qui permet d'utiliser les avantages d'OpenGL moderne et d'utiliser des shaders avec une certaine abstraction. Ceci permet d'effectuer les calculs de rendu graphique directement sur le GPU, ce qui accroit la vitesse d'exécution et donc les performances.
+\item{Nous avons enfin utilisé vispy, bibliothèque de visualisation 3D basée sur OpenGL qui permet d'utiliser les avantages d'OpenGL moderne et d'utiliser des shaders avec une certaine abstraction. Ceci permet d'effectuer les calculs de rendu graphique directement sur le GPU, ce qui accro\^it la vitesse d'exécution et donc les performances.
 }
 \end{itemize}
 
@@ -194,14 +194,14 @@ Pour réaliser les scènes nous avons utiliser deux ressources :
   \item Des modèles 3D au format libre OBJ.
 \end{enumerate}
 
-Un dossier prédéfinit contient un certain nombre de fichier JSON qui eux contiennent toutes les informations nécessaires a la création d'une scène. Ils contiennent :
+Un dossier prédéfini contient un certain nombre de fichier JSON contenant toutes les informations nécessaires a la création d'une scène :
 
 \begin{enumerate}
   \item Le nom de la scène,
   \item Une courte description de la scène,
-  \item Quels modèles 3D sont inclus à la scène,
+  \item Une liste de modèles 3D,
   \item Les algorithmes compatibles avec la scène,
-  \item La position de ces modèles 3D.
+  \item La position et la couleur ou texture de ces modèles 3D.
 \end{enumerate}
 
 Toute ces informations sont nécessaire car il est intéressant de pouvoir placer des modèles en hauteur ou à différents endroits. Par exemple, ceci permet de démontrer que lorsque les ombres sont absentes, on ne peut percevoir les informations relatives ni à la hauteur, ni au relief.
@@ -216,7 +216,7 @@ Il est aussi possible d'en rajouter ou supprimer à la volée.
 
 \subsubsection{Animations}
 
-Pour rendre le programme plus interactif et pour pouvoir mieux observé les ombres, nous avons implémenté deux animations différentes.
+Pour rendre le programme plus interactif et pouvoir mieux observer les ombres, nous avons implémenté deux animations différentes qui peuvent s'activer et se désactiver indépendemment l'une de l'autre.
 
 
 \begin{itemize}
@@ -224,24 +224,24 @@ Pour rendre le programme plus interactif et pour pouvoir mieux observé les ombr
   \item Une deuxième qui consiste a faire tourner la lampe sélectionner dans la barre d'outils.
 \end{itemize}
 
-
-\subsection{Metrics utilisé}
+\subsection{Metrics utilisés}
 
 Pour mesurer la performance d'un algorithme nous avons utilisé différentes mesures du taux d'utilisation des ressources machines.
 \subsubsection{Image par seconde}
-Le nombre d'image par seconde ou Frame par second (FPS) en anglais est une mesure indiquant le nombre d'image affiché par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
-La méthode de calcul utilisé est la suivante :
 
-$nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
+Le nombre d'images par seconde ou Frame Per Second (FPS) en anglais est une mesure indiquant le nombre d'images affichées par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
 
+
+La méthode de calcul utilisé est la suivante : $nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
 
 Pour obtenir un résultat stable, une moyenne est faite sur un échantillon d'une durée de 1 seconde.
 
 \subsubsection{CPU}
-Une librairie python permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une haute utilisation indique un algorithme peu performant.
+La bibliothèque python psutil permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une indication d'une haute utilisation indique un algorithme peu performant.
+
 \subsubsection{Mémoire}
 
-Une librairie python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une haute utilisation indique un algorithme peu performant.
+Une bibliothèque Python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une haute utilisation indique un algorithme peu performant.
 
 \section{Algorithmes implémentés} 
 
@@ -250,11 +250,11 @@ Une librairie python permet de mesurer le nombre de megabytes de mémoire vive u
 \begin{figure}[H]
 \includegraphics[scale=0.37]{images/shadow_volume.png}
 \centering
-\captionsource{Shadown volume}{https://hal.inria.fr/inria-00281388}
+\captionsource{Shadow volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
 L'algorithme de shadow volume peut être divisé en deux étapes.
 
-Tout d'abord, il s'agit de trouver les contours de chaque objet chargé dans la scène depuis le point de vue de la lumière. 
+Tout d'abord, il s'agit de trouver les contours de chaque objet de la scène depuis le point de vue de la lumière. 
 Puisque le point de vue se trouve à la position de la lumière, les contours à trouver sont toutes les arêtes communes à un triangle se trouvant dans la lumière et un triangle se trouvant dans l'ombre. 
 L'algorithme fonctionne en ajoutant les ar\^etes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
 De cette manière, seules les arêtes qui ne sont pas communes à deux triangles dans l'ombre (donc qui sont communes à un triangle dans l'ombre et un dans la lumière) sont conservées.
@@ -412,11 +412,9 @@ Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les perform
 Sans surprise, la scène sans aucune ombre offre le plus grand niveau de performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
 Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
 
-L'algorithme d'auto-ombre ne diminue pas beaucoup les performances par rapport à l'algorithme sans ombre car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes.
+L'algorithme d'auto-ombre obtient de très bonnes performances, même par rapport à l'algorithme sans ombre, car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes mais l'algorithme de shadow mapping obtient presque les mêmes performances et est beaucoup plus réaliste, ce qui en fait la meilleure des solutions.
 
-Le plus performant mais également le moins précis des trois algorithmes que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map. Sa performance est également très bonne et nous permet d'envisager de créer des scènes complexes sans soucis de fluidité.
-
-\todo{Shadow volume}
+Le plus performant mais également le moins précis des trois algorithmes d'ombres que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map. Sa performance est également très bonne et nous permet d'envisager de créer des scènes complexes sans soucis de fluidité.
 
 \section{Cas d'utilisation des algorithmes}
 \subsection{Ray Tracing}
