@@ -287,18 +287,18 @@ La première étape consiste à générer une shadow map d'une résolution chois
 Dans la seconde étape, on effectue le rendu de la scène depuis la caméra. On considère pour chaque pixel sa distance à la lumière par rapport à la profondeur au même endroit dans la shadow map. Si la première est plus grande que la seconde, alors ce pixel est dans l'ombre et sa couleur est assombrie.
 On simule également la réflexion spéculaire en prenant en compte le vecteur normal de chaque pixel par rapport au vecteur direction de la lumière. Plus un pixel est tourné vers la lumière, plus sa couleur est illuminée.
 
-Si la scène considérée contient plusieurs sources lumineuses, le principe d'implémentation reste identique. Il suffit alors de réaliser différentes shadow maps, chacune avec le point de vue d'une lumière. Ces différentes ombres sont superposées en assombrissant un pixel proportionnellement au nombre d'ombres dans lequel il se trouve.
+Si la scène considérée contient plusieurs sources lumineuses, le principe d'implémentation reste identique. Il nous suffit alors de réaliser différentes shadow maps, chacune avec le point de vue d'une lumière. Ces différentes ombres sont superposées en assombrissant un pixel proportionnellement au nombre d'ombres dans lequel il se trouve.
 
 Un apport a été effectué pour approcher d'une soft shadow en utilisant une méthode de dispersion des points d'ombre à l'aide d'un disque de Poisson, ce qui floute les contours de l'ombre et ajoute au réalisme.
 
 
 \subsection{Ray tracing}	
 
-Le ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
+Notre implémentation du ray tracing consiste à tracer un segment de droite depuis le point de vue de l'observateur jusque chaque pixel de la scène. Ce segment de droite simule un rayon de lumière en sens inverse. A partir de ce pixel, on lance un rayon vers l'ensemble des sources lumineuses de manière à déterminer sa luminosité. En effet si un rayon rencontre un autre objet avant de rencontrer une source lumineuse, cela signifie que cet objet est dans l'ombre par rapport à cette source lumineuse.
 
 On peut noter que cette technique fonctionne à l'inverse de la réalité physique où le rayon lumineux part de la lumière pour arriver à l'oeil de l'observateur. Elle permet donc une très bonne simulation du comportement de la lumière mais n'est pas applicable en temps réel. C'est pourquoi la scène où nous avons implémenté le ray tracing n'est pas interactive.
 
-Cependant, l'environnement de test est trop lourd et complexe pour du temps réel avec cet algorithme et nous avons donc créer une scène spécial non interactif avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).
+Cependant, notre environnement de test étant trop lourd et complexe pour du temps réel avec cet algorithme, nous avons donc créer une scène spécial non interactif avec deux billes qui tournent en rond. Ces deux billes ont la propriétés d'\^etre très simple et n'\^etre composé que de très peu de primitive (triangles).
 
 
 \begin{figure}[H]
