@@ -387,8 +387,6 @@ Comme prévu, cet algorithme est le plus efficace des trois algorithmes considé
 Les ombres sont crénelées à cause de la résolution limitée de la shadow map. Pour résoudre ce problème, on peut ajouter un biais lors du sampling dans la shadow map mais si ce biais devient trop grand, les ombres "flottent".
 De la même manière on peut ajouter du réalisme en modifiant la répartition du disque de Poisson mais en augmentant la répartition de trop, on voit apparaître des nuages de points dans l'ombre.
 
-\todo{PLUS DE DETAILS ICI VOILA VOILA}
-
 \subsection{Ray tracing}
 
 \begin{figure}[H]
@@ -397,7 +395,7 @@ De la même manière on peut ajouter du réalisme en modifiant la répartition d
 \caption{Scène spécial ray-tracing}
 \end{figure}
 
-Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendamment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est donc appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithme car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme n'a pas de problème de performance pour une scène simple. Les ombres affichés au sol sont précises et dénués de glitchs.
+Les ombres obtenues par cette algorithme sont très réalistes, étant donné le fait qu'il considère chaque pixel de la scène indépendamment et qu'OpenGL effectue automatiquement une interpolation des pixels pour réduire le crénelage. L'ombre est appliquée sur chaque pixel un à un, et cet algorithme offre donc une précision au pixel près. Le ray tracing permet un excellent rendu d'ombre mais on ne peut pas en comparer correctement ses performances avec les autres algorithmes car il est le seul à avoir sa propre scène. Cependant, on peut quand m\^eme remarqué que l'algorithme n'a pas de problème de performance pour une scène simple. Les ombres affichés au sol sont précises et dénués de glitchs.
 
 
 \chapter{Discussion}
@@ -418,22 +416,22 @@ Les ombres obtenues par cette algorithme sont très réalistes, étant donné le
 
 Il ne nous est pas possible de comparer le Ray Tracing car nous n'avons pas réussi à faire en sorte qu'il crée l'ombre en temps réel dans notre environnement de test. Ceci n'est pas étonnant sachant qu'il fait un très grand nombre de calcul. Pour rappel, il lance un rayon de chaque point observé vers chaque point lumineux.
 
-Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes. La technique du ray tracing peut reproduit de manières exact des phénomènes physique comme la refraction et la reflexion et des phénomènes optiques tels que les caustiques, l'illumination globale ou encore la dispersion lumineuse.
+Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les performances ne sont pas un facteur limitant, comme par exemple pour des animations qui ne sont pas en temps réels, ou même des images fixes. La technique du ray tracing peut reproduit de manières exacte des phénomènes physique comme la refraction et la réflexion et des phénomènes optiques tels que les caustiques, l'illumination globale ou encore la dispersion lumineuse.
 
 Sans surprise, la scène sans aucune ombre offre le plus grand niveau de performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
-Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
+Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais de nos jours la puissance de calcul est suffisante pour afficher un minimum d'ombres.
 
 
 L'algorithme d'auto-ombre obtient de très bonnes performances, même par rapport à l'algorithme sans ombre, car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes mais l'algorithme de shadow mapping obtient presque les mêmes performances et est beaucoup plus réaliste, ce qui en fait la meilleure des solutions.
 
-Le plus performant mais également le moins précis des trois algorithmes d'ombres que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul a offrir plusieurs niveaux de précision en fonction de la résolution qui est choisie pour la shadow map. Sa performance est également très bonne et nous permet d'envisager de créer des scènes complexes sans soucis de fluidité.
+Le plus performant mais également le moins précis des trois algorithmes d'ombres que nous avons ici considéré est le shadow mapping. Celui-ci est toutefois le seul à offrir plusieurs niveaux de précision en fonction de la résolution choisie pour la shadow map. Sa performance est également très bonne et nous permet d'envisager de créer des scènes complexes sans soucis de fluidité.
 
 \section{Cas d'utilisation des algorithmes}
 \subsection{Ray Tracing}
-Le ray tracing est utilisé dans des cas ou une excellente qualité de représentation d'ombre est nécessaire. En effet, il offre une précision au pixel près. Cependant cette précision a un coût, celui des performances. Il faudra en effet un matériel pouvant soutenir la quantité de calculs nécessaire pour ce type d'algorithme. de plus, la scène pour laquelle les ombres doivent être ajoutées doit être d'une complexité limitée. Cet algorithme sera donc très gourmand en ressource et pas ou peu utilisé pour les jeux video. En effet, les ombres n'étant pas les seuls éléments a calculer dans un jeux video, aucun jeu ne peut se permettre de lui attribuer la plupart de ses ressources disponibles.
+Le ray tracing est utilisé dans des cas où une excellente qualité de représentation d'ombre est nécessaire. En effet, il offre une précision au pixel près. Cependant cette précision a un coût, celui des performances. Il faudra en effet un matériel pouvant soutenir la quantité de calculs nécessaire pour ce type d'algorithme. de plus, la scène pour laquelle les ombres doivent être ajoutées doit être d'une complexité limitée. Cet algorithme sera donc très gourmand en ressource et pas ou peu utilisé pour les jeux video. En effet, les ombres n'étant pas les seuls éléments a calculer dans un jeux video, aucun jeu ne peut se permettre de lui attribuer la plupart de ses ressources disponibles.
 \subsection{Shadow mapping}
 Le shadow mapping quant à lui offre de bonnes performances au détriment de la qualité de l'ombre calculée. Il sera plutôt utilisé dans des cas où une simple ombre, non précise suffit.
-Il est une selection de choix pour les jeux video tournant sur des ordinateur moyennement performant
+Il est une selection de choix pour les jeux video tournant sur des ordinateur moyennement performant.
 \subsection{Shadow volume}
 Le shadow volume offre un compromis entre les deux méthodes vues ci-dessus. Il offre des performances moyennes pour une qualité d'ombre supérieure à celle du shadow mapping mais inférieure à celle du ray tracing. 
 Il est devenu l'algorithme de prédilection pour les jeux vidéos récents en qu\^ete de réalisme.
