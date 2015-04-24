@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,11pt]{report}
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -431,11 +431,13 @@ Le plus performant mais également le moins précis des trois algorithmes d'ombr
 
 \section{Cas d'utilisation des algorithmes}
 \subsection{Ray Tracing}
-Le ray tracing est utilisé dans des cas ou une excellente qualité de représentation d'ombre est nécessaire. En effet, il offre une précision au pixel près. Cependant cette précision a un coût, celui des performances. Il faudra en effet un matériel pouvant soutenir la quantité de calculs nécessaire pour ce type d'algorithme. de plus, la scène pour laquelle les ombres doivent être ajoutées doit être d'une complexité limitée.
+Le ray tracing est utilisé dans des cas ou une excellente qualité de représentation d'ombre est nécessaire. En effet, il offre une précision au pixel près. Cependant cette précision a un coût, celui des performances. Il faudra en effet un matériel pouvant soutenir la quantité de calculs nécessaire pour ce type d'algorithme. de plus, la scène pour laquelle les ombres doivent être ajoutées doit être d'une complexité limitée. Cet algorithme sera donc très gourmand en ressource et pas ou peu utilisé pour les jeux video. En effet, les ombres n'étant pas les seuls éléments a calculer dans un jeux video, aucun jeu ne peut se permettre de lui attribuer la plupart de ses ressources disponibles.
 \subsection{Shadow mapping}
-Le shadow mapping quant à lui offre de bonnes performances au détriment de la qualité de l'ombre calculée. Il sera plutôt utilisé dans des cas où une simple ombre , non précise suffit.
+Le shadow mapping quant à lui offre de bonnes performances au détriment de la qualité de l'ombre calculée. Il sera plutôt utilisé dans des cas où une simple ombre, non précise suffit.
+Il est une selection de choix pour les jeux video tournant sur des ordinateur moyennement performant
 \subsection{Shadow volume}
 Le shadow volume offre un compromis entre les deux méthodes vues ci-dessus. Il offre des performances moyennes pour une qualité d'ombre supérieure à celle du shadow mapping mais inférieure à celle du ray tracing. 
+Il est devenu l'algorithme de prédilection pour les jeux vidéos récents en qu\^ete de réalisme.
 
 \section{Alternatives}
 
