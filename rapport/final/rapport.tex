@@ -145,7 +145,7 @@ L'algorithme GEARS\cite{wang2014gears} rajoute un élément pris en compte, le d
 
 \chapter{Méthodes implémentées}
 
-Dans ce chapitre, nous allons décrire les différents algorithmes implémentés et l'environnement dans lequel ils ont été testé.
+Dans ce chapitre, nous allons décrire les différents algorithmes implémentés et l'environnement dans lequel ils ont été testés.
 
 \section{Choix de l'environnement de test}
 
@@ -156,9 +156,9 @@ L'environnement est important. En effet, c'est sur celui ci que les différents 
 OpenGL s'est imposé comme l'API 3D de choix étant donné sa spécification ouverte, ses fonctions bas niveau et sa disponibilité sur un grand nombre de plateformes.
 Nous avons utilisé OpenGL pour créer des scènes 3D, animer une/des caméra(s) et une/des source(s) de lumière mais également pour générer des ombres avec les algorithmes retenus.
 
-Nous avons utilisé dans la mesure du possible un maximum les fonctions modernes d'OpenGl majoritairement présente dans les jeux et animations d'aujourd'hui. Le code propre a la 3D sera donc des shaders.
+Nous avons utilisé dans la mesure du possible un maximum les fonctions modernes d'OpenGl majoritairement présentes dans les jeux et animations d'aujourd'hui. Le code propre à la 3D sera donc des shaders.
 
-Nous avons aussi choisi de ne pas utiliser de moteur de rendu 3D car sa substitution par un langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètres. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque aucune opérations ce qui facilite a la comparaison des algorithmes.
+Nous avons aussi choisi de ne pas utiliser de moteur de rendu 3D car sa substitution par un langage de bas niveau OpenGL permet d'avoir une approche plus fine et de maitriser plus de paramètres. En outre, cela permet de mieux comprendre le fonctionnement de la 3D et cette approche ne masque aucune opération ce qui facilite la comparaison des algorithmes.
 
 \subsection{Langages et bibliothèques utilisés}
 
@@ -177,7 +177,7 @@ Les langages utilisés influencent les performances globales des algorithmes et 
 
 \subsection{Scènes présentées}
 
-L'environnement de test sera une scène ou sont placés des objets et des personnages. Une grande diversité de scènes ont été utilisées pour présenter et mettre en application les différents algorithmes. 
+L'environnement de test sera une scène ou sont placés des objets et des personnages. Une grande diversité de scènes ont été créées pour présenter et mettre en application les différents algorithmes. 
 
 \begin{figure}[H]
 \includegraphics[scale=0.31]{images/exemple-scene.png}
@@ -187,7 +187,7 @@ L'environnement de test sera une scène ou sont placés des objets et des person
 
 \subsubsection{Création des scènes}
 
-Pour réaliser les scènes nous avons utiliser deux ressources :
+Pour réaliser les scènes nous avons utilisé deux ressources :
 
 \begin{enumerate}
   \item Des fichiers de configuration de la scène en JSON,
@@ -210,7 +210,7 @@ Les modèle 3D au format OBJ proviennent de site internet proposant des modèles
 
 \subsubsection{Lumières}
 
-Les lumières sont bien évidemment d'une importance capitale dans notre environnement de test. Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les mettre à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres ou des glitch pourrait apparaitre.
+Les lumières sont bien évidemment d'une importance capitale dans notre environnement de test. Nous n'avons implémenté que des lumières ponctuelles de couleur blanche. Nous pouvons par contre en mettre autant que souhaité et les placer à la position de notre choix. De plus il est possible via un sélectionneur dans la barre d'outils de les déplacer en temps réel. Cela permet de tester les positions critiques des ombres où des anomalies pourraient apparaitre.
 Il est aussi possible d'en rajouter ou supprimer à la volée.
 
 
@@ -220,8 +220,8 @@ Pour rendre le programme plus interactif et pouvoir mieux observer les ombres, n
 
 
 \begin{itemize}
-  \item Une première qui consiste a faire tourner de manière régulière la caméra autour du centre de la scène.
-  \item Une deuxième qui consiste a faire tourner la lampe sélectionner dans la barre d'outils.
+  \item Une première qui consiste à faire tourner de manière régulière la caméra autour du centre de la scène.
+  \item Une deuxième qui consiste à faire tourner la lampe sélectionner dans la barre d'outils.
 \end{itemize}
 
 \subsection{Metrics utilisés}
@@ -233,16 +233,16 @@ Pour mesurer la performance d'un algorithme nous avons utilisé différentes mes
 Le nombre d'images par seconde ou Frame Per Second (FPS) en anglais est une mesure indiquant le nombre d'images affichées par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
 
 
-La méthode de calcul utilisé est la suivante : $nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
+La méthode de calcul utilisée est la suivante : $nombre de fps = \frac{1 seconde}{Temps  nécessaire pour générer une frame}$
 
 Pour obtenir un résultat stable, une moyenne est faite sur un échantillon d'une durée de 1 seconde.
 
 \subsubsection{CPU}
-La bibliothèque python psutil permet de mesurer le pourcentage d'utilisation du processeur en par le programme courant. Une indication d'une haute utilisation indique un algorithme peu performant.
+La bibliothèque Python \textbf{psutil} permet de mesurer le pourcentage d'utilisation du processeur par le programme courant. Une indication d'une haute utilisation indique un algorithme peu performant.
 
 \subsubsection{Mémoire}
 
-Une bibliothèque python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une indication d'une utilisation de beaucoup de megabytes indique un algorithme peu performant.
+Une bibliothèque Python permet de mesurer le nombre de megabytes de mémoire vive utilisés par le programme courant. Une indication d'une utilisation de beaucoup de megabytes indique un algorithme peu performant.
 
 
 
@@ -288,7 +288,7 @@ La première étape consiste à générer une shadow map d'une résolution chois
 Dans la seconde étape, on effectue le rendu de la scène depuis la caméra. On considère pour chaque pixel sa distance à la lumière par rapport à la profondeur au même endroit dans la shadow map. Si la première est plus grande que la seconde, alors ce pixel est dans l'ombre et sa couleur est assombrie.
 On simule également la réflexion spéculaire en prenant en compte le vecteur normal de chaque pixel par rapport au vecteur direction de la lumière. Plus un pixel est tourné vers la lumière, plus sa couleur est illuminée.
 
-Si la scène considérée contient plusieurs sources lumineuses, le principe d'implémentation reste identique. Il suffit alors de réaliser différentes shadow map, chacune avec le point de vue d'une lumière. Ces différentes ombres sont superposées en assombrissant un pixel proportionnellement au nombre d'ombres dans lequel il se trouve.
+Si la scène considérée contient plusieurs sources lumineuses, le principe d'implémentation reste identique. Il suffit alors de réaliser différentes shadow maps, chacune avec le point de vue d'une lumière. Ces différentes ombres sont superposées en assombrissant un pixel proportionnellement au nombre d'ombres dans lequel il se trouve.
 
 Un apport a été effectué pour approcher d'une soft shadow en utilisant une méthode de dispersion des points d'ombre à l'aide d'un disque de Poisson, ce qui floute les contours de l'ombre et ajoute au réalisme.
 
@@ -328,7 +328,7 @@ Dans notre environnement de test, nous avons implémenté deux mises en scènes,
 \caption{Scène sans aucune ombre}
 \end{figure}
 
-Il a été remarqué que l'absence d'ombres privait non seulement de réalisme les scènes considérées mais également d'informations quant au relief et à la position des objets et des personnages que présente la scène. En effet si on prend par exemple la scène ou l'on voit un personnage le fait de ne pas avoir d'ombre semble montré au spectateur que le personnage est un dessin 2D sans relief peu esthétique.
+Il a été remarqué que l'absence d'ombres privait de réalisme non seulement les scènes considérées mais également d'informations quant au relief et à la position des objets et des personnages que présente la scène. En effet si on prend par exemple la scène ou l'on voit un personnage le fait de ne pas avoir d'ombre semble montré au spectateur que le personnage est un dessin 2D sans relief peu esthétique.
 
 \begin{figure}[H]
 \includegraphics[scale=0.5]{images/autoombre.png}
