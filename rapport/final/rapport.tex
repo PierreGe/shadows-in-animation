@@ -255,21 +255,21 @@ Une bibliothèque Python permet de mesurer le nombre de megabytes de mémoire vi
 \centering
 \captionsource{Shadow volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
-L'algorithme de shadow volume peut être divisé en deux étapes.
+Notre implémentation du shadow volume peut être divisé en deux étapes.
 
-Tout d'abord, il s'agit de trouver les contours de chaque objet de la scène depuis le point de vue de la lumière. 
+Tout d'abord, il nous a fallu trouver les contours de chaque objet de la scène depuis le point de vue de la lumière. 
 Puisque le point de vue se trouve à la position de la lumière, les contours à trouver sont toutes les arêtes communes à un triangle se trouvant dans la lumière et un triangle se trouvant dans l'ombre. 
-L'algorithme fonctionne en ajoutant les ar\^etes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
+L'algorithme fonctionne ensuite en ajoutant les ar\^etes des triangles situés dans l'ombre dans une liste et en les enlevant de la liste si ils sont déjà dedans.
 De cette manière, seules les arêtes qui ne sont pas communes à deux triangles dans l'ombre (donc qui sont communes à un triangle dans l'ombre et un dans la lumière) sont conservées.
 Pour déterminer si un triangle est dans l'ombre ou la lumière, on calcule le vecteur normal de ce triangle et on fait le produit scalaire de ce vecteur avec le vecteur de direction de la lumière. Si le résultat est positif, le triangle est dirigé dans le même sens que la lumière et donc se trouve sur le c\^oté opposé à la lumière.
 Une fois que les ar\^etes définissant les contours sont déterminées, on les projette à l'infini dans la direction opposée à la lumière ce qui crée une homothétie du contour. Le contour de l'objet et son homothétie délimitent alors un volume, appelé shadow volume ou volume d'ombre. 
 Nous avons commencé par implémenter cette étape en Python avant de nous rendre compte que la puissance de calcul nécessaire était trop grande.
 Cette étape est donc implémentée dans une fonction en C++ appelée depuis le code Python.
 
-Une fois que ces volumes sont générés, il suffit de déterminer quels objets ou parties d'objets se situent dans un ou plusieurs volumes, et de ce fait, dans l'ombre. 
+Une fois que ces volumes sont générés, il nous suffit de déterminer quels objets ou parties d'objets se situent dans un ou plusieurs volumes, et de ce fait, dans l'ombre. 
 Pour ce faire, le rendu de la scène est effectué une première fois sans la lumière pour dessiner la scène dans l'ombre.
 Ensuite le rendu de la scène est effectué deux fois en activant le stencil test dans OpenGL et en désactivant l'écriture sur le color buffer et le depth buffer, de manière à ne pas modifier l'image affichée. La première fois, on incrémente la valeur du stencil buffer chaque fois que l'on rentre dans un shadow volume (en activant le back-face culling). La deuxième fois on le décrémente chaque fois que l'on en sort (avec le front-face culling). Pour chaque pixel de la scène, on obtiendra alors une valeur valant soit zéro pour un point situé dans la lumière soit une valeur plus grande représentant l'intensité de l'ombre.
-Un nouveau rendu est alors effectué avec la lumière uniquement aux endroits où le stencil buffer est égal à zéro.
+Nous effectuons alors un nouveau rendu avec la lumière uniquement aux endroits où le stencil buffer est égal à zéro.
 
 
 \subsection{Shadow mapping}
