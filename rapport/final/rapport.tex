@@ -255,7 +255,7 @@ Une bibliothèque Python permet de mesurer le nombre de megabytes de mémoire vi
 \centering
 \captionsource{Shadow volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
-Notre implémentation du shadow volume peut être divisé en deux étapes.
+Notre implémentation du shadow volume est divisé en deux étapes.
 
 Tout d'abord, il nous a fallu trouver les contours de chaque objet de la scène depuis le point de vue de la lumière. 
 Puisque le point de vue se trouve à la position de la lumière, les contours à trouver sont toutes les arêtes communes à un triangle se trouvant dans la lumière et un triangle se trouvant dans l'ombre. 
@@ -280,7 +280,7 @@ Nous effectuons alors un nouveau rendu avec la lumière uniquement aux endroits 
 \captionsource{Shadown mapping}{wikipedia.org}
 \end{figure}
 
-L'algorithme de shadow mapping se déroule également en deux étapes.
+Notre implémentation du shadow mapping se déroule également en deux étapes.
 
 La première étape consiste à générer une shadow map d'une résolution choisie. Une shadow map est une représentation depuis le point de vue de lumière de la profondeur de chaque point de la scène. Pour ce faire, OpenGL offre la structure d'un depth buffer, permettant de calculer la profondeur de chaque pixel visible depuis la lumière en effectuant le rendu.
 
