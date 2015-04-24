@@ -443,7 +443,7 @@ D'après la littérature, il n'existe pas d'alternative à ces trois algorithmes
 
 \section{Approches utilisées dans l'industrie}
 
-Nous allons illustré cette section par deux exemples :
+Nous allons illustrer cette section par deux exemples :
 
 \subsection{La précision du Ray Tracing}
 
@@ -461,8 +461,7 @@ Conformément aux informations présentées par la littérature scientifique, le
 Les deux types d'ombres ont été considérées dans cette étude, les hard shadows comme les soft shadows. Les premieres sont les ombres qui sont celles dues à une seule source lumineuse ponctuelle. Elles sont donc inexistantes dans la nature. En comparaison avec celles-ci, les soft shadows, ombres diffuses, sont abondamment plus réalistes. En effet, elles sont le résultat d'éléments placés dans un environnement illuminé de force sources lumineuses ponctuelles, comme retrouvés dans la nature.
 Au fil du temps, les sociétés d'animation et de développement de jeux vidéos se sont tournés des hard shadows vers les soft shadows lorsque le matériel a commencé a le permettre, dans le but d'obtenir un réalisme supérieur.
 
-\todo{Ici on explique les différents algo, est ce que c'est une bonne idee dans la conclusion?}
-Nous avons ici implémenté et comparé 3 différents algorithmes d'implémentation d'ombres de manière informatisée. Le premier type d'algorithme est le ray tracing. Celui-ci est le plus intuitif car il consiste à réaliser des calculs relatifs aux ombres pour chaque pixel vu par la caméra. Le second type d'algorithme considéré ici est celui du shadow volume. Celui-ci approche le problème différemment. En effet, il crée, en extrudant les contours des éléments de la scène, des volumes dans lesquels tout point est alors considéré dans l'ombre, alors que tout point n'étant pas dans un volume est considéré comme illuminé. Enfin, nous avons étudié ici le shadow mapping. Ce dernier est constitué de deux principales étapes. Lors de la première étape, une shadow map est créée. Celle-ci est en fait une carte de profondeur, sur laquelle est indiquée la profondeur de chaque partie de la scène depuis la lumière. Avec cette carte de profondeur, la profondeur des différentes parties de la scène peut alors être comparée et il est alors possible de déterminer la position relative de ces parties.
+Nous avons ici implémenté et comparé 3 différents algorithmes d'implémentation d'ombres de manière informatisée : le ray tracing, le shadow mapping ainsi que le shadow volume.
 
 
 
