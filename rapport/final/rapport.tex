@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt]{report}
+\documentclass[a4paper,12pt]{report}
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -59,12 +59,11 @@ Dans le monde réel, on est souvent confronté à plusieurs sources lumineuses q
 Nous avons, lors de ce projet d'année, étudié l'impact des ombres sur le réalisme des animations et des jeux vidéos. Cette étude a été réalisée en utilisant et comparant différents algorithmes de génération d'ombre, plus ou moins réalistes.
 
 
-Nous nous sommes intéressés plus particulièrement aux algorithmes en temps réel car ceux-ci sont plus intéressants et plus attractifs pour une présentation pour le Printemps des Sciences\footnote{http://www.printempsdessciences.be}.
+Nous nous sommes intéressés plus particulièrement aux algorithmes en temps réel car ceux-ci sont plus intéressants et plus attractifs pour une présentation à un jeune publique au Printemps des Sciences 2015 \footnote{http://www.printempsdessciences.be}.
 
-Deux types d'ombres peuvent être distingués : les \textit{soft shadows} et les \textit{hard shadows}. Les premières ont des bords diffus et les secondes ont des bords nets. Plus la source de lumière est proche d'un objet, plus les bords d'une ombre réaliste sont diffus et inversément.
-Dans ce projet, nous nous somme intéressés uniquement aux algorithmes de génération des \textit{soft shadows} car ils permettent également de générer des \textit{hard shadows}.
+Deux types d'ombres peuvent être distingués : les \textit{soft shadows} et les \textit{hard shadows}. Les premières ont des bords diffus et les secondes ont des bords nets. Il est facile de remarquer que plus la source de lumière est proche d'un objet, plus les bords d'une ombre réaliste sont diffus et inversément.
 
-Nous avons testé les différents aspects et effets des ombres dans différents scénarios que nous avons mis en application. Nous avons fait varier les objets, les sources lumineuses, leur nombre et leur mouvement afin de présenter des situations se rapprochant de la réalité.
+Dans ce projet, nous avons testé les différents aspects des ombres et leur influence sur la perception de la géométrie d'une scène. Pour cela nous avons implémenter les trois algorithmes de rendu d'ombre et utiliser un environnement de test pour comparer leur performance. Cet environnement de test laisse la liberté à l'utilisateur de faire varier les positions des modèles 3D, des sources lumineuses et leur nombre. L'utilisateur a aussi la possibilité d'animer cet environnement.
 
 \begin{figure}[H]
 \includegraphics[scale=0.25]{images/relativePosition.jpg}
@@ -74,14 +73,14 @@ Nous avons testé les différents aspects et effets des ombres dans différents 
 
 \chapter{Etat de l'art}
 
-Au fil du temps, différents types d'algorithmes permettant de générer ces ombres ont été présentés dans la littérature scientifique. La littérature scientifique distingue donc deux grandes catégories : 
+Au fil du temps, différents types d'algorithmes permettant de générer ces ombres ont été présentés dans la littérature scientifique. Comme indiqué ci-dessus, la littérature scientifique distingue deux type d'ombre : 
 \begin{itemize}
 \item les \textit{Hard Shadow},
 \item les \textit{Soft Shadow}.
 \end{itemize}
-Les ombres de type \textit{Hard Shadow} ont été moins considérées ici car elles sont moins réalistes. En effet, ces ombres sont uniformément noires et ne représentent que l'ombre générée par un point lumineux. D'un autre côté, les ombres de type \textit{Soft Shadow} sont beaucoup plus réalistes et sont celles qui sont les plus utilisées. Les algorithmes permettant de faire des ombres de type Soft Shadow seront donc ceux qui seront le plus étudiés ici.
+Les ombres de type \textit{Hard Shadow} sont uniformément noires et ne représentent que l'ombre générée par un point lumineux. D'un autre côté, les ombres de type \textit{Soft Shadow} sont beaucoup plus réalistes et sont celles qui sont les plus utilisées.
 
-Il existe plusieurs types de \textit{Soft Shadow algorithms}, les principaux sont ceux de:
+Il existe plusieurs types d'algorithme, les trois principaux sont :
 \begin{itemize}
 \item{\textit{Ray tracing}}
 \item{\textit{Shadow mapping}}
