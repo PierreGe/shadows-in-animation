@@ -227,7 +227,8 @@ Pour rendre le programme plus interactif et pouvoir mieux observer les ombres, n
 \subsection{Metrics utilisés}
 
 Pour mesurer la performance d'un algorithme nous avons utilisé différentes mesures du taux d'utilisation des ressources machines.
-\subsubsection{Image par seconde}
+
+\subsubsection{Images par seconde}
 
 Le nombre d'images par seconde ou Frame Per Second (FPS) en anglais est une mesure indiquant le nombre d'images affichées par seconde sur un écran. Plus ce nombre est élevé plus l'animation semble fluide.
 
@@ -241,14 +242,17 @@ La bibliothèque python psutil permet de mesurer le pourcentage d'utilisation du
 
 \subsubsection{Mémoire}
 
-Une bibliothèque Python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une haute utilisation indique un algorithme peu performant.
+Une bibliothèque python permet de mesurer le nombre de megabytes de mémoire vive utilisé par le programme courant. Une indication d'une utilisation de beaucoup de megabytes indique un algorithme peu performant.
+
+
 
 \section{Algorithmes implémentés} 
 
 \subsection{Shadow volume}
 
 \begin{figure}[H]
-\includegraphics[scale=0.37]{images/shadow_volume.png}
+
+\includegraphics[scale=0.32]{images/shadow_volume.png}
 \centering
 \captionsource{Shadow volume}{https://hal.inria.fr/inria-00281388}
 \end{figure}
@@ -356,7 +360,15 @@ D'après nos résultats subjectif, les algorithmes hard shadow
 \end{table}
 
 \subsection{Shadow volume}
-Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne ma\^itrisons pas encore bien.
+
+\begin{figure}[H]
+\includegraphics[scale=0.4]{images/shadowvolume.png}
+\centering
+\caption{Scène avec shadow volume}
+\end{figure}
+
+Cet algorithme a été difficile à implémenter et ne fonctionne toujours pas entièrement. La partie la plus demandeuse en temps de calcul et en mémoire, à savoir la création des shadows volume à été réalisée mais les ombres ne s'affichent pas correctement. La difficulté réside dans le fait que cet algorithme utilise extensivement les possibilités de la carte graphique et donc nécessite des connaissances en OpenGL que nous ne mai\^trisons pas encore bien.
+
 Nous pouvons donc évaluer les performances de cet algorithme mais pas son réalisme.
 L'étape la plus lente est de créer les shadows volumes mais, ne dépendant pas de la position de la caméra, cette étape est réalisée uniquement quand le nombre ou la position des lumières est modifiée.
 Ceci permet d'obtenir un nombre de \textit{fps} inférieur au shadow mapping mais suffisant pour que l'image soit fluide.
@@ -411,6 +423,7 @@ Cependant, il permet donc d'obtenir les meilleurs résultats lorsque les perform
 
 Sans surprise, la scène sans aucune ombre offre le plus grand niveau de performances. Néanmoins, le niveau de réalisme est bas. Quand on compare la même scène sans ombres et avec des auto-ombres, on ne remarque pas qu'il s'agit des mêmes objets. La première semble en deux dimensions alors que la deuxième montre clairement le relief. En comparant avec l'algorithme de shadow mapping ou de shadow volume, la scène prend une toute autre dimension. On voit clairement le relief et la position de chaque objet.
 Les scènes sans ombres peuvent \^etre utilisées dans le cas où le matériel n'est pas du tout performant mais actuellement la puissance de calcul est suffisante pour afficher un minimum d'ombres.
+
 
 L'algorithme d'auto-ombre obtient de très bonnes performances, même par rapport à l'algorithme sans ombre, car les calculs sont simples et réalisés par la carte graphique. Il peut donc servir de base pour apporter du réalisme sur des plate-formes peu puissantes mais l'algorithme de shadow mapping obtient presque les mêmes performances et est beaucoup plus réaliste, ce qui en fait la meilleure des solutions.
 
